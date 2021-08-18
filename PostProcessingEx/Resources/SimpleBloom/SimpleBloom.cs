@@ -6,9 +6,12 @@
     using UnityEngine;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.PostProcessing;
+    using ColorParameter = UnityEngine.Rendering.PostProcessing.ColorParameter;
+    using FloatParameter = UnityEngine.Rendering.PostProcessing.FloatParameter;
+    using IntParameter = UnityEngine.Rendering.PostProcessing.IntParameter;
 
     [Serializable]
-    [PostProcess(typeof(SimpleBloomRenderer), PostProcessEvent.AfterStack, "Custom/SimpleBloom")]
+    [PostProcess(typeof(SimpleBloomRenderer), PostProcessEvent.BeforeStack, "Custom/SimpleBloom")]
     public sealed class SimpleBloom : PostProcessEffectSettings
     {
         [Range(0,10)]
@@ -43,9 +46,14 @@
         const int BOX_UP = 2;
         const int COMBINE_PASS = 3;
 
+        const string SIMPLE_BLOOM_SAMPLENAME = "SimpleBloom";
+
         RenderTexture[] textures = new RenderTexture[16];
+
         public override void Render(PostProcessRenderContext context)
         {
+            var cmd = context.command;
+            cmd.BeginSample(SIMPLE_BLOOM_SAMPLENAME);
             var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/SimpleBloom"));
 
             var knee = settings.threshold * settings.softThreshold;
@@ -63,7 +71,7 @@
 
             // pass 0
             var buffer0 = textures[0] = RenderTexture.GetTemporary(w, h, 0, format);
-            context.command.BlitFullscreenTriangle(context.source, buffer0, sheet, GRAB_ILLUM_PASS);
+            cmd.BlitFullscreenTriangle(context.source, buffer0, sheet, GRAB_ILLUM_PASS);
 
             //pass 1,downsample
             int i = 1;
@@ -76,7 +84,7 @@
 
                 //blur1
                 var buffer1 = textures[i] = RenderTexture.GetTemporary(w, h, 0, format);
-                context.command.BlitFullscreenTriangle(buffer0, buffer1, sheet, BOX_DOWN);
+                cmd.BlitFullscreenTriangle(buffer0, buffer1, sheet, BOX_DOWN);
 
                 buffer0 = buffer1;
             }
@@ -91,7 +99,7 @@
                     sheet.properties.SetTexture("_BloomTex", textures[lastId]);
                     lastId--;
                 }
-                context.command.BlitFullscreenTriangle(buffer0, buffer1, sheet, BOX_UP);
+                cmd.BlitFullscreenTriangle(buffer0, buffer1, sheet, BOX_UP);
                 //textures[i] = null;
                 //RenderTexture.ReleaseTemporary(buffer0);
                 buffer0 = buffer1;
@@ -101,7 +109,7 @@
                 RenderTexture.ReleaseTemporary(textures[i]);
             }
 
-            //context.command.Blit(buffer0, context.destination);
+            //cmd.Blit(buffer0, context.destination);
             //RenderTexture.ReleaseTemporary(buffer0);
             //return;
 
@@ -111,8 +119,10 @@
             sheet.properties.SetTexture("_BloomTex", buffer0);
             sheet.properties.SetColor("_BloomColor", settings.bloomColor);
 
-            context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, COMBINE_PASS);
+            cmd.BlitFullscreenTriangle(context.source, context.destination, sheet, COMBINE_PASS);
             RenderTexture.ReleaseTemporary(buffer0);
+
+            cmd.EndSample(SIMPLE_BLOOM_SAMPLENAME);
         }
     }
 
