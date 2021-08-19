@@ -3,7 +3,7 @@
 
 #include "Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl"
 
-float4 SampleBox(Texture2D tex, SamplerState state, float4 texel, float2 uv, float delta) {
+float4 SampleBox(TEXTURE2D_ARGS(tex,state), float4 texel, float2 uv, float delta) {
 	float2 p = texel.xy * delta;
 	float4 c = SAMPLE_TEXTURE2D(tex, state, uv + float2(-1, -1) * p);
 	c += SAMPLE_TEXTURE2D(tex, state, uv + float2(1, -1) * p);
@@ -13,7 +13,7 @@ float4 SampleBox(Texture2D tex, SamplerState state, float4 texel, float2 uv, flo
 	return c * 0.25;
 }
 
-float4 SampleBox(Texture2D tex,SamplerState state,float4 texel,float2 uv, float delta,float sideWeight,float centerWeight) {
+float4 SampleBox(TEXTURE2D_ARGS(tex,state),float4 texel,float2 uv, float delta,float sideWeight,float centerWeight) {
     float2 p = texel.xy * delta;
     float4 c = SAMPLE_TEXTURE2D(tex,state,uv + float2(-1,-1) * p) * sideWeight;
     c += SAMPLE_TEXTURE2D(tex,state,uv + float2(1,-1) * p) * sideWeight;
@@ -24,7 +24,7 @@ float4 SampleBox(Texture2D tex,SamplerState state,float4 texel,float2 uv, float 
 }
 
 const static float gaussianWeights[5] = { 0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216 };
-float3 SampleGaussian(Texture2D tex, SamplerState state, float2 texel, float2 uv) {
+float3 SampleGaussian(TEXTURE2D_ARGS(tex,state), float2 texel, float2 uv) {
 	float3 c = (float3)0;
 
 	c += SAMPLE_TEXTURE2D(tex, state, uv + texel.xy).rgb * gaussianWeights[0];

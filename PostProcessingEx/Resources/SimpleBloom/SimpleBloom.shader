@@ -55,7 +55,7 @@
 			float _BlurSize;
 
 			float4 Frag(VaryingsDefault i) :SV_Target{
-				float4 col = SampleBox(_MainTex,sampler_MainTex,_MainTex_TexelSize,i.texcoord,1);
+				float4 col = SampleBox(TEXTURE2D_PARAM(_MainTex,sampler_MainTex),_MainTex_TexelSize,i.texcoord,1);
 				return col;
 			}
 			ENDHLSL
@@ -69,7 +69,7 @@
 			#pragma fragment Frag
 
 			float4 Frag(VaryingsDefault i) :SV_Target{
-				float4 col = SampleBox(_MainTex,sampler_MainTex,_MainTex_TexelSize,i.texcoord,0.5);
+				float4 col = SampleBox(TEXTURE2D_PARAM(_MainTex,sampler_MainTex),_MainTex_TexelSize,i.texcoord,0.5);
 				// return col;
 				// float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
 				float4 bloom = SAMPLE_TEXTURE2D(_BloomTex,sampler_BloomTex,i.texcoord);
@@ -89,7 +89,7 @@
 
 			float4 Frag(VaryingsDefault i) :SV_Target{
 				float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
-				float4 bloom = SampleBox(_BloomTex, sampler_BloomTex, _BloomTex_TexelSize, i.texcoord, 0.5);
+				float4 bloom = SampleBox(TEXTURE2D_PARAM(_BloomTex, sampler_BloomTex), _BloomTex_TexelSize, i.texcoord, 0.5);
 				bloom *= _Intensity;
 				//bloom = smoothstep(bloom, bloom-0.2, _SmoothBorder);
 				//bloom *= pow(bloom, _SmoothBorder);
