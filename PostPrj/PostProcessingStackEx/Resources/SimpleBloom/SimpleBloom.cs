@@ -1,4 +1,5 @@
-﻿namespace PostProcessiong
+﻿#if UNITY_POST_PROCESSING_STACK_V2
+namespace PostProcessiongEx
 {
     using System;
     using System.Collections;
@@ -127,3 +128,4 @@
     }
 
 }
+#endif 
