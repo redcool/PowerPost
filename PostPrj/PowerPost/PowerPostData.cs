@@ -11,10 +11,10 @@ using UnityEngine.Rendering.Universal;
 using UnityEditor;
 #endif
 
-namespace URPPostProcessingEx
+namespace PowerPost
 {
     [Serializable]
-    public class URPPostProcessingExData : ScriptableObject
+    public class PowerPostData : ScriptableObject
     {
 #if UNITY_EDITOR
         const string ASSET_PATH = "Assets/Settings";
@@ -24,8 +24,8 @@ namespace URPPostProcessingEx
             if (!AssetDatabase.IsValidFolder(ASSET_PATH))
                 AssetDatabase.CreateFolder("Assets", "Settings");
 
-            var inst = CreateInstance<URPPostProcessingExData>();
-            AssetDatabase.CreateAsset(inst, $"{ASSET_PATH}/{nameof(URPPostProcessingExData)}.asset");
+            var inst = CreateInstance<PowerPostData>();
+            AssetDatabase.CreateAsset(inst, $"{ASSET_PATH}/{nameof(PowerPostData)}.asset");
             Selection.activeObject = inst;
         }
 #endif

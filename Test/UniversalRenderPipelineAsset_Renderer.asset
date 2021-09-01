@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: NewURPPostProcessingEx
   m_EditorClassIdentifier: 
   m_Active: 1
+  settings:
+    currentSettingTypes:
+    - URPPostProcessingEx.SSSSSettings
+    - abc
   assetData: {fileID: 0}
 --- !u!114 &-7382556075795431748
 MonoBehaviour:
@@ -28,8 +32,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 0
   settings:
-    strength: {r: 1, g: 0, b: 0, a: 1}
-    falloff: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+    strength:
+      r: 1
+      g: 0
+      b: 0
+      a: 1
+    falloff:
+      r: 0.24528301
+      g: 0.24528301
+      b: 0.24528301
+      a: 1
     blurSize: 6.53
 --- !u!114 &11400000
 MonoBehaviour:
@@ -45,9 +57,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RendererFeatures:
   - {fileID: 7484987639055055648}
-  - {fileID: -7382556075795431748}
-  - {fileID: -8401201480055389269}
-  m_RendererFeatureMap: 20fb10be9904e067bcbecf0f5de48b99ab03d0eec3ef688b
+  - {fileID: 6556095535916224800}
+  m_RendererFeatureMap: 20fb10be9904e0672091cf7b27eefb5a
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -76,6 +87,23 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_AccurateGbufferNormals: 0
+--- !u!114 &6556095535916224800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b9a816bdf6a304e8662c052f375afe, type: 3}
+  m_Name: NewURPPostProcessingExFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    currentSettingTypes:
+    - PowerPost.SSSSSettings
+  assetData: {fileID: 11400000, guid: a7e43a30c0ceaef49aa8e686e33da972, type: 2}
 --- !u!114 &7484987639055055648
 MonoBehaviour:
   m_ObjectHideFlags: 0

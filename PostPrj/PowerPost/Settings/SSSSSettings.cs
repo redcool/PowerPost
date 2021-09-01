@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace URPPostProcessingEx
+namespace PowerPost
 {
     [Serializable,VolumeComponentMenu("Custom/SSSS")]
     public class SSSSSettings : VolumeComponent,IPostProcessComponent,IPostProcessingSetting

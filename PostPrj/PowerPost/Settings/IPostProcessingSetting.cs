@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.Rendering.Universal;
 
-namespace URPPostProcessingEx
+namespace PowerPost
 {
     interface IPostProcessingSetting
     {

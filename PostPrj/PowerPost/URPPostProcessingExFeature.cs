@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace URPPostProcessingEx
+namespace PowerPost
 {
     public class URPPostProcessingExFeature : ScriptableRendererFeature
     {
@@ -21,7 +21,7 @@ namespace URPPostProcessingEx
         //    typeof(SSSSSettings)
         //};
 
-        public URPPostProcessingExData assetData;
+        public PowerPostData assetData;
 
         Dictionary<IPostProcessingSetting, PostExPass> postPassDict = new Dictionary<IPostProcessingSetting, PostExPass>();
         List<Type> postSettingTypeList = new List<Type>();

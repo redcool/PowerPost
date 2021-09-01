@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace URPPostProcessingEx
+namespace PowerPost
 {
     public abstract class PostExPass : ScriptableRenderPass
     {

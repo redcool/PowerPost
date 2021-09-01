@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace URPPostProcessingEx {
+namespace PowerPost {
     public class SSSSPass : PostExPass
     {
         public Material mat;
