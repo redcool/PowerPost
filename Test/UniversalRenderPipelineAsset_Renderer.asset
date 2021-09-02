@@ -57,8 +57,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RendererFeatures:
   - {fileID: 7484987639055055648}
-  - {fileID: 6556095535916224800}
-  m_RendererFeatureMap: 20fb10be9904e0672091cf7b27eefb5a
+  - {fileID: 316960896308975330}
+  m_RendererFeatureMap: 20fb10be9904e067e2962f8041126604
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_AccurateGbufferNormals: 0
---- !u!114 &6556095535916224800
+--- !u!114 &316960896308975330
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,13 +97,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10b9a816bdf6a304e8662c052f375afe, type: 3}
-  m_Name: NewURPPostProcessingExFeature
+  m_Name: NewPowerPostFeature
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
     currentSettingTypes:
     - PowerPost.SSSSSettings
-  assetData: {fileID: 11400000, guid: a7e43a30c0ceaef49aa8e686e33da972, type: 2}
+  assetData: {fileID: 11400000, guid: 6af1b6a89d40d6b40b04f5b56e8018f2, type: 2}
 --- !u!114 &7484987639055055648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,11 +114,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: NewRenderObject
+  m_Name: NewRenderObject1
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: NewRenderObject
+    passTag: NewRenderObject1
     Event: 300
     filterSettings:
       RenderQueueType: 0
