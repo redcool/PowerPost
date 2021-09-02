@@ -22,7 +22,7 @@ namespace PowerPost
 
         public bool IsActive()
         {
-            return active;
+            return Mathf.Abs(blurScale.value) > 0.1f;
         }
 
         public bool IsTileCompatible() => true;

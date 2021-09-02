@@ -16,6 +16,8 @@ namespace PowerPost {
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             var sssSetings = VolumeManager.instance.stack.GetComponent<SSSSSettings>();
+            if (!sssSetings.IsActive())
+                return;
 
             SSSSKernel.CalculateKernel(kernels,25, sssSetings.strength.value, sssSetings.falloff.value);
 
