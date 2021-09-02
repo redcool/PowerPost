@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using System.IO;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -17,15 +18,16 @@ namespace PowerPost
     public class PowerPostData : ScriptableObject
     {
 #if UNITY_EDITOR
-        const string ASSET_PATH = "Assets/Settings";
-        [MenuItem("Assets/Create/Rendering/Universal Render Pipeline/URPPostProcessingEx Data", priority = CoreUtils.assetCreateMenuPriority3 + 1)]
+        [MenuItem("Assets/Create/Rendering/Universal Render Pipeline/PowerPostData", priority = CoreUtils.assetCreateMenuPriority3 + 1)]
         static void CreateSaveAsset()
         {
-            if (!AssetDatabase.IsValidFolder(ASSET_PATH))
-                AssetDatabase.CreateFolder("Assets", "Settings");
+            var path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (!AssetDatabase.IsValidFolder(path)){
+                path = Path.GetDirectoryName(path);
+            }
 
             var inst = CreateInstance<PowerPostData>();
-            AssetDatabase.CreateAsset(inst, $"{ASSET_PATH}/{nameof(PowerPostData)}.asset");
+            AssetDatabase.CreateAsset(inst, $"{path}/{nameof(PowerPostData)}.asset");
             Selection.activeObject = inst;
         }
 #endif
