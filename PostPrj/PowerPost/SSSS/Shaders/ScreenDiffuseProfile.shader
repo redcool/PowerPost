@@ -53,6 +53,7 @@ Shader "Hidden/PostProcessingEx/ScreenDiffuseProfile"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             float4 _MainTex_TexelSize;
+            
             float _BlurSize;
 
             fixed4 frag (v2f i) : SV_Target

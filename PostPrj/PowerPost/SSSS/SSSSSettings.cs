@@ -11,7 +11,7 @@ namespace PowerPost
     public class SSSSSettings : VolumeComponent,IPostProcessComponent,IPostProcessingSetting
     {
         public ColorParameter strength = new ColorParameter(Color.white);
-        public ColorParameter falloff = new ColorParameter (Color.green );
+        public ColorParameter falloff = new ColorParameter (Color.red );
         public FloatParameter blurScale = new FloatParameter (0.1f );
         //public IntParameter samples = new IntParameter(25);
 

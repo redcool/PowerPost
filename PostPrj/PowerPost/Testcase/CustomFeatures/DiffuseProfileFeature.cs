@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-
+using PowerPost;
 /// <summary>
 /// 1 Render Objects render target character ,set stencil override 5
 /// 2 use this feature render diffuse profile
@@ -59,8 +59,8 @@ public class DiffuseProfileFeature : ScriptableRendererFeature
                 mat = new Material(Shader.Find("Hidden/PostProcessingEx/ScreenDiffuseProfile"));
 
             SSSSKernel.CalculateKernel(kernels, 25, settings.strength, settings.falloff);
-            mat.SetVectorArray("_Kernel",kernels);
-            mat.SetFloat("_BlurSize",settings.blurSize);
+            mat.SetVectorArray("_Kernel", kernels);
+            mat.SetFloat("_BlurSize", settings.blurSize);
 
 
             //cmd.SetGlobalTexture("_MainTex",renderer.cameraColorTarget);
@@ -96,7 +96,7 @@ public class DiffuseProfileFeature : ScriptableRendererFeature
     {
         m_ScriptablePass = new CustomRenderPass();
         // Configures where the render pass should be injected.
-        m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing ;
+        m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
     }
 
     // Here you can inject one or multiple render passes in the renderer.
@@ -108,5 +108,3 @@ public class DiffuseProfileFeature : ScriptableRendererFeature
         renderer.EnqueuePass(m_ScriptablePass);
     }
 }
-
-
