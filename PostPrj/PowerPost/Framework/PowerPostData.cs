@@ -1,4 +1,6 @@
-﻿using System;
+﻿namespace PowerPost
+{
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +12,21 @@ using System.IO;
 
 #if UNITY_EDITOR
 using UnityEditor;
+    [CustomEditor(typeof(PowerPostData))]
+    public class PowerPostDataEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            var inst = target as PowerPostData;
+            if (GUILayout.Button("Refresh"))
+            {
+                inst.InitSettingTypes();
+            }
+        }
+    }
 #endif
 
-namespace PowerPost
-{
     [Serializable]
     public class PowerPostData : ScriptableObject
     {
@@ -31,21 +44,25 @@ namespace PowerPost
             Selection.activeObject = inst;
         }
 #endif
-        [SerializeField] string[] passNames;
-        public string[] PassNames => passNames;
+        [SerializeField] string[] settingNames;
+        public string[] SettingNames => settingNames;
 
-        Type[] types;
+        Type[] settingTypes;
         public Type[] GetSettingTypes()
         {
-            if(types == null || types.Length != passNames.Length)
+            if(settingTypes == null || settingTypes.Length != settingNames.Length)
             {
-                types = new Type[passNames.Length];
-                for (int i = 0, count = passNames.Length; i < count; i++)
-                {
-                    types[i] = Type.GetType(passNames[i]);
-                }
+                InitSettingTypes();
             }
-            return types;
+            return settingTypes;
+        }
+        public void InitSettingTypes()
+        {
+            settingTypes = new Type[settingNames.Length];
+            for (int i = 0, count = settingNames.Length; i < count; i++)
+            {
+                settingTypes[i] = Type.GetType(settingNames[i]);
+            }
         }
     }
 }

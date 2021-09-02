@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83ff1c85912dfb40aeb70ceeac1c292, type: 3}
   m_Name: PowerPostData
   m_EditorClassIdentifier: 
-  passNames:
+  settingNames:
   - PowerPost.SSSSSettings

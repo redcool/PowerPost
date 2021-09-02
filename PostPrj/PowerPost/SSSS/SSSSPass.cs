@@ -22,6 +22,7 @@ namespace PowerPost {
             SSSSKernel.CalculateKernel(kernels,25, sssSetings.strength.value, sssSetings.falloff.value);
 
             var cmd = CommandBufferPool.Get();
+            cmd.BeginSample("SSSS Pass");
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();
 
@@ -35,9 +36,12 @@ namespace PowerPost {
             //cmd.SetRenderTarget(sceneColorRTId, Renderer.cameraColorTarget);
             //cmd.DrawMesh(CommandBufferEx.FullscreenQuad, Matrix4x4.identity, mat, 0, 0);
 
-            cmd.BlitColorDepth(Renderer.cameraColorTarget, sceneColorRTId, Renderer.cameraColorTarget, mat, 0);
-            cmd.BlitColorDepth(sceneColorRTId, Renderer.cameraColorTarget, Renderer.cameraColorTarget, mat, 1);
+            var urpAsset = UniversalRenderPipeline.asset;
+            var depthTarget = urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
 
+            cmd.BlitColorDepth(Renderer.cameraColorTarget, sceneColorRTId, depthTarget, mat, 0);
+            cmd.BlitColorDepth(sceneColorRTId, Renderer.cameraColorTarget, depthTarget, mat, 1);
+            cmd.EndSample("SSSS Pass");
             context.ExecuteCommandBuffer(cmd);
 
             CommandBufferPool.Release(cmd);
