@@ -23,16 +23,31 @@ float4 SampleBox(TEXTURE2D_ARGS(tex,state),float4 texel,float2 uv, float delta,f
     return c;
 }
 
-const static float gaussianWeights[5] = { 0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216 };
-float3 SampleGaussian(TEXTURE2D_ARGS(tex,state), float2 texel, float2 uv) {
-	float3 c = (float3)0;
 
-	c += SAMPLE_TEXTURE2D(tex, state, uv + texel.xy).rgb * gaussianWeights[0];
+//----------------
+// Gaussian blur
+//----------------
+const static float gaussWeights[4]={0.00038771,0.01330373,0.11098164,0.22508352};
 
-	for (int i = 1; i < 5; i++) {
-		c += SAMPLE_TEXTURE2D(tex, state, uv + i * texel.xy).rgb * gaussianWeights[i];
-		c += SAMPLE_TEXTURE2D(tex, state, uv - i * texel.xy).rgb * gaussianWeights[i];
-	}
+float4 GaussBlur(TEXTURE2D_ARGS(tex,sampler_tex),float2 uv,float2 offset,bool samplerCenter){
+    float4 c = 0;
+    if(samplerCenter){
+        c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv) * gaussWeights[3];
+    }
+    c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv + offset) * gaussWeights[2];
+    c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv - offset) * gaussWeights[2];
+
+    c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv + offset * 2) * gaussWeights[1];
+    c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv - offset * 2) * gaussWeights[1];
+
+    c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv + offset * 3) * gaussWeights[0];
+    c += SAMPLE_TEXTURE2D(tex,sampler_tex,uv - offset * 3) * gaussWeights[0];
+    return c;
+}
+
+float4 SampleGaussian(TEXTURE2D_ARGS(tex,state), float2 texel, float2 uv) {
+	float4 c = GaussBlur(tex,state,uv,float2(texel.x,0),true);
+	c += GaussBlur(tex,state,uv,float2(0,texel.y),false);
 	return c;
 }
 

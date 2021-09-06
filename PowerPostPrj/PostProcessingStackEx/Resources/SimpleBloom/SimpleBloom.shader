@@ -1,8 +1,6 @@
 ﻿Shader "Hidden/Custom/SimpleBloom"
 {
     HLSLINCLUDE
-
-        
 		#include "../PostLib.hlsl"
 
         TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
