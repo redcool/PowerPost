@@ -35,8 +35,7 @@ Shader "Hidden/PowerPost/SimpleDOF"
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
                 // float4 blurCol = SampleBox(_MainTex,sampler_MainTex,_DepthRT_TexelSize,i.texcoord,_BlurSize);
                 float4 blurCol = SampleGaussian(_MainTex,sampler_MainTex,_DepthRT_TexelSize * _BlurSize,i.texcoord);
-                blurCol.w = 1;
-                
+
                 float depth = SAMPLE_TEXTURE2D(_DepthRT,sampler_DepthRT,i.texcoord);
                 depth = Linear01Depth(depth);
 

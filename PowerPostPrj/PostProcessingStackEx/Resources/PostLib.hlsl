@@ -47,7 +47,7 @@ float4 GaussBlur(TEXTURE2D_ARGS(tex,sampler_tex),float2 uv,float2 offset,bool sa
 
 float4 SampleGaussian(TEXTURE2D_ARGS(tex,state), float2 texel, float2 uv) {
 	float4 c = GaussBlur(tex,state,uv,float2(texel.x,0),true);
-	c += GaussBlur(tex,state,uv,float2(0,texel.y),false);
+	c += GaussBlur(tex,state,uv,float2(0,texel.y),true);
 	return c;
 }
 
