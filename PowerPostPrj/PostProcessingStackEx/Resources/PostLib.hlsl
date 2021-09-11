@@ -56,7 +56,7 @@ float Gray(float3 c){
 }
 
 float N21(float2 p){
-    return frac(sin(p.x*100+p.y*7890)*10000);
+    return frac(sin(dot(p,float2(100,7890)))*12345);
 }
 
 #endif // POSTLIB_HLSL

@@ -22,20 +22,28 @@ Shader "Hidden/Custom/Glitch"
             float4 _MainTex_TexelSize;
             float2 _ScanlineJitter;
 
+            float2 _VerticalJump;
             float2 _SnowFlake; // frequency,amplitude
+            float _HorizontalShake;
+            float2 _ColorDrift;
 
             float4 frag (VaryingsDefault i) : SV_Target
             {
-                float2 snowFlake = N21(i.texcoord * _SnowFlake.x) * _SnowFlake.y;
+                float2 snowFlake = (N21(i.texcoord * _SnowFlake.x )) * _SnowFlake.y;
 
                 float u = i.texcoord.x;
                 float v = i.texcoord.y;
                 float jitter = N21(float2(v,_Time.x)) * 2-1;
                 jitter *= step(_ScanlineJitter.y,abs(jitter)) * _ScanlineJitter.x;
-                
-                float4 src1 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + jitter + snowFlake.x,v)));
-                float4 src2 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + jitter + snowFlake.y,v)));
-                return float4(src1.r,src2.g,src1.b,1);
+
+                float jump = lerp(v, frac(v + _VerticalJump.y), _VerticalJump.x);
+
+                float hshake = N21(float2(_Time.x,2)-0.5) * _HorizontalShake;
+                float drift = sin(jump + _ColorDrift.y) * _ColorDrift.x;
+
+                float4 c1 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + jitter + snowFlake.x + hshake,jump)));
+                float4 c2 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + jitter + snowFlake.y + hshake + drift,jump)));
+                return float4(c1.r,c2.g,c1.b,1);
             }
             ENDHLSL
         }
