@@ -50,7 +50,7 @@ using UnityEditor;
         Type[] settingTypes;
         public Type[] GetSettingTypes()
         {
-            if(settingTypes == null || settingTypes.Length != settingNames.Length)
+            if(settingTypes == null || settingTypes.Length != settingNames.Length || settingTypes.Contains(null))
             {
                 InitSettingTypes();
             }

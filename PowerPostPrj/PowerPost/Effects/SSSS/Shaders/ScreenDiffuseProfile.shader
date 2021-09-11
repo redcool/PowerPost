@@ -1,9 +1,10 @@
-Shader "Hidden/PostProcessingEx/ScreenDiffuseProfile"
+Shader "Hidden/PowerPost/ScreenDiffuseProfile"
 {
     Properties
     {
         // _MainTex ("Texture", 2D) = "white" {}
         _BlurSize("_BlurSize",range(0,10)) = 0.1
+        _StencilRef("_StencilRef",int) = 5
     }
     CGINCLUDE
             struct appdata
@@ -35,7 +36,7 @@ Shader "Hidden/PostProcessingEx/ScreenDiffuseProfile"
         cull off
 
         stencil{
-            ref 5
+            ref [_StencilRef]
             pass keep
             comp equal
         }

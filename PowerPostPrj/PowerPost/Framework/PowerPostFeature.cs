@@ -17,14 +17,9 @@ namespace PowerPost
         }
         public Settings settings;
 
-        //readonly static Type[] postSettingTypes = new[] { 
-        //    typeof(SSSSSettings)
-        //};
-
         public PowerPostData assetData;
 
-        Dictionary<IPostProcessingSetting, PostExPass> postPassDict = new Dictionary<IPostProcessingSetting, PostExPass>();
-        List<Type> postSettingTypeList = new List<Type>();
+        Dictionary<IPostProcessingSetting, BasePostExPass> postPassDict = new Dictionary<IPostProcessingSetting, BasePostExPass>();
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
@@ -58,10 +53,10 @@ namespace PowerPost
                 if (settings == null)
                     continue;
 
-                PostExPass pass;
+                BasePostExPass pass;
                 if (!postPassDict.TryGetValue(settings,out pass))
                 {
-                    pass = settings.CreateNewInstance();
+                    postPassDict[settings] = pass = settings.CreateNewInstance();
                     //pass.ConfigureTarget(renderer.cameraColorTarget, renderer.cameraDepthTarget);
                     pass.Renderer = renderer;
                     pass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;

@@ -8,9 +8,13 @@ using UnityEngine.Rendering.Universal;
 
 namespace PowerPost
 {
-    public abstract class PostExPass : ScriptableRenderPass
+    public abstract class BasePostExPass : ScriptableRenderPass
     {
         public ScriptableRenderer Renderer { set; get; }
 
+        public T GetSettings<T>() where T : VolumeComponent
+        {
+            return VolumeManager.instance.stack.GetComponent<T>();
+        }
     }
 }

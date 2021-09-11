@@ -9,6 +9,6 @@ namespace PowerPost
 {
     interface IPostProcessingSetting
     {
-        public PostExPass CreateNewInstance();
+        public BasePostExPass CreateNewInstance();
     }
 }

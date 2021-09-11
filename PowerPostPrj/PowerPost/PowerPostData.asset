@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PowerPostData
   m_EditorClassIdentifier: 
   settingNames:
-  - PowerPost.SSSSSettings
+  - PowerPost.SSSSSetings
