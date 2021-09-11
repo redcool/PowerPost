@@ -44,10 +44,15 @@ namespace PowerPost
 
         void AddPostPassByTypes(ScriptableRenderer renderer,Type[] postSettingTypes)
         {
+            var id = 0;
             foreach (var t in postSettingTypes)
             {
                 if (t == null)
+                {
+                    Debug.LogWarning($"PowerPostData.SettingsNames ,Element {id} can't found.");
                     continue;
+                }
+                id++;
 
                 var settings = VolumeManager.instance.stack.GetComponent(t) as IPostProcessingSetting;
                 if (settings == null)

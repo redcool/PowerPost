@@ -11,11 +11,11 @@
     [Serializable, VolumeComponentMenu("Custom/Glitch")]
     public class GlitchSettings : BasePostExSettings
     {
-        [Range(0, 1)] public FloatParameter scanlineJitter = new FloatParameter(0);
-        [Range(0, 1)] public FloatParameter snowFlakeAmplitude = new FloatParameter(0);
-        [Range(0, 1)] public FloatParameter verticalJump = new FloatParameter(0);
-        [Range(0, 1)] public FloatParameter horizontalShake = new FloatParameter(0);
-        [Range(0, 1)] public FloatParameter colorDrift = new FloatParameter(0);
+         public ClampedFloatParameter scanlineJitter = new ClampedFloatParameter(0,0,1);
+         public ClampedFloatParameter snowFlakeAmplitude = new ClampedFloatParameter(0,0,1);
+         public ClampedFloatParameter verticalJump = new ClampedFloatParameter(0,0,1);
+         public ClampedFloatParameter horizontalShake = new ClampedFloatParameter(0,0,1);
+         public ClampedFloatParameter colorDrift = new ClampedFloatParameter(0,0,1);
 
         public LayerMaskParameter layer = new LayerMaskParameter(-1);
 
