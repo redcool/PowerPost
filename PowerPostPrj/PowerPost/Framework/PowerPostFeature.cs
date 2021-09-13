@@ -18,7 +18,7 @@ namespace PowerPost
             base.OnInspectorGUI();
 
             var inst = target as PowerPostFeature;
-            isShowSettingName = EditorGUILayout.Foldout(isShowSettingName, "Current Effects:", true);
+            isShowSettingName = EditorGUILayout.Foldout(isShowSettingName, "Current Working Effects:", true);
             if (isShowSettingName)
             {
                 //var settingsProp = serializedObject.FindProperty("powerPostExSettingTypes");
@@ -52,9 +52,22 @@ namespace PowerPost
             postExSettingSet.Remove(setting.GetType());
         }
 
+        void InitPostExSettingTypes()
+        {
+            postExSettingTypes.Clear();
+            foreach (var item in postExSettingSet)
+            {
+                postExSettingTypes.Add(item);
+            }
+
+        }
+
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
+            if (postExSettingTypes.Count != postExSettingSet.Count)
+                InitPostExSettingTypes();
+
             AddPostPassByTypes(renderer, postExSettingTypes);
 
             postPass.passList = PostExPassList;
@@ -63,12 +76,7 @@ namespace PowerPost
 
         public override void Create()
         {
-            postExSettingTypes.Clear();
-            foreach (var item in postExSettingSet)
-            {
-                postExSettingTypes.Add(item);
-            }
-
+            InitPostExSettingTypes();
             postPass = new PowerPostFeaturePass();
             postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
 
