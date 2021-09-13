@@ -15,8 +15,9 @@ namespace PowerPost
         public virtual bool IsTileCompatible() => true;
         protected override void OnEnable()
         {
-            base.OnEnable();
             PowerPostFeature.AddSetting(this);
+            base.OnEnable();
         }
+
     }
 }

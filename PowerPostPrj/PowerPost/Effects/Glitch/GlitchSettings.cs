@@ -18,7 +18,7 @@
         public ClampedFloatParameter horizontalShake = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter colorDrift = new ClampedFloatParameter(0, 0, 1);
 
-        public LayerMaskParameter layer = new LayerMaskParameter(-1);
+        public LayerMaskParameter layer = new LayerMaskParameter(0);
 
         public ClampedIntParameter stencilRef = new ClampedIntParameter(6, 0, 255);
         public override BasePostExPass CreateNewInstance()

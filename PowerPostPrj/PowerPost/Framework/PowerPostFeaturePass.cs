@@ -14,6 +14,8 @@ namespace PowerPost
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
+            return;
+
             if (passList == null)
                 return;
 

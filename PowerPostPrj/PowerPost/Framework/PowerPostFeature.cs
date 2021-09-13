@@ -47,10 +47,10 @@ namespace PowerPost
             postExSettingSet.Add(setting.GetType());
         }
 
-        public static void RemoveSetting(BasePostExSettings setting)
-        {
-            postExSettingSet.Remove(setting.GetType());
-        }
+        //public static void RemoveSetting(BasePostExSettings setting)
+        //{
+        //    postExSettingSet.Remove(setting.GetType());
+        //}
 
         void InitPostExSettingTypes()
         {
@@ -70,8 +70,8 @@ namespace PowerPost
 
             AddPostPassByTypes(renderer, postExSettingTypes);
 
-            postPass.passList = PostExPassList;
-            renderer.EnqueuePass(postPass);
+            //postPass.passList = PostExPassList;
+            //renderer.EnqueuePass(postPass);
         }
 
         public override void Create()
@@ -81,14 +81,6 @@ namespace PowerPost
             postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
 
             PostExPassList = new List<BasePostExPass>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            postPassDict.Clear();
-            postExSettingSet.Clear();
-            postExSettingTypes.Clear();
         }
 
         void AddPostPassByTypes(ScriptableRenderer renderer,List<Type> postSettingTypes)
@@ -117,7 +109,9 @@ namespace PowerPost
                     pass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
                 }
                 renderer.EnqueuePass(pass);
-                //PostExPassList.Add(pass);
+                PostExPassList.Add(pass);
+
+
                 id++;
             }
         }
