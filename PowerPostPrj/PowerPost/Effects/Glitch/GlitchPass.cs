@@ -19,32 +19,19 @@ namespace PowerPost
         float verticalJumpTime;
         int _ColorRT = Shader.PropertyToID("_ColorRT");
 
-        //ShaderTagId[] shaderTags = new[] {
-        //    new ShaderTagId("SRPDefaultUnlit"),
-        //    new ShaderTagId("UniversalForward"),
-        //};
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             var settings = GetSettings<GlitchSettings>();
             if (!settings.IsActive())
                 return;
 
-            var cmd = CommandBufferUtils.GetBuffer(context,nameof(GlitchPass));
-            cmd.BeginSample(cmd.name);
+            var cmd = CommandBufferUtils.GetBufferBeginSample(context,nameof(GlitchPass));
 
+            var stencilRef = settings.stencilRef.value;
 
-            //var sortingSettings = new SortingSettings { criteria = SortingCriteria.CommonTransparent };
-            //var drawSettings = new DrawingSettings { sortingSettings = sortingSettings };
-            //for (int i = 0; i < shaderTags.Length; i++)
-            //{
-            //    drawSettings.SetShaderPassName(i, shaderTags[i]);
-            //}
-            //var filterSettings = new FilteringSettings(RenderQueueRange.all, settings.layer.value);
-
-            //context.DrawRenderers(renderingData.cullResults, ref drawSettings, ref filterSettings);
-            //context.ExecuteCommandBuffer(cmd);
-
-            //return;
+            GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, GraphicsUtils.shaderTags, settings.layer.value,(ref RenderStateBlock block)=> {
+                GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
+            });
 
             if (!mat)
                 mat = new Material(Shader.Find(GLITCH_SHADER));
@@ -64,14 +51,11 @@ namespace PowerPost
             var urpAsset = UniversalRenderPipeline.asset;
             var depthTarget = urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
 
-
-
             cmd.BlitColorDepth(Renderer.cameraColorTarget, _ColorRT, depthTarget, mat, 0);
             cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, depthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
-            cmd.EndSample(cmd.name);
-            CommandBufferUtils.ReleaseBuffer(cmd);
+            CommandBufferUtils.ReleaseBufferEndSample(context,cmd);
             cmd.Clear();
         }
 

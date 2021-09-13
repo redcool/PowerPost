@@ -19,7 +19,7 @@ namespace PowerPost
     ///         4 Compare Function = always
     ///  2 SSSSSettings stencilRef = 5
     /// </summary>
-    [Serializable,VolumeComponentMenu("Custom/SSSS")]
+    [Serializable,VolumeComponentMenu("PowerPostEx/SSSS")]
     public class SSSSSettings : BasePostExSettings
     {
         public ColorParameter strength = new ColorParameter(Color.white);
