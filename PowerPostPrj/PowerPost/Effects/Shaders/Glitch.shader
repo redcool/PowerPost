@@ -3,6 +3,7 @@ Shader "Hidden/PowerPost/Glitch"
     Properties
     {
         // _MainTex ("Texture", 2D) = "white" {}
+        _StencilRef("_StencilRef",int) = 6
     }
 
     HLSLINCLUDE
@@ -16,7 +17,7 @@ Shader "Hidden/PowerPost/Glitch"
         Cull Off ZWrite Off ZTest Always
 
         stencil{
-            ref 6
+            ref [_StencilRef]
             comp equal
             pass keep
         }

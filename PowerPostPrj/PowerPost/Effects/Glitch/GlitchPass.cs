@@ -14,6 +14,7 @@ namespace PowerPost
         int _VerticalJump = Shader.PropertyToID("_VerticalJump");
         int _HorizontalShake = Shader.PropertyToID("_HorizontalShake");
         int _ColorDrift = Shader.PropertyToID("_ColorDrift");
+        int _StencilRef = Shader.PropertyToID("_StencilRef");
 
         Material mat;
         float verticalJumpTime;
@@ -28,10 +29,10 @@ namespace PowerPost
             var cmd = CommandBufferUtils.GetBufferBeginSample(context,nameof(GlitchPass));
 
             var stencilRef = settings.stencilRef.value;
-
             GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, GraphicsUtils.shaderTags, settings.layer.value,(ref RenderStateBlock block)=> {
                 GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
             });
+
 
             if (!mat)
                 mat = new Material(Shader.Find(GLITCH_SHADER));
@@ -47,6 +48,7 @@ namespace PowerPost
             mat.SetVector(_VerticalJump, new Vector2(settings.verticalJump.value, verticalJumpTime));
             mat.SetFloat(_HorizontalShake, settings.horizontalShake.value * 0.2f);
             mat.SetVector(_ColorDrift, new Vector2(settings.colorDrift.value * 0.04f, Time.time * 666.66f));
+            mat.SetInt(_StencilRef, settings.stencilRef.value);
 
             var urpAsset = UniversalRenderPipeline.asset;
             var depthTarget = urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
