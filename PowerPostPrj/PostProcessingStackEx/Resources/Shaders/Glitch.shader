@@ -16,7 +16,7 @@ Shader "Hidden/Custom/Glitch"
             #pragma vertex VertDefault
             #pragma fragment frag
 
-            #include "../PostLib.hlsl"
+            #include "PostLib.hlsl"
 
             TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
             float4 _MainTex_TexelSize;

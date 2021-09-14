@@ -5,7 +5,7 @@ Shader "Hidden/PowerPost/SimpleDOF"
         // _MainTex ("Texture", 2D) = "white" {}
     }
     HLSLINCLUDE
-        #include "../PostLib.hlsl"
+        #include "PostLib.hlsl"
         TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
 		float4 _MainTex_TexelSize;
 
@@ -34,9 +34,9 @@ Shader "Hidden/PowerPost/SimpleDOF"
             {
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
                 // float4 blurCol = SampleBox(_MainTex,sampler_MainTex,_DepthRT_TexelSize,i.texcoord,_BlurSize);
-                float4 blurCol = SampleGaussian(_MainTex,sampler_MainTex,_DepthRT_TexelSize * _BlurSize,i.texcoord);
+                float4 blurCol = SampleGaussian(_MainTex,sampler_MainTex,_DepthRT_TexelSize.xy * _BlurSize,i.texcoord);
 
-                float depth = SAMPLE_TEXTURE2D(_DepthRT,sampler_DepthRT,i.texcoord);
+                float depth = SAMPLE_TEXTURE2D(_DepthRT,sampler_DepthRT,i.texcoord).r;
                 depth = Linear01Depth(depth);
 
                 float rate = abs(depth - _Distance);
