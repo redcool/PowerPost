@@ -6,6 +6,9 @@ namespace PowerPost
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.Universal;
 
+    /// <summary>
+    /// PowerPost setting
+    /// </summary>
     public abstract class BasePostExSettings : VolumeComponent, IPostProcessComponent
     {
         public abstract BasePostExPass CreateNewInstance();

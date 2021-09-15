@@ -36,15 +36,21 @@ namespace PowerPost {
             CalcSSSSKernel(settings, kernels);
 
             // command
-            var cmd = CommandBufferPool.Get();
-            cmd.BeginSample(nameof(SSSSPass));
+            var cmd = CommandBufferUtils.GetBufferBeginSample(context, nameof(SSSSPass));
 
-            context.ExecuteCommandBuffer(cmd);
-            cmd.Clear();
+            var layer = settings.layer.value;
+            if(layer != 0)
+            {
+                int stencilRef = settings.stencilRef.value;
+                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, (ref RenderStateBlock block) => {
+                    GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
+                });
+            }
 
             // update material
             if(!mat)
                 mat = new Material(Shader.Find(DIFFUSE_PROFILE_SHADER));
+
             mat.SetVectorArray(_Kernel,kernels);
             mat.SetFloat(_BlurSize,settings.blurScale.value);
             mat.SetInt(_StencilRef, settings.stencilRef.value);
@@ -57,8 +63,7 @@ namespace PowerPost {
             cmd.BlitColorDepth(sceneColorRTId, Renderer.cameraColorTarget, depthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
-            CommandBufferPool.Release(cmd);
-            cmd.EndSample(nameof(SSSSPass));
+            CommandBufferUtils.ReleaseBufferEndSample(cmd);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

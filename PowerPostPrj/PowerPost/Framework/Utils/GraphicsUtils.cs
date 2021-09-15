@@ -16,7 +16,7 @@
 
     public static class GraphicsUtils
     {
-        public static readonly ShaderTagId[] shaderTags = new[] {
+        public static readonly ShaderTagId[] URP_FORWARD_TAGS = new[] {
             new ShaderTagId("SRPDefaultUnlit"),
             new ShaderTagId("UniversalForward"),
             new ShaderTagId("UniversalForwardOnly"),
@@ -40,6 +40,11 @@
 
             context.DrawRenderers(renderingData.cullResults, ref drawSettings, ref filterSettings,ref stateBlock);
             context.ExecuteCommandBuffer(cmd);
+        }
+
+        public static void DrawRenderers(ScriptableRenderContext context, ref RenderingData renderingData, CommandBuffer cmd, LayerMask filterLayer, RefAction<RenderStateBlock> onSetState)
+        {
+            DrawRenderers(context, ref renderingData, cmd, URP_FORWARD_TAGS, filterLayer, onSetState);
         }
 
         public static void SetStencilState(ref RenderStateBlock stateBlock, int stencilRef, StencilState state)

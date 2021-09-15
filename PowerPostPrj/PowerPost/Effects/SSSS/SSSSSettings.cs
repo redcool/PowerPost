@@ -25,8 +25,10 @@ namespace PowerPost
         public ColorParameter strength = new ColorParameter(Color.white);
         public ColorParameter falloff = new ColorParameter (Color.red );
         public ClampedFloatParameter blurScale = new ClampedFloatParameter(0.1f ,0.01f,20f);
-        public ClampedIntParameter stencilRef = new ClampedIntParameter(5,0,255);
         //public IntParameter samples = new IntParameter(25);
+        [Header("Draw Objects")]
+        public LayerMaskParameter layer = new LayerMaskParameter(0);
+        public ClampedIntParameter stencilRef = new ClampedIntParameter(5,0,255);
 
         public override BasePostExPass CreateNewInstance()
         {
@@ -35,7 +37,7 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return Mathf.Abs(blurScale.value) > 0.1f;
+            return blurScale.value > 0.1f || layer.value != 0;
         }
 
     }

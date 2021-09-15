@@ -28,7 +28,7 @@ namespace PowerPost
             if (settings.layer.value != 0)
             {
                 var stencilRef = settings.stencilRef.value;
-                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, GraphicsUtils.shaderTags, settings.layer.value, (ref RenderStateBlock block) =>
+                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, settings.layer.value, (ref RenderStateBlock block) =>
                 {
                     GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
                 });
