@@ -32,7 +32,7 @@ namespace PostProcessiongEx
             sheet.properties.SetFloat(_RadiusMin, settings.radiusMin.value);
             sheet.properties.SetFloat(_RadiusMax,settings.radiusMax.value);
 
-            sheet.properties.SetVector(_BlurSize, new Vector2(settings.blurSize.value, 0));
+            sheet.properties.SetFloat(_BlurSize, settings.blurSize.value);
             sheet.properties.SetFloat(_Aspect, settings.roundness.value ? (context.width/(float)context.height) : 1);
 
             var cmd = context.command;

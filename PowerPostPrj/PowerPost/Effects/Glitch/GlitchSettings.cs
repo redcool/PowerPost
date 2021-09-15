@@ -28,14 +28,14 @@
 
         public override bool IsActive()
         {
-            //var active = scanlineJitter.value != 0 ||
-            //    snowFlakeAmplitude.value != 0 ||
-            //    verticalJump.value != 0 ||
-            //    horizontalShake.value != 0 ||
-            //    colorDrift.value != 0
-            //    ;
+            var active = scanlineJitter.value != 0 ||
+                snowFlakeAmplitude.value != 0 ||
+                verticalJump.value != 0 ||
+                horizontalShake.value != 0 ||
+                colorDrift.value != 0
+                ;
 
-            return true;
+            return active;
         }
 
     }

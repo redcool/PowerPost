@@ -16,31 +16,31 @@ namespace PowerPost
         {
             return;
 
-            if (passList == null)
-                return;
+            //if (passList == null)
+            //    return;
 
-            ref CameraData cameraData = ref renderingData.cameraData;
-            var targetDesc = cameraData.cameraTargetDescriptor;
+            //ref CameraData cameraData = ref renderingData.cameraData;
+            //var targetDesc = cameraData.cameraTargetDescriptor;
 
-            foreach (var item in passList)
-            {
-                var name = item.GetType().Name;
-                var cmd = CommandBufferUtils.GetBufferBeginSample(context, name);
+            //foreach (var item in passList)
+            //{
+            //    var name = item.GetType().Name;
+            //    var cmd = CommandBufferUtils.GetBufferBeginSample(context, name);
 
 
-                item.OnCameraSetup(cmd, ref renderingData);
+            //    item.OnCameraSetup(cmd, ref renderingData);
 
-                // execute pass
-                item.Configure(cmd, targetDesc);
+            //    // execute pass
+            //    item.Configure(cmd, targetDesc);
 
-                item.Execute(context, ref renderingData);
+            //    item.Execute(context, ref renderingData);
 
-                item.FrameCleanup(cmd);
+            //    item.FrameCleanup(cmd);
 
-                context.ExecuteCommandBuffer(cmd);
+            //    context.ExecuteCommandBuffer(cmd);
 
-                CommandBufferUtils.ReleaseBufferEndSample(context,cmd);
-            }
+            //    CommandBufferUtils.ReleaseBufferEndSample(cmd);
+            //}
         }
     }
 }

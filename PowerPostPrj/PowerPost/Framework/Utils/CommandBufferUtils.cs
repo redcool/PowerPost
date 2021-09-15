@@ -17,14 +17,13 @@ namespace PowerPost
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();
 
-            cmd.BeginSample(name);
+            //cmd.BeginSample(name);
             return cmd;
         }
 
-        public static void ReleaseBufferEndSample(ScriptableRenderContext context,CommandBuffer cmd)
+        public static void ReleaseBufferEndSample(CommandBuffer cmd)
         {
-            cmd.EndSample(cmd.name);
-            //context.ExecuteCommandBuffer(cmd);
+            //cmd.EndSample(cmd.name);
             cmd.Clear();
             CommandBufferPool.Release(cmd);
         }

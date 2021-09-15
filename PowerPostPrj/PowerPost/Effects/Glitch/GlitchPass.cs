@@ -28,12 +28,16 @@ namespace PowerPost
 
             var cmd = CommandBufferUtils.GetBufferBeginSample(context,nameof(GlitchPass));
 
-            var stencilRef = settings.stencilRef.value;
-            GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, GraphicsUtils.shaderTags, settings.layer.value,(ref RenderStateBlock block)=> {
-                GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
-            });
-
-
+            // draw layer's objects
+            if (settings.layer.value != 0)
+            {
+                var stencilRef = settings.stencilRef.value;
+                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, GraphicsUtils.shaderTags, settings.layer.value, (ref RenderStateBlock block) =>
+                {
+                    GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
+                });
+            }
+            
             if (!mat)
                 mat = new Material(Shader.Find(GLITCH_SHADER));
 
@@ -57,7 +61,7 @@ namespace PowerPost
             cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, depthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
-            CommandBufferUtils.ReleaseBufferEndSample(context,cmd);
+            CommandBufferUtils.ReleaseBufferEndSample(cmd);
             cmd.Clear();
         }
 
