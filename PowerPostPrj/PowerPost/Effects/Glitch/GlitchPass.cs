@@ -6,7 +6,7 @@ namespace PowerPost
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.Universal;
 
-    public class GlitchPass : BasePostExPass
+    public class GlitchPass : BasePostExPass<GlitchSettings>
     {
         const string GLITCH_SHADER = "Hidden/PowerPost/Glitch";
         int _ScanlineJiiterId = Shader.PropertyToID("_ScanlineJitter");
@@ -20,12 +20,8 @@ namespace PowerPost
         float verticalJumpTime;
         int _ColorRT = Shader.PropertyToID("_ColorRT");
 
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,GlitchSettings settings)
         {
-            var settings = GetSettings<GlitchSettings>();
-            if (!settings.IsActive())
-                return;
-
             var cmd = CommandBufferUtils.GetBufferBeginSample(context,nameof(GlitchPass));
 
             // draw layer's objects

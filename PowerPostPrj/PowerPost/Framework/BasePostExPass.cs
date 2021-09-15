@@ -26,10 +26,29 @@ namespace PowerPost
                 return defaultMaterial;
             }
         }
-
-        public T GetSettings<T>() where T : VolumeComponent
+        public T GetSettings<T>() where T :BasePostExSettings
         {
             return VolumeManager.instance.stack.GetComponent<T>();
         }
     }
+
+    public abstract class BasePostExPass<T> : BasePostExPass where T : BasePostExSettings
+    {
+        public T GetSettings()
+        {
+            return GetSettings<T>();
+        }
+
+        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        {
+            var settings = GetSettings();
+            if (!settings.IsActive())
+                return;
+
+            OnExecute(context, ref renderingData, settings);
+        }
+
+        public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,T settings);
+    }
+
 }

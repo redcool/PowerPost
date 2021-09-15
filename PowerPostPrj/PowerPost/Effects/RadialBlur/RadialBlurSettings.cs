@@ -14,7 +14,7 @@ namespace PowerPost
         public Vector2Parameter center = new Vector2Parameter(new Vector2(.5f, .5f));
         public ClampedFloatParameter radiusMin = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter radiusMax = new ClampedFloatParameter(1, 0, 1);
-        public FloatParameter blurSize = new FloatParameter(0.5f);
+        public MinFloatParameter blurSize = new MinFloatParameter(0,0);
         public BoolParameter roundness = new BoolParameter(false);
 
         public override BasePostExPass CreateNewInstance()
@@ -24,9 +24,7 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return false;
-            return blurSize != 0;
-
+            return blurSize.value > 0;
         }
     }
 }

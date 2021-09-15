@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace PowerPost
 {
-    public class RadialBlurPass : BasePostExPass
+    public class RadialBlurPass : BasePostExPass<RadialBlurSettings>
     {
         const string SHADER_PATH = "Hidden/PowerPost/RadialBlur";
         static int _Center = Shader.PropertyToID("_Center");
@@ -17,12 +17,8 @@ namespace PowerPost
 
         Material mat;
 
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, RadialBlurSettings settings)
         {
-            var settings = GetSettings<RadialBlurSettings>();
-            if (!settings.IsActive())
-                return;
-
             var cam = renderingData.cameraData.camera;
             var aspect = cam.pixelWidth / (float)cam.pixelHeight;
 
@@ -39,7 +35,7 @@ namespace PowerPost
             var cmd = CommandBufferUtils.GetBufferBeginSample(context, nameof(RadialBlurPass));
 
             cmd.BlitColorDepth(Renderer.cameraColorTarget, _ColorRT, Renderer.cameraDepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, Renderer.cameraDepthTarget, mat, 1);
+            cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, Renderer.cameraDepthTarget, DefaultMaterial, 0);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferUtils.ReleaseBufferEndSample( cmd);
         }

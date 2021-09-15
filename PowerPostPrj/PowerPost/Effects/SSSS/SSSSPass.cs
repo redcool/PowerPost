@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 namespace PowerPost {
-    public class SSSSPass : BasePostExPass
+    public class SSSSPass : BasePostExPass<SSSSSettings>
     {
         const string DIFFUSE_PROFILE_SHADER = "Hidden/PowerPost/ScreenDiffuseProfile";
 
@@ -30,12 +30,8 @@ namespace PowerPost {
             SSSSKernel.CalculateKernel(kernels, 25, lastStrength, lastFalloff);
         }
 
-
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSSSSettings settings)
         {
-            var settings = GetSettings<SSSSSettings>();
-            if (!settings.IsActive())
-                return;
             //update kernel 
             CalcSSSSKernel(settings, kernels);
 
