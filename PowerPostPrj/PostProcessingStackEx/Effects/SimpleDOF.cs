@@ -33,7 +33,7 @@ namespace PostProcessiongEx
 
         public override void Render(PostProcessRenderContext context)
         {
-            var sheet = context.propertySheets.Get(Shader.Find("Hidden/PowerPost/SimpleDOF"));
+            var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/SimpleDOF"));
 
             var downsample = settings.downsample.value;
             downsample = downsample <= 0 ? 1 : downsample;

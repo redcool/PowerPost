@@ -22,7 +22,7 @@ namespace PowerPost
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,GlitchSettings settings)
         {
-            var cmd = CommandBufferUtils.GetBufferBeginSample(context,nameof(GlitchPass));
+            var cmd = CommandBufferUtils.Get(context,nameof(GlitchPass));
 
             // draw layer's objects
             if (settings.layer.value != 0)
@@ -57,7 +57,7 @@ namespace PowerPost
             cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, depthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
-            CommandBufferUtils.ReleaseBufferEndSample(cmd);
+            CommandBufferUtils.Release(cmd);
             cmd.Clear();
         }
 

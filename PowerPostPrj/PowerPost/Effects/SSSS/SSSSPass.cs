@@ -36,7 +36,7 @@ namespace PowerPost {
             CalcSSSSKernel(settings, kernels);
 
             // command
-            var cmd = CommandBufferUtils.GetBufferBeginSample(context, nameof(SSSSPass));
+            var cmd = CommandBufferUtils.Get(context, nameof(SSSSPass));
 
             var layer = settings.layer.value;
             if(layer != 0)
@@ -63,7 +63,7 @@ namespace PowerPost {
             cmd.BlitColorDepth(sceneColorRTId, Renderer.cameraColorTarget, depthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
-            CommandBufferUtils.ReleaseBufferEndSample(cmd);
+            CommandBufferUtils.Release(cmd);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

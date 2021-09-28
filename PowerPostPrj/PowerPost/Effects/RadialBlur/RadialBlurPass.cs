@@ -32,12 +32,12 @@ namespace PowerPost
             mat.SetFloat(_BlurSize, settings.blurSize.value);
             mat.SetFloat(_Aspect, settings.roundness.value ? aspect : 1);
 
-            var cmd = CommandBufferUtils.GetBufferBeginSample(context, nameof(RadialBlurPass));
+            var cmd = CommandBufferUtils.Get(context, nameof(RadialBlurPass));
 
-            cmd.BlitColorDepth(Renderer.cameraColorTarget, _ColorRT, Renderer.cameraDepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, Renderer.cameraDepthTarget, DefaultMaterial, 0);
+            cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
+            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
             context.ExecuteCommandBuffer(cmd);
-            CommandBufferUtils.ReleaseBufferEndSample( cmd);
+            CommandBufferUtils.Release( cmd);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

@@ -26,9 +26,32 @@ namespace PowerPost
                 return defaultMaterial;
             }
         }
+
+        Material material;
+        public Material GetTargetMaterial(string shaderName)
+        {
+            if (!material)
+                material = new Material(Shader.Find(shaderName));
+            return material;
+        }
+
         public T GetSettings<T>() where T :BasePostExSettings
         {
             return VolumeManager.instance.stack.GetComponent<T>();
+        }
+
+        public RenderTargetIdentifier DepthTarget
+        {
+            get
+            {
+                var urpAsset = UniversalRenderPipeline.asset;
+                return urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
+            }
+        }
+
+        public RenderTargetIdentifier ColorTarget
+        {
+            get { return Renderer.cameraColorTarget; }
         }
     }
 

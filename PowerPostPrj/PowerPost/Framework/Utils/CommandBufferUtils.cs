@@ -11,7 +11,7 @@ namespace PowerPost
     {
 
 
-        public static CommandBuffer GetBufferBeginSample(ScriptableRenderContext context,string name ="")
+        public static CommandBuffer Get(ScriptableRenderContext context,string name ="")
         {
             var cmd = CommandBufferPool.Get(name);
             context.ExecuteCommandBuffer(cmd);
@@ -21,7 +21,7 @@ namespace PowerPost
             return cmd;
         }
 
-        public static void ReleaseBufferEndSample(CommandBuffer cmd)
+        public static void Release(CommandBuffer cmd)
         {
             //cmd.EndSample(cmd.name);
             cmd.Clear();
