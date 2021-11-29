@@ -32,6 +32,8 @@ namespace PowerPost
         {
             if (!material)
                 material = new Material(Shader.Find(shaderName));
+            if (!material)
+                throw new ArgumentException($"{shaderName} not found!");
             return material;
         }
 

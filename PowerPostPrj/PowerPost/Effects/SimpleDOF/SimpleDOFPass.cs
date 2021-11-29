@@ -18,6 +18,7 @@
         static int DEPTH_RANGE_ID = Shader.PropertyToID("_DepthRange");
         static int DEBUG_ID = Shader.PropertyToID("_Debug");
         const string SHADER_NAME = "Hidden/PowerPost/SimpleDOF";
+
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings)
         {
             var mat = GetTargetMaterial(SHADER_NAME);
