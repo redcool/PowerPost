@@ -36,13 +36,13 @@ CBUFFER_END
                 float2 dir = i.texcoord - _Center.xy;
                 dir.x *= _Aspect;
 
-                float dist = length(dir);
-                dist = smoothstep(_RadiusMin,_RadiusMax,dist);
+                float dirLen = length(dir);
+                float dist = smoothstep(_RadiusMin,_RadiusMax,dirLen);
 
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord);
 
                 float blurSize = max(0.0001,_BlurSize.x);
-                float4 blurCol = SampleDirBlur(_MainTex,sampler_MainTex,i.texcoord,normalize(dir) * blurSize);
+                float4 blurCol = SampleDirBlur(_MainTex,sampler_MainTex,i.texcoord,dir / dirLen * blurSize);
 
                 return lerp(col,blurCol,dist);
             }

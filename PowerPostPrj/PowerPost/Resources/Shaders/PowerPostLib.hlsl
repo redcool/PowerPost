@@ -62,9 +62,9 @@ const static float dirBlurWeights[DIR_BLUR_SAMPLES] = {-0.08,-0.05,-0.03,-0.02,-
 float4 SampleDirBlur(TEXTURE2D_PARAM(tex,state),float2 uv,float2 dir){
     float4 c = 0;
     for(int i=0;i<DIR_BLUR_SAMPLES;i++){
-        c += SAMPLE_TEXTURE2D(tex,state,frac(uv + dir * dirBlurWeights[i]));
+        c += SAMPLE_TEXTURE2D(tex,state,(uv + dir * dirBlurWeights[i]));
     }
-    return c * rcp(DIR_BLUR_SAMPLES);
+    return c / (DIR_BLUR_SAMPLES);
 }
 
 

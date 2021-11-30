@@ -17,6 +17,11 @@ namespace PowerPost
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SunShaftSettings settings)
         {
             var sunPos = new Vector4(Mathf.Clamp01(settings.sunPos.value.x), Mathf.Clamp01(settings.sunPos.value.y), 0, settings.maxRadius.value);
+            if (RenderSettings.sun)
+            {
+                sunPos=renderingData.cameraData.camera.WorldToViewportPoint(RenderSettings.sun.transform.position);
+                sunPos.w = settings.maxRadius.value;
+            }
 
             var mat = GetTargetMaterial(SHADER_NAME);
             var cmd = CommandBufferUtils.Get(context, nameof(SunShaftPass));
@@ -33,20 +38,26 @@ namespace PowerPost
             //return;
 
             // 2 radial blur
-            var offsets = settings.sunShaftBlurRadius.value * (1f / 768f);
+            const float DELTA = 0.0078f;
+            var offsets = settings.sunShaftBlurRadius.value * DELTA;
             mat.SetVector("_BlurRadius4", new Vector4(offsets, offsets, 0, 0));
             for (int i = 0; i < settings.radialBlurIterations.value; i++)
             {
                 cmd.BlitColorDepth(COLOR_RT_ID, COLOR_RT2_ID, DepthTarget, mat, RADIAS_BLUR_PASS);
 
-                offsets = settings.sunShaftBlurRadius.value * (i * 2 + 1) * 6 / 768f;
+                offsets = settings.sunShaftBlurRadius.value * (i * 2 + 1) * DELTA;
                 mat.SetVector("_BlurRadius4", new Vector4(offsets, offsets, 0, 0));
 
                 cmd.BlitColorDepth(COLOR_RT2_ID, COLOR_RT_ID, DepthTarget, mat, RADIAS_BLUR_PASS);
 
-                offsets = settings.sunShaftBlurRadius.value * (i * 2 + 2) * 6 / 768f;
+                offsets = settings.sunShaftBlurRadius.value * (i * 2 + 2) * DELTA;
                 mat.SetVector("_BlurRadius4", new Vector4(offsets, offsets, 0, 0));
             }
+
+
+            //BlitToColorBuffer(cmd, COLOR_RT_ID);
+            //context.ExecuteCommandBuffer(cmd);
+            //return;
 
             // 3 composite
             var sunColor = Color.clear;

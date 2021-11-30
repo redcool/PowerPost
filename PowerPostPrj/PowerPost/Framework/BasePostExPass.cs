@@ -55,6 +55,11 @@ namespace PowerPost
         {
             get { return Renderer.cameraColorTarget; }
         }
+
+        public void BlitToColorBuffer(CommandBuffer cmd,RenderTargetIdentifier id)
+        {
+            cmd.BlitColorDepth(id, ColorTarget, DepthTarget, DefaultMaterial, 0);
+        }
     }
 
     public abstract class BasePostExPass<T> : BasePostExPass where T : BasePostExSettings
