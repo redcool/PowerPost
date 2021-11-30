@@ -16,10 +16,10 @@ namespace PowerPost {
         [Header("Sun Color")]
         public ColorParameter sunThreshold = new ColorParameter(new Color(.8f, .7f, .6f,0));
         public ColorParameter sunColor = new ColorParameter(Color.white);
-        public FloatParameter sunShaftIntensity = new FloatParameter(1.15f);
+        public ClampedFloatParameter sunShaftIntensity = new ClampedFloatParameter(0,0,50);
 
         [Header("Sun Range")]
-        public ClampedFloatParameter maxRadius = new ClampedFloatParameter(0.2f,0.1f,1f);
+        public ClampedFloatParameter maxRadius = new ClampedFloatParameter(0.2f,0,1);
 
 
         public override BasePostExPass CreateNewInstance()
@@ -29,7 +29,7 @@ namespace PowerPost {
 
         public override bool IsActive()
         {
-            return true;
+            return maxRadius.value > 0 || sunShaftIntensity.value > 0;
         }
     }
 }
