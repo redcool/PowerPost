@@ -7,8 +7,12 @@ namespace PowerPost {
     public class SunShaftSettings : BasePostExSettings
     {
         [Header("Sun")]
+        [Tooltip("use Lighting/Environment/Sun Source")]
         public BoolParameter useRenderSettingsSun = new BoolParameter(true);
         public Vector2Parameter sunPos = new Vector2Parameter(new Vector4(.5f, .5f));
+
+        public BoolParameter hiddenSunShaftBackfaceSun = new BoolParameter(true);
+
 
         [Header("Radial Blur")]
         public ClampedIntParameter radialBlurIterations = new ClampedIntParameter(1, 1,4);
