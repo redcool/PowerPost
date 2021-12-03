@@ -12,7 +12,7 @@ namespace PowerPost {
         public ClampedIntParameter iterators = new ClampedIntParameter( 4,1,7 );
         public ClampedFloatParameter threshold = new ClampedFloatParameter( 0.5f ,0,10);
         public ClampedFloatParameter softThreshold = new ClampedFloatParameter( 0.5f ,0,1);
-        public ClampedFloatParameter smoothBorder = new ClampedFloatParameter( 1 ,0.5f,2);
+        //public ClampedFloatParameter smoothBorder = new ClampedFloatParameter( 1 ,0.5f,2);
         public ColorParameter bloomColor = new ColorParameter ( Color.white );
 
         public override BasePostExPass CreateNewInstance()

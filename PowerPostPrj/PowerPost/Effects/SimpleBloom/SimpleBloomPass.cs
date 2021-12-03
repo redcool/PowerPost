@@ -73,7 +73,7 @@ namespace PowerPost
 
             //pass 3
             mat.SetFloat("_Intensity", Mathf.GammaToLinearSpace(settings.intensity.value));
-            mat.SetFloat("_SmoothBorder", Mathf.GammaToLinearSpace(settings.smoothBorder.value));
+            //mat.SetFloat("_SmoothBorder", Mathf.GammaToLinearSpace(settings.smoothBorder.value));
             mat.SetTexture("_BloomTex", buffer0);
             mat.SetColor("_BloomColor", settings.bloomColor.value);
 

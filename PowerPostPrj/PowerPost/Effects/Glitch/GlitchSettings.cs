@@ -16,8 +16,13 @@
         public ClampedFloatParameter snowFlakeAmplitude = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter verticalJump = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter horizontalShake = new ClampedFloatParameter(0, 0, 1);
+        
+        [Header("Color Drift")]
         public ClampedFloatParameter colorDrift = new ClampedFloatParameter(0, 0, 1);
+        public ClampedFloatParameter colorDriftSpeed = new ClampedFloatParameter(666,1,1000f);
 
+        [Header("Draw Per Objects")]
+        [Tooltip("draw layer's objects with stencil")]
         public LayerMaskParameter layer = new LayerMaskParameter(0);
 
         public ClampedIntParameter stencilRef = new ClampedIntParameter(6, 0, 255);

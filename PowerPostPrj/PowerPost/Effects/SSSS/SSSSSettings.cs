@@ -26,7 +26,7 @@ namespace PowerPost
         public ColorParameter falloff = new ColorParameter (Color.red );
         public ClampedFloatParameter blurScale = new ClampedFloatParameter(0.1f ,0.01f,20f);
         //public IntParameter samples = new IntParameter(25);
-        [Header("Draw Objects")]
+        [Header("Draw Objects write stencil")]
         public LayerMaskParameter layer = new LayerMaskParameter(0);
         public ClampedIntParameter stencilRef = new ClampedIntParameter(5,0,255);
 

@@ -47,14 +47,14 @@ namespace PowerPost
             verticalJumpTime += Time.deltaTime * settings.verticalJump.value * 10;
             mat.SetVector(_VerticalJump, new Vector2(settings.verticalJump.value, verticalJumpTime));
             mat.SetFloat(_HorizontalShake, settings.horizontalShake.value * 0.2f);
-            mat.SetVector(_ColorDrift, new Vector2(settings.colorDrift.value * 0.04f, Time.time * 666.66f));
+
+            //sin(y) * x :
+            //x: amplitude, y : period
+            mat.SetVector(_ColorDrift, new Vector2(settings.colorDrift.value * 0.04f, Time.time * settings.colorDriftSpeed.value));
             mat.SetInt(_StencilRef, settings.stencilRef.value);
 
-            var urpAsset = UniversalRenderPipeline.asset;
-            var depthTarget = urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
-
-            cmd.BlitColorDepth(Renderer.cameraColorTarget, _ColorRT, depthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, Renderer.cameraColorTarget, depthTarget, mat, 1);
+            cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
+            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
             CommandBufferUtils.Release(cmd);
