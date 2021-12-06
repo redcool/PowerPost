@@ -1,0 +1,320 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8615807721181755825
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3b52fff70db734eb5b54d206926681, type: 3}
+  m_Name: RadialBlurSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  radiusMin:
+    m_OverrideState: 1
+    m_Value: 0.12
+    min: 0
+    max: 1
+  radiusMax:
+    m_OverrideState: 1
+    m_Value: 0.86
+    min: 0
+    max: 1
+  blurSize:
+    m_OverrideState: 1
+    m_Value: 0.29
+    min: 0
+  roundness:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &-1750137317500595214
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ba45d6b376959499c3dffd1844fff5, type: 3}
+  m_Name: SSSSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  strength:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0, b: 0, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  falloff:
+    m_OverrideState: 1
+    m_Value: {r: 0.8396226, g: 0.479922, b: 0.46337664, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  blurScale:
+    m_OverrideState: 1
+    m_Value: 8.5
+    min: 0.01
+    max: 20
+  layer:
+    m_OverrideState: 1
+    m_Value:
+      serializedVersion: 2
+      m_Bits: 8
+  stencilRef:
+    m_OverrideState: 1
+    m_Value: 5
+    min: 0
+    max: 255
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
+  m_Name: Global Volume Profile
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: 4981167910640062526}
+  - {fileID: -8615807721181755825}
+  - {fileID: -1750137317500595214}
+  - {fileID: 114250422938574362}
+  - {fileID: 1330698629989190785}
+  - {fileID: 7880351773144058896}
+--- !u!114 &114250422938574362
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd5939f8cee2de4b9078710214d40bd, type: 3}
+  m_Name: SimpleBloomSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  intensity:
+    m_OverrideState: 1
+    m_Value: 10
+    min: 0
+    max: 10
+  iterators:
+    m_OverrideState: 1
+    m_Value: 4
+    min: 1
+    max: 7
+  threshold:
+    m_OverrideState: 1
+    m_Value: 1.04
+    min: 0
+    max: 10
+  softThreshold:
+    m_OverrideState: 1
+    m_Value: 0.417
+    min: 0
+    max: 1
+  smoothBorder:
+    m_OverrideState: 1
+    m_Value: 1.12
+    min: 0.5
+    max: 2
+  bloomColor:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0, b: 0, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+--- !u!114 &1330698629989190785
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eef20d9f47ea08489ca8b9633c59423, type: 3}
+  m_Name: SimpleDOFSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  distance:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+    max: 1
+  depthRange:
+    m_OverrideState: 0
+    m_Value: 0.05
+    min: 0
+    max: 1
+  blurSize:
+    m_OverrideState: 0
+    m_Value: 1.1
+    min: 1
+    max: 8
+  debugMode:
+    m_OverrideState: 0
+    m_Value: 0
+--- !u!114 &1924762467783699470
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181a62ed49136e74896f62df0edbabb3, type: 3}
+  m_Name: SSSSDiffuseProfile
+  m_EditorClassIdentifier: 
+  active: 1
+  <displayName>k__BackingField: 
+  m_AdvancedMode: 0
+  strength:
+    m_OverrideState: 1
+    m_Value:
+      r: 1
+      g: 0
+      b: 0
+      a: 1
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  falloff:
+    m_OverrideState: 1
+    m_Value:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  blurScale:
+    m_OverrideState: 1
+    m_Value: 5.1
+--- !u!114 &4981167910640062526
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f90506e20e21b4ab6b3a36d8cbb211, type: 3}
+  m_Name: GlitchSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  scanlineJitter:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  snowFlakeAmplitude:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  verticalJump:
+    m_OverrideState: 1
+    m_Value: 0.01
+    min: 0
+    max: 1
+  horizontalShake:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  colorDrift:
+    m_OverrideState: 1
+    m_Value: 0.51
+    min: 0
+    max: 1
+  colorDriftSpeed:
+    m_OverrideState: 1
+    m_Value: 3.03
+    min: 1
+    max: 10000
+  layer:
+    m_OverrideState: 1
+    m_Value:
+      serializedVersion: 2
+      m_Bits: 8
+  stencilRef:
+    m_OverrideState: 1
+    m_Value: 5
+    min: 0
+    max: 255
+--- !u!114 &7880351773144058896
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5d533ff1cee124ea846c66236784f1, type: 3}
+  m_Name: SunShaftSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  useRenderSettingsSun:
+    m_OverrideState: 0
+    m_Value: 1
+  sunPos:
+    m_OverrideState: 0
+    m_Value: {x: 0.5, y: 0.5}
+  hiddenSunShaftBackfaceSun:
+    m_OverrideState: 0
+    m_Value: 1
+  radialBlurIterations:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 1
+    max: 4
+  sunShaftBlurRadius:
+    m_OverrideState: 0
+    m_Value: 2.5
+    min: 1
+    max: 10
+  sunThreshold:
+    m_OverrideState: 0
+    m_Value: {r: 0.8, g: 0.7, b: 0.6, a: 0}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  sunColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  sunShaftIntensity:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 50
+  maxRadius:
+    m_OverrideState: 0
+    m_Value: 0.2
+    min: 0
+    max: 1
