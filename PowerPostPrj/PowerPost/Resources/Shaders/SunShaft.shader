@@ -10,7 +10,7 @@ Shader "Hidden/PowerPost/SunShaft"
         #define SAMPLES_FLOAT 6.0
 
         TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-        TEXTURE2D(_ColorRT);SAMPLER(sampler_ColorRT);
+        TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
 		half4 _MainTex_TexelSize;
 
         TEXTURE2D(_CameraDepthTexture);SAMPLER(sampler_CameraDepthTexture);
@@ -61,7 +61,7 @@ Shader "Hidden/PowerPost/SunShaft"
         half4 frag (VaryingsDefault i) : SV_Target
         {
             half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,i.texcoord);
-            half4 col2 = SAMPLE_TEXTURE2D(_ColorRT,sampler_ColorRT,i.texcoord);
+            half4 col2 = SAMPLE_TEXTURE2D(_BlurRT,sampler_BlurRT,i.texcoord);
             // return col2;
             col2 = saturate(col2 * _SunColor);
             // col = col + col2 - (col*col2);
