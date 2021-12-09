@@ -15,6 +15,7 @@ namespace PowerPost
         int _HorizontalShake = Shader.PropertyToID("_HorizontalShake");
         int _ColorDrift = Shader.PropertyToID("_ColorDrift");
         int _StencilRef = Shader.PropertyToID("_StencilRef");
+        int _BlockSize = Shader.PropertyToID("_BlockSize");
 
         Material mat;
         float verticalJumpTime;
@@ -36,11 +37,11 @@ namespace PowerPost
             
             if (!mat)
                 mat = new Material(Shader.Find(GLITCH_SHADER));
-
+            
             //jitter
-            var sl_threshold = Mathf.Clamp01(settings.scanlineJitter.value * 1.2f);
+            var sl_threshold = (settings.scanlineJitter.value * 1.2f);
             var sl_disp = 0.002f + Mathf.Pow(settings.scanlineJitter.value, 3) * 0.05f;
-            mat.SetVector(_ScanlineJiiterId, new Vector2(sl_threshold, sl_disp));
+            mat.SetVector(_ScanlineJiiterId, new Vector4(sl_threshold, sl_disp,1f/settings.jitterBlockSize.value,settings.glitchHorizontalIntensity.value));
             // snow flake
             mat.SetVector(_SnowFlake, new Vector2(Mathf.Sin(Random.value) * 0.1f, settings.snowFlakeAmplitude.value));
 

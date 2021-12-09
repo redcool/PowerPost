@@ -12,9 +12,17 @@
     [Serializable, VolumeComponentMenu("PowerPostEx/Glitch")]
     public class GlitchSettings : BasePostExSettings
     {
+        [Header("Global")]
+        public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(1,0,1);
+        [Header("Jitter")]
         public ClampedFloatParameter scanlineJitter = new ClampedFloatParameter(0, 0, 1);
+        public ClampedFloatParameter jitterBlockSize = new ClampedFloatParameter(1, 1,1000);
+        [Header("Snow Flake")]
         public ClampedFloatParameter snowFlakeAmplitude = new ClampedFloatParameter(0, 0, 1);
+        [Header("Vertical Jump")]
         public ClampedFloatParameter verticalJump = new ClampedFloatParameter(0, 0, 1);
+
+        [Header("h Shadke")]
         public ClampedFloatParameter horizontalShake = new ClampedFloatParameter(0, 0, 1);
         
         [Header("Color Drift")]
@@ -33,14 +41,14 @@
 
         public override bool IsActive()
         {
-            var active = scanlineJitter.value != 0 ||
-                snowFlakeAmplitude.value != 0 ||
-                verticalJump.value != 0 ||
-                horizontalShake.value != 0 ||
-                colorDrift.value != 0
-                ;
+            //var active = scanlineJitter.value != 0 ||
+            //    snowFlakeAmplitude.value != 0 ||
+            //    verticalJump.value != 0 ||
+            //    horizontalShake.value != 0 ||
+            //    colorDrift.value != 0
+            //    ;
 
-            return active;
+            return glitchHorizontalIntensity.value > 0;
         }
 
     }
