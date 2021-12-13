@@ -73,60 +73,6 @@ MonoBehaviour:
     m_Value: 5
     min: 0
     max: 255
---- !u!114 &-5287332654596283513
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8f90506e20e21b4ab6b3a36d8cbb211, type: 3}
-  m_Name: GlitchSettings
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  scanlineJitter:
-    m_OverrideState: 1
-    m_Value: 0
-    min: 0
-    max: 1
-  snowFlakeAmplitude:
-    m_OverrideState: 1
-    m_Value: 0
-    min: 0
-    max: 1
-  verticalJump:
-    m_OverrideState: 1
-    m_Value: 0.01
-    min: 0
-    max: 1
-  horizontalShake:
-    m_OverrideState: 1
-    m_Value: 0
-    min: 0
-    max: 1
-  colorDrift:
-    m_OverrideState: 1
-    m_Value: 0.51
-    min: 0
-    max: 1
-  colorDriftSpeed:
-    m_OverrideState: 1
-    m_Value: 3.03
-    min: 1
-    max: 10000
-  layer:
-    m_OverrideState: 1
-    m_Value:
-      serializedVersion: 2
-      m_Bits: 8
-  stencilRef:
-    m_OverrideState: 1
-    m_Value: 5
-    min: 0
-    max: 255
 --- !u!114 &-3301292782092311874
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -216,11 +162,6 @@ MonoBehaviour:
     m_Value: 0.417
     min: 0
     max: 1
-  smoothBorder:
-    m_OverrideState: 1
-    m_Value: 1.12
-    min: 0.5
-    max: 2
   bloomColor:
     m_OverrideState: 1
     m_Value: {r: 1, g: 0, b: 0, a: 1}
@@ -240,12 +181,76 @@ MonoBehaviour:
   m_Name: Global Volume Profile _glitch
   m_EditorClassIdentifier: 
   components:
-  - {fileID: -5287332654596283513}
   - {fileID: 7130441275232656504}
   - {fileID: -8689178939303964369}
   - {fileID: -3110989838521709235}
   - {fileID: -8738509126069706621}
   - {fileID: -3301292782092311874}
+  - {fileID: 3229192460140802937}
+--- !u!114 &3229192460140802937
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f90506e20e21b4ab6b3a36d8cbb211, type: 3}
+  m_Name: GlitchSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  glitchHorizontalIntensity:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 0
+    max: 1
+  scanlineJitter:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  jitterBlockSize:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 1
+    max: 1000
+  snowFlakeAmplitude:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  verticalJump:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  horizontalShake:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  colorDrift:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 1
+  colorDriftSpeed:
+    m_OverrideState: 1
+    m_Value: 1
+    min: 1
+    max: 1000
+  layer:
+    m_OverrideState: 1
+    m_Value:
+      serializedVersion: 2
+      m_Bits: 8
+  stencilRef:
+    m_OverrideState: 1
+    m_Value: 6
+    min: 0
+    max: 255
 --- !u!114 &7130441275232656504
 MonoBehaviour:
   m_ObjectHideFlags: 3
