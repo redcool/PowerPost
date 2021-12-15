@@ -17,7 +17,7 @@ namespace PowerPost
         int _StencilRef = Shader.PropertyToID("_StencilRef");
         int _BlockSize = Shader.PropertyToID("_BlockSize");
 
-        Material mat;
+        
         float verticalJumpTime;
         int _ColorRT = Shader.PropertyToID("_ColorRT");
 
@@ -34,9 +34,8 @@ namespace PowerPost
                     GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
                 });
             }
-            
-            if (!mat)
-                mat = new Material(Shader.Find(GLITCH_SHADER));
+
+            var mat = GetTargetMaterial(GLITCH_SHADER);
             
             //jitter
             var sl_threshold = (settings.scanlineJitter.value * 1.2f);

@@ -72,7 +72,7 @@ namespace PowerPost
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
             var settings = GetSettings();
-            if (!settings.IsActive())
+            if (settings == null || !settings.IsActive())
                 return;
 
             OnExecute(context, ref renderingData, settings);

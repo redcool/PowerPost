@@ -15,7 +15,6 @@ namespace PowerPost {
         int _BlurSize = Shader.PropertyToID("_BlurSize");
         int _StencilRef = Shader.PropertyToID("_StencilRef");
 
-        Material mat;
         List<Vector4> kernels = new List<Vector4>();
         Color lastStrength, lastFalloff;
 
@@ -48,9 +47,7 @@ namespace PowerPost {
             }
 
             // update material
-            if(!mat)
-                mat = new Material(Shader.Find(DIFFUSE_PROFILE_SHADER));
-
+            var mat = GetTargetMaterial(DIFFUSE_PROFILE_SHADER);
             mat.SetVectorArray(_Kernel,kernels);
             mat.SetFloat(_BlurSize,settings.blurScale.value);
             mat.SetInt(_StencilRef, settings.stencilRef.value);
