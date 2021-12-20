@@ -38,7 +38,7 @@ namespace PowerPost
 
             var cmd = CommandBufferUtils.Get(context, nameof(SimpleBloomPass));
             cmd.Blit(ColorTarget, _ColorRT);
-            cmd.BlitColorDepth(ColorTarget, buffer0, DepthTarget, mat, GRAB_ILLUM_PASS);
+            cmd.BlitColorDepth(ColorTarget, buffer0, buffer0, mat, GRAB_ILLUM_PASS);
 
             //pass 1,downsample
             int i = 1;
