@@ -11,12 +11,15 @@
 
     public class SimpleDOFPass : BasePostExPass<SimpleDOFSettings>
     {
-        static int COLOR_RT_ID = Shader.PropertyToID("_ColorRT");
-        static int DEPTH_RT_ID = Shader.PropertyToID("_DepthRT");
-        static int DISTANCE_ID = Shader.PropertyToID("_Distance");
-        static int BLUR_SIZE_ID = Shader.PropertyToID("_BlurSize");
-        static int DEPTH_RANGE_ID = Shader.PropertyToID("_DepthRange");
-        static int DEBUG_ID = Shader.PropertyToID("_Debug");
+        static int _ColorRT = Shader.PropertyToID("_ColorRT");
+        static int _DepthRT = Shader.PropertyToID("_DepthRT");
+        static int _BlurRT = Shader.PropertyToID("_BlurRT");
+
+        static int _Distance = Shader.PropertyToID("_Distance");
+        static int _BlurSize = Shader.PropertyToID("_BlurSize");
+        static int _DepthRange = Shader.PropertyToID("_DepthRange");
+        static int _Debug = Shader.PropertyToID("_Debug");
+
         const string SHADER_NAME = "Hidden/PowerPost/SimpleDOF";
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings)
@@ -24,16 +27,18 @@
             var mat = GetTargetMaterial(SHADER_NAME);
             var cmd = CommandBufferUtils.Get(context, nameof(SimpleDOFPass));
 
-            cmd.BlitColorDepth(DepthTarget, DEPTH_RT_ID, DEPTH_RT_ID, DefaultMaterial, 0);
-            cmd.SetGlobalTexture(DEPTH_RT_ID, DEPTH_RT_ID);
+            cmd.BlitColorDepth(DepthTarget, _DepthRT, _DepthRT, DefaultMaterial, 0);
+            cmd.SetGlobalTexture(_DepthRT, _DepthRT);
 
-            mat.SetFloat(DISTANCE_ID, settings.distance.value);
-            mat.SetFloat(BLUR_SIZE_ID, settings.blurSize.value);
-            mat.SetFloat(DEPTH_RANGE_ID, settings.depthRange.value);
-            mat.SetFloat(DEBUG_ID, settings.debugMode.value ? 1 : 0);
+            mat.SetFloat(_Distance, settings.distance.value);
+            mat.SetFloat(_BlurSize, settings.blurSize.value);
+            mat.SetFloat(_DepthRange, settings.depthRange.value);
+            mat.SetFloat(_Debug, settings.debugMode.value ? 1 : 0);
 
-            cmd.BlitColorDepth(ColorTarget, COLOR_RT_ID, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(COLOR_RT_ID, ColorTarget, DepthTarget, DefaultMaterial, 0);
+            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultMaterial, 0);
+
+            cmd.BlitColorDepth(_BlurRT, _ColorRT, _ColorRT, mat, 0);
+            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
             context.ExecuteCommandBuffer(cmd);
 
             CommandBufferUtils.Release(cmd);
@@ -44,15 +49,20 @@
             //var settings = GetSettings();
             //var downsample = settings.downsample.value;
 
-            cmd.GetTemporaryRT(COLOR_RT_ID, rtDesc);
+            cmd.GetTemporaryRT(_ColorRT, rtDesc);
             //cmd.GetTemporaryRT(COLOR_RT_ID, rtDesc.width / downsample, rtDesc.height / downsample, 0, FilterMode.Bilinear, rtDesc.colorFormat);
-            cmd.GetTemporaryRT(DEPTH_RT_ID, rtDesc.width, rtDesc.height,16,FilterMode.Bilinear,RenderTextureFormat.R16);
+            cmd.GetTemporaryRT(_DepthRT, rtDesc.width, rtDesc.height,16,FilterMode.Bilinear,RenderTextureFormat.R16);
+
+            var w = rtDesc.width >> 1;
+            var h = rtDesc.height >> 1;
+            cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
         }
 
         public override void FrameCleanup(CommandBuffer cmd)
         {
-            cmd.ReleaseTemporaryRT(COLOR_RT_ID);
-            cmd.ReleaseTemporaryRT(DEPTH_RT_ID);
+            cmd.ReleaseTemporaryRT(_ColorRT);
+            cmd.ReleaseTemporaryRT(_DepthRT);
+            cmd.ReleaseTemporaryRT(_BlurRT);
         }
     }
 }

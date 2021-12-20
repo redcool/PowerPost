@@ -68,7 +68,7 @@ float3 AMDTonemapper(float3 color)
 // TonemapWithWeight
 //--------------------------------------------------------------------------------------
 float max3(float3 c){return max(c.x,max(c.y,c.z));}
-float Tonemap(float3 color){
+float3 Tonemap(float3 color){
     return color * rcp(max3(color)+1.0);
 }
 
