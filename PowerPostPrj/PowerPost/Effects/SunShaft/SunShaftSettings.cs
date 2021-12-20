@@ -1,9 +1,11 @@
 namespace PowerPost {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Rendering;
 
+    [Serializable, VolumeComponentMenu("PowerPostEx/SunShaft")]
     public class SunShaftSettings : BasePostExSettings
     {
         [Header("Sun")]

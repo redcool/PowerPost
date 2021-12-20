@@ -1,10 +1,10 @@
 ﻿namespace PowerPost
 {
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.Rendering;
     using UnityEngine.Rendering.Universal;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
         const string TONE_MAPPING_SHADER = "Hidden/PowerPost/ToneMapping";
 
-        void InitTextures(CommandBuffer cmd,RenderTextureDescriptor desc)
+        void InitTextures(CommandBuffer cmd, RenderTextureDescriptor desc)
         {
             cmd.GetTemporaryRT(_ColorRT, desc);
 
