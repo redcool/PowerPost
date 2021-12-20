@@ -13,7 +13,7 @@
     public class GlitchSettings : BasePostExSettings
     {
         [Header("Global")]
-        public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(1,0,1);
+        public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
         [Header("Jitter")]
         public ClampedFloatParameter scanlineJitter = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter jitterBlockSize = new ClampedFloatParameter(1, 1,1000);

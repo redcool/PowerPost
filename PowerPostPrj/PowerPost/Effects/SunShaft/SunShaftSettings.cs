@@ -35,7 +35,7 @@ namespace PowerPost {
 
         public override bool IsActive()
         {
-            return maxRadius.value > 0 || sunShaftIntensity.value > 0;
+            return maxRadius.value > 0 && sunShaftIntensity.value > 0;
         }
     }
 }

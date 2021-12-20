@@ -82,7 +82,7 @@ namespace PowerPost
             mat.SetVector("_SunColor", sunColor);
 
             cmd.BlitColorDepth(ColorTarget, _ResultTex, DepthTarget, mat, SCREEN_PASS);
-            cmd.BlitColorDepth(_ResultTex, ColorTarget, DepthTarget, DefaultMaterial, 0);
+            cmd.BlitColorDepth(_ResultTex, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
 
             CleanupTextures(cmd);
             context.ExecuteCommandBuffer(cmd);

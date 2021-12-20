@@ -1,4 +1,4 @@
-Shader "Hidden/PowerPost/__"
+Shader "Hidden/PowerPost/DefaultBlit"
 {
     Properties
     {
@@ -21,7 +21,6 @@ Shader "Hidden/PowerPost/__"
             float4 frag (VaryingsDefault i) : SV_Target
             {
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord);
-
                 return col;
             }
             ENDHLSL

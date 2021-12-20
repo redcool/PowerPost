@@ -38,7 +38,7 @@
             mat.SetFloat("_Weight", settings.weight.value);
 
             cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
+            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
 
             context.ExecuteCommandBuffer(cmd);
             CleanTextures(cmd);

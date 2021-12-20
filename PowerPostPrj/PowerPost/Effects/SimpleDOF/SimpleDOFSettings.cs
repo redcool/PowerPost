@@ -29,7 +29,7 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return blurSize.value > 1;
+            return blurSize.value > 1.1f;
         }
 
     }

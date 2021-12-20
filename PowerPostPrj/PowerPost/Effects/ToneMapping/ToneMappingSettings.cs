@@ -28,8 +28,10 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return true;
+            return mode != Mode.None;
         }
+
+        public new int ID => int.MaxValue;
     }
 
     [Serializable]

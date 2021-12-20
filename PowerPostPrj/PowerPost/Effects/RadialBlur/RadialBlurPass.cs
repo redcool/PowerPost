@@ -33,11 +33,11 @@ namespace PowerPost
             var cmd = CommandBufferUtils.Get(context, nameof(RadialBlurPass));
 
             // blur 
-            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultMaterial, 0);
+            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultMaterialBlit, 0);
 
 
             cmd.BlitColorDepth(ColorTarget, _ResultRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ResultRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
+            cmd.BlitColorDepth(_ResultRT, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
 
             context.ExecuteCommandBuffer(cmd);
             CommandBufferUtils.Release( cmd);
@@ -45,8 +45,8 @@ namespace PowerPost
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
-            var w = cameraTextureDescriptor.width >> 4;
-            var h = cameraTextureDescriptor.height >> 4;
+            var w = cameraTextureDescriptor.width >> 3;
+            var h = cameraTextureDescriptor.height >> 3;
             cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
             cmd.GetTemporaryRT(_ResultRT,cameraTextureDescriptor);
         }

@@ -13,9 +13,9 @@ namespace PowerPost
     {
         public ScriptableRenderer Renderer { set; get; }
 
-        public const string POWER_POST_DEFAULT_SHADER = "Hidden/PowerPost/Default";
+        public const string POWER_POST_DEFAULT_SHADER = "Hidden/PowerPost/DefaultBlit";
         Material defaultMaterial;
-        public Material DefaultMaterial
+        public Material DefaultMaterialBlit
         {
             get
             {
@@ -58,7 +58,7 @@ namespace PowerPost
 
         public void BlitToColorBuffer(CommandBuffer cmd,RenderTargetIdentifier id)
         {
-            cmd.BlitColorDepth(id, ColorTarget, DepthTarget, DefaultMaterial, 0);
+            cmd.BlitColorDepth(id, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
         }
     }
 

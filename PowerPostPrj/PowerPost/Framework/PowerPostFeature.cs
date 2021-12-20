@@ -59,7 +59,7 @@ namespace PowerPost
             {
                 postExSettingTypes.Add(item);
             }
-
+            
         }
 
 
