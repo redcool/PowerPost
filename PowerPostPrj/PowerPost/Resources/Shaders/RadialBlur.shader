@@ -13,6 +13,8 @@ Shader "Hidden/PowerPost/RadialBlur"
         #include "PowerPostLib.hlsl"
         TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
         float4 _MainTex_TexelSize;
+
+        TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
     ENDHLSL
 
     SubShader
@@ -42,11 +44,12 @@ CBUFFER_END
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord);
 
                 float blurSize = max(0.0001,_BlurSize.x);
-                float4 blurCol = SampleDirBlur(_MainTex,sampler_MainTex,i.texcoord,dir / dirLen * blurSize);
+                float4 blurCol = SampleDirBlur(_BlurRT,sampler_BlurRT,i.texcoord,dir / dirLen * blurSize);
 
                 return lerp(col,blurCol,dist);
             }
             ENDHLSL
         }
+
     }
 }

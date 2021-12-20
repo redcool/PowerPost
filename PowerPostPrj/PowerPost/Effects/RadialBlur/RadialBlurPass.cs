@@ -13,7 +13,8 @@ namespace PowerPost
         static int _BlurSize = Shader.PropertyToID("_BlurSize");
         static int _Aspect = Shader.PropertyToID("_Aspect");
 
-        static int _ColorRT = Shader.PropertyToID("_ColorRT");
+        static int _BlurRT = Shader.PropertyToID("_BlurRT");
+        static int _ResultRT = Shader.PropertyToID("_ResultRT");
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, RadialBlurSettings settings)
         {
@@ -31,20 +32,29 @@ namespace PowerPost
 
             var cmd = CommandBufferUtils.Get(context, nameof(RadialBlurPass));
 
-            cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
+            // blur 
+            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultMaterial, 0);
+
+
+            cmd.BlitColorDepth(ColorTarget, _ResultRT, DepthTarget, mat, 0);
+            cmd.BlitColorDepth(_ResultRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
+
             context.ExecuteCommandBuffer(cmd);
             CommandBufferUtils.Release( cmd);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
-            cmd.GetTemporaryRT(_ColorRT, cameraTextureDescriptor);
+            var w = cameraTextureDescriptor.width >> 4;
+            var h = cameraTextureDescriptor.height >> 4;
+            cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
+            cmd.GetTemporaryRT(_ResultRT,cameraTextureDescriptor);
         }
 
         public override void FrameCleanup(CommandBuffer cmd)
         {
-            cmd.ReleaseTemporaryRT(_ColorRT);
+            cmd.ReleaseTemporaryRT(_BlurRT);
+            cmd.ReleaseTemporaryRT(_ResultRT);
         }
     }
 }
