@@ -10,7 +10,7 @@ namespace PowerPost {
     {
         const string DIFFUSE_PROFILE_SHADER = "Hidden/PowerPost/ScreenDiffuseProfile";
 
-        int sceneColorRTId = Shader.PropertyToID("_SceneColorRT");
+        int _SceneColorRT = Shader.PropertyToID("_SceneColorRT");
         int _Kernel = Shader.PropertyToID("_Kernel");
         int _BlurSize = Shader.PropertyToID("_BlurSize");
         int _StencilRef = Shader.PropertyToID("_StencilRef");
@@ -52,12 +52,8 @@ namespace PowerPost {
             mat.SetFloat(_BlurSize,settings.blurScale.value);
             mat.SetInt(_StencilRef, settings.stencilRef.value);
 
-            // look urp asset's depthTexture mode
-            var urpAsset = UniversalRenderPipeline.asset;
-            var depthTarget = urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
-
-            cmd.BlitColorDepth(Renderer.cameraColorTarget, sceneColorRTId, depthTarget, mat, 0);
-            cmd.BlitColorDepth(sceneColorRTId, Renderer.cameraColorTarget, depthTarget, mat, 1);
+            cmd.BlitColorDepth(ColorTarget, _SceneColorRT, DepthTarget, mat, 0);
+            cmd.BlitColorDepth(_SceneColorRT, ColorTarget, DepthTarget, mat, 1);
             context.ExecuteCommandBuffer(cmd);
 
             CommandBufferUtils.Release(cmd);
@@ -65,12 +61,12 @@ namespace PowerPost {
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
-            cmd.GetTemporaryRT(sceneColorRTId, cameraTextureDescriptor);
+            cmd.GetTemporaryRT(_SceneColorRT, cameraTextureDescriptor);
         }
 
         public override void FrameCleanup(CommandBuffer cmd)
         {
-            cmd.ReleaseTemporaryRT(sceneColorRTId);
+            cmd.ReleaseTemporaryRT(_SceneColorRT);
         }
     }
 }
