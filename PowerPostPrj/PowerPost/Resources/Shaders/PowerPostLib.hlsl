@@ -105,8 +105,8 @@ VaryingsDefault VertDefaultQuad(AttributesDefault input){
     0
     -1 0 1 . 3
 */
-const static half2 TRIANGLE_VERTEIES[3] = {-1,-1,3,-1,-1,3};
-const static half2 TRIANGLE_UV[3] = {0,0,2,0,0,2};
+const static half2 TRIANGLE_VERTEIES[3] = {-1,-1,-1,3,3,-1};
+const static half2 TRIANGLE_UV[3] = {0,0,0,2,2,0};
 
 VaryingsDefault VertDefault(uint vid:SV_VertexID){
     VaryingsDefault output;

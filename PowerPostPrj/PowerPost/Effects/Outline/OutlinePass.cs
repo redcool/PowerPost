@@ -8,31 +8,44 @@ namespace PowerPost {
 
     public class OutlinePass : BasePostExPass<OutlineSettings>
     {
-        int _BlurTex = Shader.PropertyToID("_BlurTex");
+        int _DepthTex = Shader.PropertyToID("_DepthTex");
         int _ColorTex = Shader.PropertyToID("_ColorTex");
+        int _BlurColorTex = Shader.PropertyToID("_BlurColorTex");
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, OutlineSettings settings)
         {
             var outlineMat = GetTargetMaterial("Hidden/PowerPost/Outline");
-            var cmd = CommandBufferUtils.Get(context,nameof(OutlinePass));
+            outlineMat.SetFloat("_OutlineWidth", settings.outlineWidth.value);
+            outlineMat.SetColor("_OutlineColor", settings.outlineColor.value);
+
+            var cmd = CommandBufferUtils.Get(context, nameof(OutlinePass));
 
             var cam = renderingData.cameraData.camera;
 
-            SetupTextures(cmd,cam,settings);
+            SetupTextures(cmd, cam, settings);
 
             var layer = settings.layer.value;
-            if (layer != 0)
+            if (layer != 0 && layer != -1)
             {
-                cmd.SetRenderTarget(_BlurTex);
+                cmd.SetRenderTarget(_BlurColorTex);
                 context.ExecuteCommandBuffer(cmd);
                 GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, null);
 
                 cmd.SetRenderTarget(ColorTarget);
                 context.ExecuteCommandBuffer(cmd);
-                cmd.Clear();
+
+                cmd.BlitColorDepth(_BlurColorTex, _DepthTex, _DepthTex, DefaultMaterialBlit, 0);
             }
-            cmd.SetGlobalTexture(_BlurTex, _BlurTex);
-            cmd.BlitColorDepth(ColorTarget, _ColorTex, DepthTarget, outlineMat, 0);
+            else if (layer == -1)
+            {
+                cmd.BlitColorDepth(DepthTarget, _DepthTex, _DepthTex, DefaultMaterialBlit, 0);
+            }
+
+            cmd.SetGlobalTexture(_BlurColorTex, _BlurColorTex);
+            cmd.SetGlobalTexture(_DepthTex, _DepthTex);
+
+
+            cmd.BlitColorDepth(ColorTarget, _ColorTex, _ColorTex, outlineMat, 0);
             cmd.BlitColorDepth(_ColorTex, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
 
             context.ExecuteCommandBuffer(cmd);
@@ -42,7 +55,7 @@ namespace PowerPost {
 
         private void ReleaseTextures(CommandBuffer cmd)
         {
-            cmd.ReleaseTemporaryRT(_BlurTex);
+            cmd.ReleaseTemporaryRT(_DepthTex);
             cmd.ReleaseTemporaryRT(_ColorTex);
         }
 
@@ -50,7 +63,9 @@ namespace PowerPost {
         {
             var w = cam.pixelWidth >> settings.downSamples.value;
             var h = cam.pixelHeight >> settings.downSamples.value;
-            cmd.GetTemporaryRT(_BlurTex, w, h,16,FilterMode.Bilinear);
+            cmd.GetTemporaryRT(_DepthTex, w, h,0,FilterMode.Bilinear, RenderTextureFormat.Default);
+            cmd.GetTemporaryRT(_BlurColorTex, w, h, 16, FilterMode.Bilinear, RenderTextureFormat.Default);
+
             cmd.GetTemporaryRT(_ColorTex, cam.pixelWidth, cam.pixelHeight, 0, FilterMode.Bilinear);
         }
     }

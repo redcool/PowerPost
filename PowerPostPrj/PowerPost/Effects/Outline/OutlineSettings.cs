@@ -8,9 +8,11 @@ namespace PowerPost {
     [Serializable, VolumeComponentMenu("PowerPostEx/Outline")]
     public class OutlineSettings : BasePostExSettings
     {
-        public ClampedFloatParameter width = new ClampedFloatParameter(0.01f, 0.0001f, 0.01f);
         public ClampedIntParameter downSamples = new ClampedIntParameter(0, 0, 4);
         public LayerMaskParameter layer = new LayerMaskParameter(0);
+
+        public ColorParameter outlineColor = new ColorParameter(Color.white);
+        public ClampedFloatParameter outlineWidth = new ClampedFloatParameter(1, 0.1f, 3f);
 
         public override BasePostExPass CreateNewInstance()
         {
@@ -19,6 +21,7 @@ namespace PowerPost {
 
         public override bool IsActive()
         {
+            return true;
             return layer.value != 0;
         }
     }
