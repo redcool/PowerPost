@@ -37,7 +37,8 @@ namespace PowerPost
         {
             buf.SetGlobalTexture(_MAIN_TEX_ID, source);
             buf.SetRenderTarget(colorBuffer, depthBuffer);
-            buf.DrawMesh(FullscreenQuad, Matrix4x4.identity, mat, 0, pass);
+            //buf.DrawMesh(FullscreenQuad, Matrix4x4.identity, mat, 0, pass);
+            buf.DrawProcedural(Matrix4x4.identity, mat, 0, MeshTopology.Triangles, 3);
         }
 
     }

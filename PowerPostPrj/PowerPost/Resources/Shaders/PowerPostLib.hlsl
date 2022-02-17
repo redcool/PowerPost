@@ -86,10 +86,32 @@ struct VaryingsDefault{
     float2 texcoord:TEXCOORD;
 };
 
-VaryingsDefault VertDefault(AttributesDefault input){
+/** fullscreen quad
+    1
+    0 
+    -1 0 1
+*/
+VaryingsDefault VertDefaultQuad(AttributesDefault input){
     VaryingsDefault output;
     output.vertex = float4(input.vertex.xy,0,1);
     output.texcoord = input.texcoord;//(input.vertex.xy + 1) * 0.5;
+    return output;
+}
+
+/** fullscreen triangle
+    3
+    .
+    1    .
+    0
+    -1 0 1 . 3
+*/
+const static half2 TRIANGLE_VERTEIES[3] = {-1,-1,3,-1,-1,3};
+const static half2 TRIANGLE_UV[3] = {0,0,2,0,0,2};
+
+VaryingsDefault VertDefault(uint vid:SV_VertexID){
+    VaryingsDefault output;
+    output.vertex = half4(TRIANGLE_VERTEIES[vid],0,1);
+    output.texcoord = TRIANGLE_UV[vid];
     return output;
 }
 
