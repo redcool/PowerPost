@@ -115,4 +115,27 @@ VaryingsDefault VertDefault(uint vid:SV_VertexID){
     return output;
 }
 
+/**
+    计算四周深度差之和
+        .
+    . depth .
+        .
+    
+*/
+#define OFFSET_COUNT 4
+static half2 offsets[OFFSET_COUNT] = {
+    half2(-1,0),
+    half2(0,1),
+    half2(1,0),
+    half2(0,-1)
+};
+
+half CalcDepthDeltaAround(TEXTURE2D_PARAM(depthTex,state),half depth,half2 depthUV,half scale){
+    half delta = 0;
+    for( int x = 0;x < OFFSET_COUNT ;x++){
+        delta += depth - Linear01Depth(SAMPLE_TEXTURE2D(depthTex,state, depthUV + offsets[x] * scale),_ZBufferParams);
+    }
+    return delta;
+}
+
 #endif //POWER_POST_LIB_HLSL
