@@ -246,7 +246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -308,7 +308,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.59
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -370,7 +370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -432,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.34
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -589,7 +589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.09
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -661,7 +661,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: d81515f9d433fe641ac5155cfb349040, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 7458f9374101a194ea887567b3254e64, type: 2}
 --- !u!4 &1047203830
 Transform:
   m_ObjectHideFlags: 0

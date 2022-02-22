@@ -5,8 +5,8 @@ namespace PowerPost {
     using UnityEngine;
     using UnityEngine.Rendering;
 
-    [Serializable, VolumeComponentMenu("PowerPostEx/Outline")]
-    public class OutlineSettings : BasePostExSettings
+    [Serializable, VolumeComponentMenu("PowerPostEx/SSAO")]
+    public class SSAOSettings : BasePostExSettings
     {
         public ClampedIntParameter downSamples = new ClampedIntParameter(0, 0, 4);
         public LayerMaskParameter layer = new LayerMaskParameter(0);
@@ -16,11 +16,12 @@ namespace PowerPost {
 
         public override BasePostExPass CreateNewInstance()
         {
-            return new OutlinePass();
+            return new SSAOPass();
         }
 
         public override bool IsActive()
         {
+            //return true;
             return layer.value != 0;
         }
     }

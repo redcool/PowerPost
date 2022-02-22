@@ -217,7 +217,7 @@ MonoBehaviour:
     m_Value: 0
   sunPos:
     m_OverrideState: 1
-    m_Value: {x: 0.34, y: 0.84}
+    m_Value: {x: 0.5, y: 0.84}
   hiddenSunShaftBackfaceSun:
     m_OverrideState: 1
     m_Value: 1
@@ -228,7 +228,7 @@ MonoBehaviour:
     max: 4
   sunShaftBlurRadius:
     m_OverrideState: 1
-    m_Value: 1.78
+    m_Value: 2.19
     min: 1
     max: 10
   sunThreshold:
@@ -245,12 +245,12 @@ MonoBehaviour:
     showEyeDropper: 1
   sunShaftIntensity:
     m_OverrideState: 1
-    m_Value: 21.6
+    m_Value: 49.7
     min: 0
     max: 50
   maxRadius:
     m_OverrideState: 1
-    m_Value: 0.18
+    m_Value: 0.192
     min: 0
     max: 1
 --- !u!114 &5205076983436479166

@@ -9,13 +9,6 @@ Shader "Hidden/PowerPost/RadialBlur"
         _RadiusMax("_RadiusMax",range(0,1)) = 1
         _BlurSize("_BlurSize",float) = 0.5
     }
-    HLSLINCLUDE
-        #include "PowerPostLib.hlsl"
-        TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-        float4 _MainTex_TexelSize;
-
-        TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
-    ENDHLSL
 
     SubShader
     {
@@ -27,6 +20,12 @@ Shader "Hidden/PowerPost/RadialBlur"
             HLSLPROGRAM
             #pragma vertex VertDefault
             #pragma fragment frag
+
+            #include "PowerPostLib.hlsl"
+            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
+            float4 _MainTex_TexelSize;
+
+            TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
 CBUFFER_START(UnityPerMaterial)
             float2 _Center;
             float _RadiusMin,_RadiusMax;

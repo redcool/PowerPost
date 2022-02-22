@@ -1,5 +1,40 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7965323580491380883
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b5f8b10f4158f744b7c72b29a13da84, type: 3}
+  m_Name: SSAOSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  downSamples:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 4
+  layer:
+    m_OverrideState: 0
+    m_Value:
+      serializedVersion: 2
+      m_Bits: 0
+  outlineColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  outlineWidth:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0.1
+    max: 3
 --- !u!114 &-6690242533076779509
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -58,11 +93,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   m_AdvancedMode: 0
-  width:
-    m_OverrideState: 1
-    m_Value: 0.00095
-    min: 0.0001
-    max: 0.01
   downSamples:
     m_OverrideState: 1
     m_Value: 0
@@ -72,7 +102,18 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value:
       serializedVersion: 2
-      m_Bits: 8
+      m_Bits: 4294967295
+  outlineColor:
+    m_OverrideState: 1
+    m_Value: {r: 0.8584906, g: 0.0040494935, b: 0.0040494935, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  outlineWidth:
+    m_OverrideState: 1
+    m_Value: 2.1
+    min: 0.1
+    max: 3
 --- !u!114 &-522830349771770714
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -166,6 +207,8 @@ MonoBehaviour:
   - {fileID: -19263669577127379}
   - {fileID: 3191802302427137956}
   - {fileID: -1319704679513378675}
+  - {fileID: 4641413423776988317}
+  - {fileID: -7965323580491380883}
 --- !u!114 &3191802302427137956
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -285,6 +328,45 @@ MonoBehaviour:
     m_Value: 5
     min: 0
     max: 255
+--- !u!114 &4641413423776988317
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 0
+  m_AdvancedMode: 0
+  color:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+    hdr: 0
+    showAlpha: 0
+    showEyeDropper: 1
+  center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.127
+    min: 0
+    max: 1
+  smoothness:
+    m_OverrideState: 1
+    m_Value: 0.2
+    min: 0.01
+    max: 1
+  rounded:
+    m_OverrideState: 1
+    m_Value: 0
+  oval:
+    m_OverrideState: 1
+    m_Value: {x: 0.43, y: -0.41, z: 0, w: 0}
 --- !u!114 &6677302914878662868
 MonoBehaviour:
   m_ObjectHideFlags: 3
