@@ -106,7 +106,6 @@ namespace PowerPost
                     postPassDict[settingType] = pass = settings.CreateNewInstance();
                     //pass.ConfigureTarget(renderer.cameraColorTarget, renderer.cameraDepthTarget);
                     pass.Renderer = renderer;
-                    pass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
                 }
                 renderer.EnqueuePass(pass);
                 PostExPassList.Add(pass);

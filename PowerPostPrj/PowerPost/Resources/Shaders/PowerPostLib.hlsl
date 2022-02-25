@@ -4,6 +4,7 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Filtering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Shaders/PostProcessing/Common.hlsl"
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
 half4 SampleBox(TEXTURE2D_PARAM(tex,state), half4 texel, half2 uv, half delta) {
 	half2 p = texel.xy * delta;

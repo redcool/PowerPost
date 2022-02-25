@@ -4,25 +4,23 @@ namespace PowerPost {
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Rendering;
+    using UnityEngine.Rendering.Universal;
 
     [Serializable, VolumeComponentMenu("PowerPostEx/SSAO")]
     public class SSAOSettings : BasePostExSettings
     {
         public ClampedIntParameter downSamples = new ClampedIntParameter(0, 0, 4);
-        public LayerMaskParameter layer = new LayerMaskParameter(0);
-
-        public ColorParameter outlineColor = new ColorParameter(Color.white);
-        public ClampedFloatParameter outlineWidth = new ClampedFloatParameter(1, 0.1f, 3f);
-
+        public ClampedFloatParameter sampleRadius = new ClampedFloatParameter(0.5f, 0.1f, 1);
+        public TextureParameter noiseTex = new TextureParameter(null);
         public override BasePostExPass CreateNewInstance()
         {
-            return new SSAOPass();
+            var pass =  new SSAOPass();
+            return pass;
         }
-
         public override bool IsActive()
         {
-            //return true;
-            return layer.value != 0;
+
+            return true;
         }
     }
 }

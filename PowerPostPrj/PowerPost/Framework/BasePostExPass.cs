@@ -15,6 +15,7 @@ namespace PowerPost
 
         public const string POWER_POST_DEFAULT_SHADER = "Hidden/PowerPost/DefaultBlit";
         Material defaultMaterial;
+        Material material;
         public Material DefaultMaterialBlit
         {
             get
@@ -27,7 +28,12 @@ namespace PowerPost
             }
         }
 
-        Material material;
+
+        public BasePostExPass()
+        {
+            renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
+        }
+
         public Material GetTargetMaterial(string shaderName)
         {
             if (!material)

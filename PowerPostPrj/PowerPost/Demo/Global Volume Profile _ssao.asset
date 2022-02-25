@@ -288,42 +288,7 @@ MonoBehaviour:
   - {fileID: -2401009374545108293}
   - {fileID: -8980675036142961229}
   - {fileID: -2684813901076371476}
-  - {fileID: 2193089805292645980}
---- !u!114 &2193089805292645980
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b5f8b10f4158f744b7c72b29a13da84, type: 3}
-  m_Name: SSAOSettings
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  downSamples:
-    m_OverrideState: 1
-    m_Value: 1
-    min: 0
-    max: 4
-  layer:
-    m_OverrideState: 1
-    m_Value:
-      serializedVersion: 2
-      m_Bits: 0
-  outlineColor:
-    m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
-  outlineWidth:
-    m_OverrideState: 1
-    m_Value: 1
-    min: 0.1
-    max: 3
+  - {fileID: 7217871673762557730}
 --- !u!114 &4564676366210348061
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -356,6 +321,33 @@ MonoBehaviour:
   debugMode:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &7217871673762557730
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b5f8b10f4158f744b7c72b29a13da84, type: 3}
+  m_Name: SSAOSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  downSamples:
+    m_OverrideState: 1
+    m_Value: 0
+    min: 0
+    max: 4
+  sampleRadius:
+    m_OverrideState: 1
+    m_Value: 0.35
+    min: 0.1
+    max: 1
+  noiseTex:
+    m_OverrideState: 1
+    m_Value: {fileID: 2800000, guid: b52d5033b68309943a2386c270a90f44, type: 3}
 --- !u!114 &8595306529100297335
 MonoBehaviour:
   m_ObjectHideFlags: 3
