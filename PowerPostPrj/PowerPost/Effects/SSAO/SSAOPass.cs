@@ -36,14 +36,19 @@ namespace PowerPost {
             var cam = renderingData.cameraData.camera;
 
             var mat = GetTargetMaterial("Hidden/PowerPost/SSAO");
-            mat.SetFloat("_TanHalfFovY", Mathf.Tan(Mathf.Deg2Rad * cam.fieldOfView / 2));
-            mat.SetFloat("_Aspect", cam.aspect);
-            mat.SetFloat("_SampleRadius", settings.sampleRadius.value);
-            mat.SetVectorArray("_Kernel", Kernels);
-            mat.SetMatrix("_ProjMat", GL.GetGPUProjectionMatrix(cam.projectionMatrix, false));
-            mat.SetTexture("_NoiseMap", settings.noiseTex.value);
+            //mat.SetFloat("_TanHalfFovY", Mathf.Tan(Mathf.Deg2Rad * cam.fieldOfView / 2));
+            //mat.SetFloat("_Aspect", cam.aspect);
+            //mat.SetFloat("_SampleRadius", settings.sampleRadius.value);
+            //mat.SetVectorArray("_Kernel", Kernels);
+            //mat.SetMatrix("_ProjMat", GL.GetGPUProjectionMatrix(cam.projectionMatrix, false));
+            //mat.SetTexture("_NoiseMap", settings.noiseTex.value);
 
-            mat.SetVector("_SSAOParams",new Vector4(1,settings.sampleRadius.value,1,3));
+            //(intensity,radius,downsample,sampleCount)
+            mat.SetVector("_SSAOParams",new Vector4(settings.intensity.value,
+                settings.sampleRadius.value,
+                settings.downSamples.value,
+                settings.sampleCount.value
+            ));
 
             var cmd = CommandBufferUtils.Get(context, nameof(SSAOPass));
 
