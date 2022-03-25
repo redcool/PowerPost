@@ -12,7 +12,7 @@ namespace PowerPost {
         public ClampedIntParameter downSamples = new ClampedIntParameter(1, 1, 4);
         public ClampedFloatParameter sampleRadius = new ClampedFloatParameter(0.1f, 0.01f, 0.2f);
         public ClampedIntParameter sampleCount = new ClampedIntParameter(1,1,6);
-        public ClampedFloatParameter intensity = new ClampedFloatParameter(1, 0.1f, 5f);
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0, 0f, 5f);
         public override BasePostExPass CreateNewInstance()
         {
             var pass =  new SSAOPass();
@@ -20,7 +20,7 @@ namespace PowerPost {
         }
         public override bool IsActive()
         {
-
+            return intensity.value > 0;
             return true;
         }
     }
