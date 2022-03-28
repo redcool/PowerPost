@@ -40,8 +40,8 @@
             cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
             cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
 
-            context.ExecuteCommandBuffer(cmd);
             CleanTextures(cmd);
+            context.ExecuteCommandBuffer(cmd);
             CommandBufferUtils.Release(cmd);
         }
     }
