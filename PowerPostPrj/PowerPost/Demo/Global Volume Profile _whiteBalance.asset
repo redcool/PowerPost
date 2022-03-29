@@ -113,30 +113,6 @@ MonoBehaviour:
   debugMode:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &-3731593606080183768
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c87d317de57dbd84e86cd640e4215bd6, type: 3}
-  m_Name: WhiteBalanceSettings
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  temperature:
-    m_OverrideState: 1
-    m_Value: 25
-    min: -100
-    max: 100
-  tint:
-    m_OverrideState: 1
-    m_Value: -100
-    min: -100
-    max: 100
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +123,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Global Volume Profile _tone
+  m_Name: Global Volume Profile _whiteBalance
   m_EditorClassIdentifier: 
   components:
   - {fileID: 5404789168662656773}
@@ -157,7 +133,6 @@ MonoBehaviour:
   - {fileID: -5984172738735940071}
   - {fileID: 7476134607694991065}
   - {fileID: 4813415655309978088}
-  - {fileID: -3731593606080183768}
 --- !u!114 &1011183109951206468
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -204,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 914aecf19d90c5542ba3cc4491783d46, type: 3}
   m_Name: ToneMappingSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_AdvancedMode: 0
   mode:
     m_OverrideState: 1

@@ -44,7 +44,7 @@ Shader "Hidden/PowerPost/SSAO"
         }
 
         float3 ReconstructViewPos(float2 uv,float depth,float2 ps,float2 pt){
-            float3 vpos = float3((uv.xy *2 -1-pt) * ps,1) * depth;
+            float3 vpos = float3((uv.xy *2 -1-pt) * ps,1) * depth; //[0,1] ->[-d,d]
             return vpos;
         }
 
@@ -73,7 +73,7 @@ Shader "Hidden/PowerPost/SSAO"
             return float3(CosSin(theta) * sqrt(1 - u*u),u);
         }
 
-        float4 SSAO(float2 uv){
+        float SSAO(float2 uv){
             float2 ps,pt;
             float3x3 camProj = CalcProjection(ps,pt);
 
@@ -98,17 +98,20 @@ Shader "Hidden/PowerPost/SSAO"
                 float3 vpos = ReconstructViewPos(sampleUV,d,ps,pt);
                 float3 dir = vpos - viewPos;
 
-                float a1 = max(dot(dir,normal) - 0.02 * depth,0);
-                float a2 = dot(dir,dir) * 0.00001;
+                float a1 = max(dot(dir,normal) - 0.01 * depth,0);
+                float a2 = dot(dir,dir) * 0.0001;
+                // return a2;
                 ao += a1 / a2;
             }
-            ao *= RADIUS;
+            ao *= RADIUS * INTENSITY * rcpSampleCount;
 
             return ao;
         }
             float4 frag(VaryingsDefault input) : SV_Target
             {
-                return SSAO(input.texcoord);
+                float ao = SSAO(input.texcoord);
+                return ao;
+                
             }
             ENDHLSL
         }
