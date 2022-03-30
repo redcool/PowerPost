@@ -132,6 +132,8 @@ float3 DX11DSK(float3 color)
     return color;
 }
 
-
+float3 Exposure(float3 color,float exposure){
+    return 1 - exp(-color * exposure);
+}
 
 #endif //TONE_MAPPERS_HLSL

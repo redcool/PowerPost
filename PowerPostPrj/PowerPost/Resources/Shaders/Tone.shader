@@ -29,6 +29,7 @@ Shader "Hidden/PowerPost/ToneMapping"
                     case 3 : return Reinhard(col);
                     case 4 : return Uncharted2Tonemap(col);
                     case 5 : return TonemapWithWeight(col,_Weight);
+                    case 6 : return Exposure(col,_Weight);
                     default:return 1;
                 }
             }

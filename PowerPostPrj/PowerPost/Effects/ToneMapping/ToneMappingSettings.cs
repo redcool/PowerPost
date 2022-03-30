@@ -16,7 +16,8 @@ namespace PowerPost
             ACES = 2,
             Reinhard =3,
             Uncharted2Tonemap = 4,
-            Weight = 5
+            Weight = 5,
+            Exposure = 6,
         }
         public ToneMappingModeParameter mode = new ToneMappingModeParameter(Mode.None);
         public FloatParameter weight = new FloatParameter(1);

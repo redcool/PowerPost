@@ -113,7 +113,7 @@ MonoBehaviour:
   debugMode:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &-3731593606080183768
+--- !u!114 &-5386508100119324704
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,13 +128,13 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   temperature:
-    m_OverrideState: 1
-    m_Value: 25
+    m_OverrideState: 0
+    m_Value: 0
     min: -100
     max: 100
   tint:
-    m_OverrideState: 1
-    m_Value: -100
+    m_OverrideState: 0
+    m_Value: 0
     min: -100
     max: 100
 --- !u!114 &11400000
@@ -157,7 +157,7 @@ MonoBehaviour:
   - {fileID: -5984172738735940071}
   - {fileID: 7476134607694991065}
   - {fileID: 4813415655309978088}
-  - {fileID: -3731593606080183768}
+  - {fileID: -5386508100119324704}
 --- !u!114 &1011183109951206468
 MonoBehaviour:
   m_ObjectHideFlags: 3
