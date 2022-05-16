@@ -59,11 +59,13 @@ namespace PowerPost
             }
         }
 
-        public static void BlitColorDepth(this CommandBuffer buf, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass)
+        public static void BlitColorDepth(this CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass)
         {
-            buf.SetGlobalTexture(_MAIN_TEX_ID, source);
-            buf.SetRenderTarget(colorBuffer, depthBuffer);
-            buf.DrawMesh(FullscreenQuad, Matrix4x4.identity, mat, 0, pass);
+            cmd.SetGlobalTexture(_MAIN_TEX_ID, source);
+            cmd.SetRenderTarget(colorBuffer, depthBuffer);
+            cmd.DrawMesh(FullscreenQuad, Matrix4x4.identity, mat, 0, pass);
+
+
             //buf.DrawMesh(FullscreenTriangle, Matrix4x4.identity, mat, 0, pass);
             //buf.DrawProcedural(Matrix4x4.identity, mat, 0, MeshTopology.Triangles, 3);
         }

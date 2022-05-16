@@ -80,6 +80,8 @@ namespace PowerPost
             var settings = GetSettings();
             if (settings == null || !settings.IsActive())
                 return;
+            
+            Renderer = renderingData.cameraData.renderer;
 
             OnExecute(context, ref renderingData, settings);
         }

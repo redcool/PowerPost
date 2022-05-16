@@ -9,10 +9,10 @@ namespace PowerPost {
     [Serializable, VolumeComponentMenu("PowerPostEx/SSAO")]
     public class SSAOSettings : BasePostExSettings
     {
-        public ClampedIntParameter downSamples = new ClampedIntParameter(1, 1, 4);
-        public ClampedFloatParameter sampleRadius = new ClampedFloatParameter(0.1f, 0.01f, 0.2f);
-        public ClampedIntParameter sampleCount = new ClampedIntParameter(1,1,6);
         public ClampedFloatParameter intensity = new ClampedFloatParameter(0, 0f, 5f);
+        public ClampedFloatParameter radius = new ClampedFloatParameter(0.1f, 0.01f, 0.2f);
+        public BoolParameter downSample = new BoolParameter(true);
+        public ClampedIntParameter sampleCount = new ClampedIntParameter(1, 1, 40);
         public override BasePostExPass CreateNewInstance()
         {
             var pass =  new SSAOPass();

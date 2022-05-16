@@ -9,60 +9,40 @@ namespace PowerPost {
 
     public class SSAOPass : BasePostExPass<SSAOSettings>
     {
-        int _DepthTex = Shader.PropertyToID("_DepthTex");
-        int _ColorTex = Shader.PropertyToID("_ColorTex");
-        int _BlurColorTex = Shader.PropertyToID("_BlurColorTex");
+        int _Intensity = Shader.PropertyToID(nameof(_Intensity));
+        int _Radius = Shader.PropertyToID(nameof(_Radius));
+        int _Downsample = Shader.PropertyToID(nameof(_Downsample));
+        int _SampleCount = Shader.PropertyToID(nameof(_SampleCount));
 
-        const int MAX_KERNEL_SIZE = 64;
-        Vector4[] kernels;
-        Vector4[] Kernels
-        {
-            get
-            {
-                if (kernels == null)
-                {
-                    kernels = new Vector4[MAX_KERNEL_SIZE];
-                    for (int i = 0; i < MAX_KERNEL_SIZE; i++)
-                    {
-                        kernels[i] = Random.insideUnitSphere;
-                    }
-                }
-                return kernels;
-            }
-        }
+        int _SSAOMask = Shader.PropertyToID(nameof(_SSAOMask));
+        int _BlurTex = Shader.PropertyToID(nameof(_BlurTex));
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSAOSettings settings)
         {
             var cam = renderingData.cameraData.camera;
 
-            var mat = GetTargetMaterial("Hidden/PowerPost/SSAO");
-            //mat.SetFloat("_TanHalfFovY", Mathf.Tan(Mathf.Deg2Rad * cam.fieldOfView / 2));
-            //mat.SetFloat("_Aspect", cam.aspect);
-            //mat.SetFloat("_SampleRadius", settings.sampleRadius.value);
-            //mat.SetVectorArray("_Kernel", Kernels);
-            //mat.SetMatrix("_ProjMat", GL.GetGPUProjectionMatrix(cam.projectionMatrix, false));
-            //mat.SetTexture("_NoiseMap", settings.noiseTex.value);
-
-            //(intensity,radius,downsample,sampleCount)
-            mat.SetVector("_SSAOParams",new Vector4(settings.intensity.value,
-                settings.sampleRadius.value,
-                settings.downSamples.value,
-                settings.sampleCount.value
-            ));
+            var mat = GetTargetMaterial("Hidden/PowerPost/Obscurance");
+            
+            mat.SetFloat(_Intensity,settings.intensity.value);
+            mat.SetFloat(_Radius, settings.radius.value);
+            mat.SetFloat(_Downsample, settings.downSample.value ? 0.5f : 1f);
+            mat.SetInt(_SampleCount, settings.sampleCount.value);
+            
 
             var cmd = CommandBufferUtils.Get(context, nameof(SSAOPass));
-
-
-
             SetupTextures(cmd, cam, settings);
 
-            //cmd.BlitColorDepth(Renderer.cameraDepthTarget, _DepthTex, _DepthTex, DefaultMaterialBlit, 0);
-            //cmd.SetGlobalTexture(_BlurColorTex, _BlurColorTex);
-            //cmd.SetGlobalTexture(_DepthTex, _DepthTex);
+            // 0 calc ssao mask 
+            cmd.BlitColorDepth(ColorTarget, _SSAOMask, _SSAOMask, mat, 0);
 
+            // 1 h blur
+            cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
 
-            cmd.BlitColorDepth(ColorTarget, _ColorTex, _ColorTex, mat, 0);
-            cmd.BlitColorDepth(_ColorTex, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(_BlurTex, ColorTarget, ColorTarget, DefaultMaterialBlit, 0);
+            //// 2 v blur
+            //cmd.BlitColorDepth(_BlurTex, _SSAOMask, _SSAOMask, mat, 5);
+            //// 3 composite
+            //cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget,mat,6);
 
             context.ExecuteCommandBuffer(cmd);
             ReleaseTextures(cmd);
@@ -71,18 +51,17 @@ namespace PowerPost {
 
         private void ReleaseTextures(CommandBuffer cmd)
         {
-            cmd.ReleaseTemporaryRT(_DepthTex);
-            cmd.ReleaseTemporaryRT(_ColorTex);
+            cmd.ReleaseTemporaryRT(_SSAOMask);
+            cmd.ReleaseTemporaryRT(_BlurTex);
         }
 
         private void SetupTextures(CommandBuffer cmd,Camera cam, SSAOSettings settings)
         {
-            var w = cam.pixelWidth >> settings.downSamples.value;
-            var h = cam.pixelHeight >> settings.downSamples.value;
-            //cmd.GetTemporaryRT(_DepthTex, w, h,0,FilterMode.Bilinear,RenderTextureFormat.R16);
-            cmd.GetTemporaryRT(_BlurColorTex, w, h, 16, FilterMode.Bilinear, RenderTextureFormat.Default);
+            var w = cam.pixelWidth >> (settings.downSample.value ? 1 : 0);
+            var h = cam.pixelHeight >> (settings.downSample.value ? 1 : 0);
 
-            cmd.GetTemporaryRT(_ColorTex, cam.pixelWidth, cam.pixelHeight, 0, FilterMode.Bilinear);
+            cmd.GetTemporaryRT(_SSAOMask, w, h, 0, FilterMode.Bilinear, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            cmd.GetTemporaryRT(_BlurTex, cam.pixelWidth>>2, cam.pixelHeight>>2, 0,FilterMode.Bilinear);
         }
     }
 }
