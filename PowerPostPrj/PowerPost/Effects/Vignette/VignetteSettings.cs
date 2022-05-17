@@ -10,7 +10,7 @@ namespace PowerPost
     [Serializable,VolumeComponentMenu("PowerPostEx/Vignette")]
     public class VignetteSettings : BasePostExSettings
     {
-        public ClampedFloatParameter intensity = new ClampedFloatParameter(1,0,2);
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0,0,2);
         public ClampedFloatParameter smoothness = new ClampedFloatParameter(0.5f, 0, 1);
         public BoolParameter rounded = new BoolParameter(false);
         public ColorParameter color = new ColorParameter(Color.black);
@@ -29,7 +29,7 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return true;
+            return intensity.value>0;
         }
     }
 }

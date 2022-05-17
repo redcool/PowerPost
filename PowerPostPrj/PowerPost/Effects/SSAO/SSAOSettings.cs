@@ -10,18 +10,17 @@ namespace PowerPost {
     public class SSAOSettings : BasePostExSettings
     {
         public ClampedFloatParameter intensity = new ClampedFloatParameter(0, 0f, 5f);
-        public ClampedFloatParameter radius = new ClampedFloatParameter(0.1f, 0.01f, 0.2f);
+        public ClampedFloatParameter radius = new ClampedFloatParameter(0.1f, 0.00001f, 0.2f);
         public BoolParameter downSample = new BoolParameter(true);
+        [Header("Samples")]
         public ClampedIntParameter sampleCount = new ClampedIntParameter(1, 1, 40);
         public override BasePostExPass CreateNewInstance()
         {
-            var pass =  new SSAOPass();
-            return pass;
+            return new SSAOPass();
         }
         public override bool IsActive()
         {
             return intensity.value > 0;
-            return true;
         }
     }
 }

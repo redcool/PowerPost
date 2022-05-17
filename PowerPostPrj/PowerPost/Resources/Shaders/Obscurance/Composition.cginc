@@ -38,11 +38,16 @@ half BlurSmall(sampler2D tex, float2 uv, float2 delta)
 }
 
 // Final composition shader
+/**
+    _MainTex (normal,ao)
+    _CameraOpaqueTexture
+*/
 half4 frag_composition(v2f i) : SV_Target
 {
     float2 delta = _MainTex_TexelSize.xy / _Downsample;
     half ao = BlurSmall(_MainTex, i.uvAlt, delta);
-
+    // half ao = tex2D(_MainTex,i.uvAlt);
+// return ao;
     half4 color = tex2D(_CameraOpaqueTexture, i.uv);
     color.rgb *= 1 - EncodeAO(ao);
 

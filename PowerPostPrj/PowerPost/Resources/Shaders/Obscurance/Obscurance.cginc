@@ -84,7 +84,7 @@ half4 frag_ao(v2f i) : SV_Target
     // Reconstruct the view-space position.
     float3 vpos_o = ReconstructViewPos(uv01, depth_o, p11_22, p13_31);
 
-norm_o = normalize(cross(ddy(vpos_o),ddx(vpos_o)));
+    norm_o = normalize(cross(ddy(vpos_o),ddx(vpos_o)));
 
     float ao = 0.0;
 // return norm_o.xyzx;

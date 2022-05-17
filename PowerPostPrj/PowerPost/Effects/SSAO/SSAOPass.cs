@@ -30,19 +30,17 @@ namespace PowerPost {
             mat.SetInt(_SampleCount, settings.sampleCount.value);
             
 
-            SetupTextures(cmd, cam, settings);
+            InitTextures(cmd, cam, settings);
 
-            // 0 calc ssao mask 
+            //// 0 calc ssao mask 
             cmd.BlitColorDepth(ColorTarget, _SSAOMask, _SSAOMask, mat, 0);
 
-            // 1 h blur
-            cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
-
-            cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, DefaultBlitMaterial, 0);
+            //// 1 h blur
+            //cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
             //// 2 v blur
             //cmd.BlitColorDepth(_BlurTex, _SSAOMask, _SSAOMask, mat, 5);
             //// 3 composite
-            //cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget,mat,6);
+            cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, mat, 6);
 
             ReleaseTextures(cmd);
         }
@@ -53,13 +51,13 @@ namespace PowerPost {
             cmd.ReleaseTemporaryRT(_BlurTex);
         }
 
-        private void SetupTextures(CommandBuffer cmd,Camera cam, SSAOSettings settings)
+        private void InitTextures(CommandBuffer cmd,Camera cam, SSAOSettings settings)
         {
             var w = cam.pixelWidth >> (settings.downSample.value ? 1 : 0);
             var h = cam.pixelHeight >> (settings.downSample.value ? 1 : 0);
 
             cmd.GetTemporaryRT(_SSAOMask, w, h, 0, FilterMode.Bilinear, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-            cmd.GetTemporaryRT(_BlurTex, cam.pixelWidth>>2, cam.pixelHeight>>2, 0,FilterMode.Bilinear);
+            cmd.GetTemporaryRT(_BlurTex, cam.pixelWidth>>1, cam.pixelHeight>>1, 0,FilterMode.Bilinear);
         }
     }
 }
