@@ -29,13 +29,12 @@ namespace PowerPost {
             SSSSKernel.CalculateKernel(kernels, 25, lastStrength, lastFalloff);
         }
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSSSSettings settings)
+        public override string PassName => nameof(SSSSPass);
+
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSSSSettings settings,CommandBuffer cmd)
         {
             //update kernel 
             CalcSSSSKernel(settings, kernels);
-
-            // command
-            var cmd = CommandBufferUtils.Get(context, nameof(SSSSPass));
 
             var layer = settings.layer.value;
             if(layer != 0)
@@ -54,9 +53,6 @@ namespace PowerPost {
 
             cmd.BlitColorDepth(ColorTarget, _SceneColorRT, DepthTarget, mat, 0);
             cmd.BlitColorDepth(_SceneColorRT, ColorTarget, DepthTarget, mat, 1);
-            context.ExecuteCommandBuffer(cmd);
-
-            CommandBufferUtils.Release(cmd);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

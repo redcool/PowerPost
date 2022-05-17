@@ -22,12 +22,13 @@
 
         const string SHADER_NAME = "Hidden/PowerPost/SimpleDOF";
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings)
+        public override string PassName => nameof(SimpleDOFPass);
+
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings,CommandBuffer cmd)
         {
             var mat = GetTargetMaterial(SHADER_NAME);
-            var cmd = CommandBufferUtils.Get(context, nameof(SimpleDOFPass));
 
-            cmd.BlitColorDepth(DepthTarget, _DepthRT, _DepthRT, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(DepthTarget, _DepthRT, _DepthRT, DefaultBlitMaterial, 0);
             cmd.SetGlobalTexture(_DepthRT, _DepthRT);
 
             mat.SetFloat(_Distance, settings.distance.value);
@@ -35,13 +36,10 @@
             mat.SetFloat(_DepthRange, settings.depthRange.value);
             mat.SetFloat(_Debug, settings.debugMode.value ? 1 : 0);
 
-            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultBlitMaterial, 0);
 
             cmd.BlitColorDepth(_BlurRT, _ColorRT, _ColorRT, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
-            context.ExecuteCommandBuffer(cmd);
-
-            CommandBufferUtils.Release(cmd);
+            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor rtDesc)

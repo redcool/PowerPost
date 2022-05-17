@@ -12,13 +12,13 @@ namespace PowerPost {
         int _ColorTex = Shader.PropertyToID("_ColorTex");
         int _BlurColorTex = Shader.PropertyToID("_BlurColorTex");
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, OutlineSettings settings)
+        public override string PassName => nameof(OutlinePass);
+
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, OutlineSettings settings,CommandBuffer cmd)
         {
             var outlineMat = GetTargetMaterial("Hidden/PowerPost/Outline");
             outlineMat.SetFloat("_OutlineWidth", settings.outlineWidth.value);
             outlineMat.SetColor("_OutlineColor", settings.outlineColor.value);
-
-            var cmd = CommandBufferUtils.Get(context, nameof(OutlinePass));
 
             var cam = renderingData.cameraData.camera;
 
@@ -34,11 +34,11 @@ namespace PowerPost {
                 cmd.SetRenderTarget(ColorTarget);
                 context.ExecuteCommandBuffer(cmd);
 
-                cmd.BlitColorDepth(_BlurColorTex, _DepthTex, _DepthTex, DefaultMaterialBlit, 0);
+                cmd.BlitColorDepth(_BlurColorTex, _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
             }
             else if (layer == -1)
             {
-                cmd.BlitColorDepth(DepthTarget, _DepthTex, _DepthTex, DefaultMaterialBlit, 0);
+                cmd.BlitColorDepth(DepthTarget, _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
             }
 
             cmd.SetGlobalTexture(_BlurColorTex, _BlurColorTex);
@@ -46,11 +46,11 @@ namespace PowerPost {
 
 
             cmd.BlitColorDepth(ColorTarget, _ColorTex, _ColorTex, outlineMat, 0);
-            cmd.BlitColorDepth(_ColorTex, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(_ColorTex, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
 
-            context.ExecuteCommandBuffer(cmd);
             ReleaseTextures(cmd);
-            CommandBufferUtils.Release(cmd);
+            context.ExecuteCommandBuffer(cmd);
+            CommandBufferUtils.ClearRelease(cmd);
         }
 
         private void ReleaseTextures(CommandBuffer cmd)

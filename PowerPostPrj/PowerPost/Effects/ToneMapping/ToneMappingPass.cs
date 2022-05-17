@@ -26,10 +26,10 @@
             cmd.ReleaseTemporaryRT(_ColorRT);
         }
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, ToneMappingSettings settings)
-        {
-            var cmd = CommandBufferUtils.Get(context, nameof(ToneMappingPass));
+        public override string PassName => nameof(ToneMappingPass);
 
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, ToneMappingSettings settings,CommandBuffer cmd)
+        {
             var desc = renderingData.cameraData.cameraTargetDescriptor;
 
             InitTextures(cmd, desc);
@@ -38,11 +38,9 @@
             mat.SetFloat("_Weight", settings.weight.value);
 
             cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
 
             CleanTextures(cmd);
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferUtils.Release(cmd);
         }
     }
 }

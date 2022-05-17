@@ -21,7 +21,7 @@ namespace PowerPost
             return cmd;
         }
 
-        public static void Release(CommandBuffer cmd)
+        public static void ClearRelease(CommandBuffer cmd)
         {
             //cmd.EndSample(cmd.name);
             cmd.Clear();

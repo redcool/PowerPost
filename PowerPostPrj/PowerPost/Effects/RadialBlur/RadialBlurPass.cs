@@ -16,7 +16,9 @@ namespace PowerPost
         static int _BlurRT = Shader.PropertyToID("_BlurRT");
         static int _ResultRT = Shader.PropertyToID("_ResultRT");
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, RadialBlurSettings settings)
+        public override string PassName => nameof(RadialBlurPass);
+
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, RadialBlurSettings settings,CommandBuffer cmd)
         {
             var cam = renderingData.cameraData.camera;
             var aspect = cam.pixelWidth / (float)cam.pixelHeight;
@@ -30,17 +32,13 @@ namespace PowerPost
             mat.SetFloat(_BlurSize, settings.blurSize.value);
             mat.SetFloat(_Aspect, settings.roundness.value ? aspect : 1);
 
-            var cmd = CommandBufferUtils.Get(context, nameof(RadialBlurPass));
-
             // blur 
-            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultBlitMaterial, 0);
 
 
             cmd.BlitColorDepth(ColorTarget, _ResultRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ResultRT, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(_ResultRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
 
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferUtils.Release( cmd);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

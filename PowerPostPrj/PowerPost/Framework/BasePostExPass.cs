@@ -15,8 +15,7 @@ namespace PowerPost
 
         public const string POWER_POST_DEFAULT_SHADER = "Hidden/PowerPost/DefaultBlit";
         Material defaultMaterial;
-        Material material;
-        public Material DefaultMaterialBlit
+        public Material DefaultBlitMaterial
         {
             get
             {
@@ -28,19 +27,9 @@ namespace PowerPost
             }
         }
 
-
         public BasePostExPass()
         {
             renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
-        }
-
-        public Material GetTargetMaterial(string shaderName)
-        {
-            if (!material)
-                material = new Material(Shader.Find(shaderName));
-            if (!material)
-                throw new ArgumentException($"{shaderName} not found!");
-            return material;
         }
 
         public T GetSettings<T>() where T :BasePostExSettings
@@ -62,31 +51,35 @@ namespace PowerPost
             get { return Renderer.cameraColorTarget; }
         }
 
-        public void BlitToColorBuffer(CommandBuffer cmd,RenderTargetIdentifier id)
-        {
-            cmd.BlitColorDepth(id, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
-        }
     }
 
     public abstract class BasePostExPass<T> : BasePostExPass where T : BasePostExSettings
     {
-        public T GetSettings()
+        Material material;
+        public Material GetTargetMaterial(string shaderName)
         {
-            return GetSettings<T>();
+            if (!material)
+                material = new Material(Shader.Find(shaderName));
+            return material;
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            var settings = GetSettings();
+            var settings = GetSettings<T>();
             if (settings == null || !settings.IsActive())
                 return;
             
             Renderer = renderingData.cameraData.renderer;
 
-            OnExecute(context, ref renderingData, settings);
+            var cmd = CommandBufferUtils.Get(context, PassName);
+            OnExecute(context, ref renderingData, settings,cmd);
+
+            context.ExecuteCommandBuffer(cmd);
+            CommandBufferUtils.ClearRelease(cmd);
         }
 
-        public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,T settings);
+        public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,T settings,CommandBuffer cmd);
+        public abstract string PassName { get; }
     }
 
 }

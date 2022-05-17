@@ -21,10 +21,10 @@ namespace PowerPost
         float verticalJumpTime;
         int _ColorRT = Shader.PropertyToID("_ColorRT");
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,GlitchSettings settings)
-        {
-            var cmd = CommandBufferUtils.Get(context,nameof(GlitchPass));
+        public override string PassName => nameof(GlitchPass);
 
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,GlitchSettings settings,CommandBuffer cmd)
+        {
             // draw layer's objects
             if (settings.layer.value != 0)
             {
@@ -55,10 +55,7 @@ namespace PowerPost
 
             cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
             cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, mat, 1);
-            context.ExecuteCommandBuffer(cmd);
 
-            CommandBufferUtils.Release(cmd);
-            cmd.Clear();
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

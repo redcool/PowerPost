@@ -65,7 +65,6 @@ namespace PowerPost
             cmd.SetRenderTarget(colorBuffer, depthBuffer);
             cmd.DrawMesh(FullscreenQuad, Matrix4x4.identity, mat, 0, pass);
 
-
             //buf.DrawMesh(FullscreenTriangle, Matrix4x4.identity, mat, 0, pass);
             //buf.DrawProcedural(Matrix4x4.identity, mat, 0, MeshTopology.Triangles, 3);
         }

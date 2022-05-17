@@ -17,7 +17,8 @@ namespace PowerPost {
         int _SSAOMask = Shader.PropertyToID(nameof(_SSAOMask));
         int _BlurTex = Shader.PropertyToID(nameof(_BlurTex));
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSAOSettings settings)
+        public override string PassName => nameof(SSAOPass);
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSAOSettings settings,CommandBuffer cmd)
         {
             var cam = renderingData.cameraData.camera;
 
@@ -29,7 +30,6 @@ namespace PowerPost {
             mat.SetInt(_SampleCount, settings.sampleCount.value);
             
 
-            var cmd = CommandBufferUtils.Get(context, nameof(SSAOPass));
             SetupTextures(cmd, cam, settings);
 
             // 0 calc ssao mask 
@@ -38,15 +38,13 @@ namespace PowerPost {
             // 1 h blur
             cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
 
-            cmd.BlitColorDepth(_BlurTex, ColorTarget, ColorTarget, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, DefaultBlitMaterial, 0);
             //// 2 v blur
             //cmd.BlitColorDepth(_BlurTex, _SSAOMask, _SSAOMask, mat, 5);
             //// 3 composite
             //cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget,mat,6);
 
-            context.ExecuteCommandBuffer(cmd);
             ReleaseTextures(cmd);
-            CommandBufferUtils.Release(cmd);
         }
 
         private void ReleaseTextures(CommandBuffer cmd)

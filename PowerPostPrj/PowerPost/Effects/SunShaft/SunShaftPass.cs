@@ -16,9 +16,9 @@ namespace PowerPost
         int _BlurRT2 = Shader.PropertyToID("_BlurRT2");
         // full size
         int _ResultTex = Shader.PropertyToID("_ResultTex");
-        
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SunShaftSettings settings)
+        public override string PassName => nameof(SunShaftPass);
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SunShaftSettings settings,CommandBuffer cmd)
         {
             var sunPos = new Vector4(Mathf.Clamp01(settings.sunPos.value.x), Mathf.Clamp01(settings.sunPos.value.y), 0, settings.maxRadius.value);
             var cam = renderingData.cameraData.camera;
@@ -39,7 +39,6 @@ namespace PowerPost
             }
 
             var mat = GetTargetMaterial(SHADER_NAME);
-            var cmd = CommandBufferUtils.Get(context, nameof(SunShaftPass));
             InitTextures(cmd, renderingData.cameraData.cameraTargetDescriptor);
 
             mat.SetVector("_BlurRadius4", new Vector4(1, 1, 0, 0) * settings.sunShaftBlurRadius.value);
@@ -82,11 +81,9 @@ namespace PowerPost
             mat.SetVector("_SunColor", sunColor);
 
             cmd.BlitColorDepth(ColorTarget, _ResultTex, DepthTarget, mat, SCREEN_PASS);
-            cmd.BlitColorDepth(_ResultTex, ColorTarget, DepthTarget, DefaultMaterialBlit, 0);
+            cmd.BlitColorDepth(_ResultTex, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
 
             CleanupTextures(cmd);
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferUtils.Release(cmd);
         }
 
         void InitTextures(CommandBuffer cmd, RenderTextureDescriptor desc)

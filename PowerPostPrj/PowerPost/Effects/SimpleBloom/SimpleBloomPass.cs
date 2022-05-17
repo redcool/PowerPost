@@ -17,7 +17,10 @@ namespace PowerPost
 
         RenderTexture[] textures = new RenderTexture[16];
         RenderTextureFormat rtFormat;
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleBloomSettings settings)
+
+        public override string PassName => nameof(SimpleBloomPass);
+
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleBloomSettings settings,CommandBuffer cmd)
         {
             var mat = GetTargetMaterial(SHADER_NAME);
 
@@ -36,7 +39,6 @@ namespace PowerPost
             // pass 0
             var buffer0 = textures[0] = RenderTexture.GetTemporary(w, h, 0, rtFormat);
 
-            var cmd = CommandBufferUtils.Get(context, nameof(SimpleBloomPass));
             cmd.Blit(ColorTarget, _ColorRT);
             cmd.BlitColorDepth(ColorTarget, buffer0, buffer0, mat, GRAB_ILLUM_PASS);
 
@@ -79,8 +81,6 @@ namespace PowerPost
 
             cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, mat, COMBINE_PASS);
 
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferUtils.Release(cmd);
             for (i = 0; i < settings.iterators.value; i++)
             {
                 RenderTexture.ReleaseTemporary(textures[i]);
@@ -97,5 +97,6 @@ namespace PowerPost
         {
             cmd.ReleaseTemporaryRT(_ColorRT);
         }
+
     }
 }

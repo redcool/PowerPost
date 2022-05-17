@@ -39,7 +39,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b5f8b10f4158f744b7c72b29a13da84, type: 3}
   m_Name: SSAOSettings
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   intensity:
     m_OverrideState: 1
     m_Value: 4.78
@@ -50,6 +50,43 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   sampleCount:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &-8615587277378136258
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e9b315299c20e4458db12df96953908, type: 3}
+  m_Name: VignetteSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1.04
+  smoothness:
+    m_OverrideState: 1
+    m_Value: 0.316
+  rounded:
+    m_OverrideState: 1
+    m_Value: 0
+  color:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  centerX:
+    m_OverrideState: 1
+    m_Value: 0.5
+  centerY:
+    m_OverrideState: 1
+    m_Value: 0.5
+  ovalX:
+    m_OverrideState: 1
+    m_Value: 1
+  ovalY:
     m_OverrideState: 1
     m_Value: 1
 --- !u!114 &-5740629127227192254
@@ -203,7 +240,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Global Volume Profile _ssao
+  m_Name: Global Volume Profile _vignette
   m_EditorClassIdentifier: 
   components:
   - {fileID: -5740629127227192254}
@@ -214,6 +251,7 @@ MonoBehaviour:
   - {fileID: -2401009374545108293}
   - {fileID: -8980675036142961229}
   - {fileID: -8966379184359789282}
+  - {fileID: -8615587277378136258}
 --- !u!114 &4564676366210348061
 MonoBehaviour:
   m_ObjectHideFlags: 3
