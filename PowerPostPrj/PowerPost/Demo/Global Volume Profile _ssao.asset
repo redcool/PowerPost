@@ -39,19 +39,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b5f8b10f4158f744b7c72b29a13da84, type: 3}
   m_Name: SSAOSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1.17
   radius:
     m_OverrideState: 1
-    m_Value: 0.037
+    m_Value: 0.092
   downSample:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   sampleCount:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 3
 --- !u!114 &-5740629127227192254
 MonoBehaviour:
   m_ObjectHideFlags: 3
