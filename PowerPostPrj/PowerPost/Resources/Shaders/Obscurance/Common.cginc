@@ -106,6 +106,20 @@ float LinearizeDepth(float z)
     return (1 - isOrtho * z) / (isPers * z + _ZBufferParams.y);
 }
 
+float LinearizeEyeDepth(float z){
+    return LinearizeDepth(z) * _ZBufferParams.z;
+}
+
+half4x4 unity_MatrixInvVP;
+half3 CalcWorldPos(float2 uv){
+    half d = LinearizeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
+    d = LinearizeEyeDepth(d);
+
+    half4 p = half4(uv,d,1);
+    p = mul(unity_MatrixInvVP,p);
+    return p.xyz/p.w;
+}
+
 // Depth/normal sampling functions
 float SampleDepth(float2 uv)
 {
@@ -128,6 +142,12 @@ float3 SampleNormal(float2 uv)
     norm = normalize(norm);
 #endif
     return norm;
+
+#elif defined(SOURCE_DEPTH)
+    half3 worldPos = CalcWorldPos(uv);
+    half3 n = cross(ddy(worldPos),ddx(worldPos));
+    return n;
+
 #else
     float4 cdn = tex2D(_CameraDepthNormalsTexture, uv);
     return DecodeViewNormalStereo(cdn) * float3(1, 1, -1);

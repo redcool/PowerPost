@@ -49,9 +49,10 @@ Shader "Hidden/PowerPost/Obscurance"
         {
             ZTest Always Cull Off ZWrite Off
             CGPROGRAM
-            #define SOURCE_DEPTHNORMALS
+            // #define SOURCE_DEPTHNORMALS
+            #define SOURCE_DEPTH
             #define BLUR_HORIZONTAL
-            #define BLUR_SAMPLE_CENTER_NORMAL
+            // #define BLUR_SAMPLE_CENTER_NORMAL
             #include "SeparableBlur.cginc"
             #pragma vertex vert
             #pragma fragment frag_blur

@@ -36,9 +36,14 @@ namespace PowerPost {
             cmd.BlitColorDepth(ColorTarget, _SSAOMask, _SSAOMask, mat, 0);
 
             //// 1 h blur
-            //cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
+            cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
             //// 2 v blur
-            //cmd.BlitColorDepth(_BlurTex, _SSAOMask, _SSAOMask, mat, 5);
+            cmd.BlitColorDepth(_BlurTex, _SSAOMask, _SSAOMask, mat, 5);
+            //cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, DefaultBlitMaterial, 0);
+            //return;
+
+            //cmd.Blit(ColorTarget, Shader.PropertyToID("_CameraOpaqueTexture"));
+
             //// 3 composite
             cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, mat, 6);
 
