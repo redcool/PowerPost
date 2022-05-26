@@ -11,7 +11,11 @@
 
     public class ToneMappingPass : BasePostExPass<ToneMappingSettings>
     {
-        int _ColorRT = Shader.PropertyToID("_ColorRT");
+        int _ColorRT = Shader.PropertyToID(nameof(_ColorRT));
+        int _Mode = Shader.PropertyToID(nameof(_Mode));
+        int _Weight = Shader.PropertyToID(nameof(_Weight));
+        int _Saturate = Shader.PropertyToID(nameof(_Saturate));
+        int _Brightness = Shader.PropertyToID(nameof(_Brightness));
 
         const string TONE_MAPPING_SHADER = "Hidden/PowerPost/ToneMapping";
 
@@ -34,8 +38,10 @@
 
             InitTextures(cmd, desc);
             var mat = GetTargetMaterial(TONE_MAPPING_SHADER);
-            mat.SetInt("_Mode", (int)settings.mode.value);
-            mat.SetFloat("_Weight", settings.weight.value);
+            mat.SetInt(_Mode, (int)settings.mode.value);
+            mat.SetFloat(_Weight, settings.weight.value);
+            mat.SetFloat(_Saturate, settings.saturate.value);
+            mat.SetFloat(_Brightness, settings.brightness.value);
 
             cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
             cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);

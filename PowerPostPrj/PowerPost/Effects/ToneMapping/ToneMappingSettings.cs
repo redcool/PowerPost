@@ -18,13 +18,22 @@ namespace PowerPost
             Uncharted2Tonemap = 4,
             Weight = 5,
             Exposure = 6,
+            ACESFitted = 7,
         }
         public ToneMappingModeParameter mode = new ToneMappingModeParameter(Mode.None);
+
+        [Tooltip("Weight tone:")]
         public FloatParameter weight = new FloatParameter(1);
+
+        [Header("Tone")]
+        public FloatParameter saturate = new FloatParameter(1);
+        public FloatParameter brightness = new FloatParameter(1);
 
         public override BasePostExPass CreateNewInstance()
         {
-            return new ToneMappingPass();
+            var pass = new ToneMappingPass();
+            pass.renderPassEvent = UnityEngine.Rendering.Universal.RenderPassEvent.BeforeRenderingPostProcessing;
+            return pass;
         }
 
         public override bool IsActive()

@@ -2,7 +2,8 @@ Shader "Hidden/PowerPost/ToneMapping"
 {
     Properties
     {
-        
+        _Saturate("_Saturate",float)=1
+        _Brightness("_Brightness",float)=1
     }
     SubShader
     {
@@ -16,10 +17,13 @@ Shader "Hidden/PowerPost/ToneMapping"
             #pragma fragment frag
             #include "PowerPostLib.hlsl"
             #include "Lib/ToneMappers.hlsl"
+            #include "Lib/ACESFitted.hlsl"
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
             int _Mode;
             float _Weight;
+            float _Saturate;
+            float _Brightness;
 
             float3 ApplyTone(float3 col){
                 switch(_Mode){
@@ -30,6 +34,7 @@ Shader "Hidden/PowerPost/ToneMapping"
                     case 4 : return Uncharted2Tonemap(col);
                     case 5 : return TonemapWithWeight(col,_Weight);
                     case 6 : return Exposure(col,_Weight);
+                    case 7 : return ACESFitted(col);
                     default:return 1;
                 }
             }
@@ -40,6 +45,9 @@ Shader "Hidden/PowerPost/ToneMapping"
                 // col.xyz = Reinhard(col.xyz);
                 col.xyz = ApplyTone(col.xyz);
 
+                col.xyz = lerp(dot(half3(0.2,0.7,0.07),col.xyz),col.xyz,_Saturate);
+                col.xyz = lerp(0,col.xyz,_Brightness);
+                col.xyz = saturate(col.xyz);
                 return col;
             }
             ENDHLSL

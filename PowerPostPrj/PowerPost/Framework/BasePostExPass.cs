@@ -29,7 +29,7 @@ namespace PowerPost
 
         public BasePostExPass()
         {
-            renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
+            renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing-1;
         }
 
         public T GetSettings<T>() where T :BasePostExSettings
