@@ -25,9 +25,14 @@ namespace PowerPost
         [Tooltip("Weight tone:")]
         public FloatParameter weight = new FloatParameter(1);
 
-        [Header("Tone")]
-        public FloatParameter saturate = new FloatParameter(1);
-        public FloatParameter brightness = new FloatParameter(1);
+        [Header("Color Tint")]
+        //public ClampedFloatParameter hue = new ClampedFloatParameter(0,0,1);
+        [Tooltip("hue scale")]
+        public FloatParameter scale = new FloatParameter(1);
+        [Tooltip("hue offset")]
+        public ClampedFloatParameter offset = new ClampedFloatParameter(0,0,1);
+        public MinFloatParameter saturate = new MinFloatParameter(1,0);
+        public MinFloatParameter brightness = new MinFloatParameter(1,0);
 
         public override BasePostExPass CreateNewInstance()
         {

@@ -22,7 +22,7 @@
         [Header("Vertical Jump")]
         public ClampedFloatParameter verticalJump = new ClampedFloatParameter(0, 0, 1);
 
-        [Header("h Shadke")]
+        [Header("h Shake")]
         public ClampedFloatParameter horizontalShake = new ClampedFloatParameter(0, 0, 1);
         
         [Header("Color Drift")]

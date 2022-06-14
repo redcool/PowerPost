@@ -183,16 +183,16 @@ MonoBehaviour:
   m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
-    m_Value: 6
+    m_Value: 7
   weight:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 2
   saturate:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.2
   brightness:
     m_OverrideState: 1
-    m_Value: 1.2
+    m_Value: 1.5
 --- !u!114 &5404789168662656773
 MonoBehaviour:
   m_ObjectHideFlags: 3

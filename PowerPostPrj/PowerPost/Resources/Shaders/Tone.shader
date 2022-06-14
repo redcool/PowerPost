@@ -18,12 +18,14 @@ Shader "Hidden/PowerPost/ToneMapping"
             #include "PowerPostLib.hlsl"
             #include "Lib/ToneMappers.hlsl"
             #include "Lib/ACESFitted.hlsl"
+            #include "Lib/Colors.hlsl"
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
             int _Mode;
             float _Weight;
             float _Saturate;
             float _Brightness;
+            float _Scale,_Offset;
 
             float3 ApplyTone(float3 col){
                 switch(_Mode){
@@ -45,8 +47,16 @@ Shader "Hidden/PowerPost/ToneMapping"
                 // col.xyz = Reinhard(col.xyz);
                 col.xyz = ApplyTone(col.xyz);
 
-                col.xyz = lerp(dot(half3(0.2,0.7,0.07),col.xyz),col.xyz,_Saturate);
-                col.xyz = lerp(0,col.xyz,_Brightness);
+                // col.xyz = lerp(dot(half3(0.2,0.7,0.07),col.xyz),col.xyz,_Saturate);
+                // col.xyz = lerp(0,col.xyz,_Brightness);
+
+                half3 hsv = RgbToHsv(col.xyz);
+
+                half h = hsv.x * _Scale + _Offset;
+                half s = hsv.y * _Saturate;
+                half v = hsv.z *  _Brightness;
+
+                col.xyz = HsvToRgb(half3(h,s,v));
                 col.xyz = saturate(col.xyz);
                 return col;
             }
