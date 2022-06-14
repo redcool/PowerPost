@@ -18,7 +18,6 @@ Shader "Hidden/PowerPost/ToneMapping"
             #include "PowerPostLib.hlsl"
             #include "Lib/ToneMappers.hlsl"
             #include "Lib/ACESFitted.hlsl"
-            #include "Lib/Colors.hlsl"
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
             int _Mode;

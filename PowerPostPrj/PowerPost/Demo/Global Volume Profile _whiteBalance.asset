@@ -128,12 +128,12 @@ MonoBehaviour:
   active: 1
   m_AdvancedMode: 0
   temperature:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
     min: -100
     max: 100
   tint:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
     min: -100
     max: 100
@@ -212,6 +212,22 @@ MonoBehaviour:
   weight:
     m_OverrideState: 1
     m_Value: 1.13
+  scale:
+    m_OverrideState: 0
+    m_Value: 1
+  offset:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 1
+  saturate:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  brightness:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
 --- !u!114 &5404789168662656773
 MonoBehaviour:
   m_ObjectHideFlags: 3
