@@ -18,7 +18,7 @@ namespace PowerPost {
 
         [Header("Radial Blur")]
         public ClampedIntParameter radialBlurIterations = new ClampedIntParameter(1, 1,4);
-        public ClampedFloatParameter sunShaftBlurRadius = new ClampedFloatParameter(2.5f,1,10);
+        public ClampedFloatParameter sunShaftBlurRadius = new ClampedFloatParameter(2.5f,0.1f,10,true);
         [Header("Sun Color")]
         public ColorParameter sunThreshold = new ColorParameter(new Color(.8f, .7f, .6f,0));
         public ColorParameter sunColor = new ColorParameter(Color.white);

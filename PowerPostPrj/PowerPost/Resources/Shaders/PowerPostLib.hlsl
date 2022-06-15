@@ -58,8 +58,8 @@ half4 SampleGaussian(TEXTURE2D_PARAM(tex,state), half2 texel, half2 uv) {
 //----------------
 // Dir blur
 //----------------
-#define DIR_BLUR_SAMPLES 10
-const static half dirBlurWeights[DIR_BLUR_SAMPLES] = {-0.08,-0.05,-0.03,-0.02,-0.01,0.01,0.02,0.03,0.05,0.08};
+#define DIR_BLUR_SAMPLES 6
+const static half dirBlurWeights[DIR_BLUR_SAMPLES] = {-0.03,-0.02,-0.01,0.01,0.02,0.03};
 half4 SampleDirBlur(TEXTURE2D_PARAM(tex,state),half2 uv,half2 dir){
     half4 c = 0;
     for(int i=0;i<DIR_BLUR_SAMPLES;i++){
