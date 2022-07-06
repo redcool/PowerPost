@@ -36,6 +36,7 @@ Shader "Hidden/PowerPost/ToneMapping"
                     case 5 : return TonemapWithWeight(col,_Weight);
                     case 6 : return Exposure(col,_Weight);
                     case 7 : return ACESFitted(col);
+                    case 8 : return GTTone(col);
                     default:return 1;
                 }
             }

@@ -19,6 +19,7 @@ namespace PowerPost
             Weight = 5,
             Exposure = 6,
             ACESFitted = 7,
+            GTTone = 8,
         }
         public ToneMappingModeParameter mode = new ToneMappingModeParameter(Mode.None);
 

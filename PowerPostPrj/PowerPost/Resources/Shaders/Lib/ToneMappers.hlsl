@@ -136,4 +136,29 @@ float3 Exposure(float3 color,float exposure){
     return 1 - exp(-color * exposure);
 }
 
+float3 GTTone(float3 x){
+    float P=1.0f;
+    float a = 1.0f;
+    float m=0.22f;
+    float l = 0.4f;
+    float c=1.33f;
+    float b=0.0f;
+
+    float l0 = (P-m)*l/a;
+    float S0 = m+l0;
+    float S1 = m+a*l0;
+    float C2 = (a*P)/(P-S1+1e-05);
+    float CP = -C2/P;
+
+    float3 w0 = 1.0 - smoothstep(0,m,x);
+    float3 w2 = step(m+l0,x);
+    float3 w1 = 1.0-w0-w2;
+
+    float3 T = m* pow(x/m,c) + b;
+    float3 S = P-(P-S1)* exp(CP * (x-S0));
+    float3 L = m+a*(x-m);
+
+    return T*w0 + L*w1+S*w2;
+}
+
 #endif //TONE_MAPPERS_HLSL
