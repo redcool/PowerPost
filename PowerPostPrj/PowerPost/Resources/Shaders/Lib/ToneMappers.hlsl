@@ -137,7 +137,26 @@ float3 Exposure(float3 color,float exposure){
 }
 
 float3 GTTone(float3 x){
-    float P=1.0f;
+    /**
+    GT Tonemap.
+    Uchimura 2017, "HDR theory and practice"
+    JP: https://www.desmos.com/calculator/mbkwnuihbd
+    EN: https://www.desmos.com/calculator/gslcdxvipg
+
+    P : float
+        max display brightness
+    a : float
+        contrast
+    m : float
+        linear section start
+    l : float
+        linear section length
+    c : float
+        black
+    b : float
+        pedestal
+    */
+    float P=2.0f;
     float a = 1.0f;
     float m=0.22f;
     float l = 0.4f;
