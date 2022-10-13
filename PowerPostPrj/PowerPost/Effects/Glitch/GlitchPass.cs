@@ -51,10 +51,10 @@ namespace PowerPost
             //sin(y) * x :
             //x: amplitude, y : period
             mat.SetVector(_ColorDrift, new Vector2(settings.colorDrift.value * 0.04f, Time.time * settings.colorDriftSpeed.value));
-            mat.SetInt(_StencilRef, settings.stencilRef.value);
+            mat.SetInt(_StencilRef, settings.layer.value != 0 ? settings.stencilRef.value : 0);
 
-            cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, mat, 1);
+
+            cmd.BlitColorDepth(BuiltinRenderTextureType.None, ColorTarget, ColorTarget, mat, 0);
 
         }
 

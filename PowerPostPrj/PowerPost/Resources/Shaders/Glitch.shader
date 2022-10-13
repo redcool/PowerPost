@@ -2,14 +2,13 @@ Shader "Hidden/PowerPost/Glitch"
 {
     Properties
     {
-        // _MainTex ("Texture", 2D) = "white" {}
         _StencilRef("_StencilRef",int) = 6
     }
 
     HLSLINCLUDE
         #include "PowerPostLib.hlsl"
-        TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-        float4 _MainTex_TexelSize;
+        TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
+        float4 _CameraOpaqueTexture_TexelSize;
     ENDHLSL
 
     SubShader
@@ -55,23 +54,12 @@ Shader "Hidden/PowerPost/Glitch"
 
                 float u1 = (jitter + snowFlake.x + hshake) * intensity;
                 float u2 = (jitter + snowFlake.x + hshake + drift ) * intensity;
-                float4 c1 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + u1,jump)));
-                float4 c2 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + u2 ,jump)));
+                float4 c1 = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,frac(float2(u + u1,jump)));
+                float4 c2 = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,frac(float2(u + u2 ,jump)));
                 return float4(c1.r,c2.g,c1.b,1);
             }
             ENDHLSL
         }
 
-        pass{
-            HLSLPROGRAM
-            #pragma vertex VertDefault
-            #pragma fragment frag
-            
-            float4 frag (VaryingsDefault i) : SV_Target
-            {
-                return SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
-            }
-            ENDHLSL
-        }
     }
 }
