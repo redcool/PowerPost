@@ -15,7 +15,6 @@ namespace PowerPost
         static int _Aspect = Shader.PropertyToID("_Aspect");
 
         static int _BlurRT = Shader.PropertyToID("_BlurRT");
-        static int _ResultRT = Shader.PropertyToID("_ResultRT");
 
         //radial tex
         static int _RadialTex = Shader.PropertyToID(nameof(_RadialTex));
@@ -44,12 +43,10 @@ namespace PowerPost
             mat.SetFloat(_BlurSize, settings.blurSize.value);
             mat.SetFloat(_Aspect, settings.roundness.value ? aspect : 1);
 
-            // blur 
+            // blur (downsample only)
             cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultBlitMaterial, 0);
 
-
-            cmd.BlitColorDepth(ColorTarget, _ResultRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ResultRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
+            cmd.BlitColorDepth(BuiltinRenderTextureType.None, ColorTarget, ColorTarget, mat, 0);
 
             // radial tex
             if (settings.radialTexOn.value)
@@ -84,13 +81,11 @@ namespace PowerPost
             var w = cameraTextureDescriptor.width >> 3;
             var h = cameraTextureDescriptor.height >> 3;
             cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
-            cmd.GetTemporaryRT(_ResultRT,cameraTextureDescriptor);
         }
 
         public override void FrameCleanup(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_BlurRT);
-            cmd.ReleaseTemporaryRT(_ResultRT);
         }
     }
 }
