@@ -9,8 +9,6 @@ namespace PowerPost {
     public class OutlinePass : BasePostExPass<OutlineSettings>
     {
         int _DepthTex = Shader.PropertyToID("_DepthTex");
-        int _ColorTex = Shader.PropertyToID("_ColorTex");
-        int _BlurColorTex = Shader.PropertyToID("_BlurColorTex");
 
         public override string PassName => nameof(OutlinePass);
 
@@ -27,46 +25,36 @@ namespace PowerPost {
             var layer = settings.layer.value;
             if (layer != 0 && layer != -1)
             {
-                cmd.SetRenderTarget(_BlurColorTex);
+                cmd.SetRenderTarget(_DepthTex);
                 context.ExecuteCommandBuffer(cmd);
                 GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, null);
 
                 cmd.SetRenderTarget(ColorTarget);
                 context.ExecuteCommandBuffer(cmd);
-
-                cmd.BlitColorDepth(_BlurColorTex, _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
             }
             else if (layer == -1)
             {
-                cmd.BlitColorDepth(DepthTarget, _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
+                if (settings.downSamples.value > 1)
+                    cmd.BlitColorDepth("_CameraDepthTexture", _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
+                else
+                    cmd.SetGlobalTexture(_DepthTex, "_CameraDepthTexture");
             }
 
-            cmd.SetGlobalTexture(_BlurColorTex, _BlurColorTex);
-            cmd.SetGlobalTexture(_DepthTex, _DepthTex);
-
-
-            cmd.BlitColorDepth(ColorTarget, _ColorTex, _ColorTex, outlineMat, 0);
-            cmd.BlitColorDepth(_ColorTex, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
+            cmd.BlitColorDepth(0, ColorTarget, DepthTarget, outlineMat, 0);
 
             ReleaseTextures(cmd);
-            context.ExecuteCommandBuffer(cmd);
-            CommandBufferUtils.ClearRelease(cmd);
         }
 
         private void ReleaseTextures(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_DepthTex);
-            cmd.ReleaseTemporaryRT(_ColorTex);
         }
 
         private void SetupTextures(CommandBuffer cmd,Camera cam,OutlineSettings settings)
         {
             var w = cam.pixelWidth >> settings.downSamples.value;
             var h = cam.pixelHeight >> settings.downSamples.value;
-            cmd.GetTemporaryRT(_DepthTex, w, h,0,FilterMode.Bilinear, RenderTextureFormat.Default);
-            cmd.GetTemporaryRT(_BlurColorTex, w, h, 16, FilterMode.Bilinear, RenderTextureFormat.Default);
-
-            cmd.GetTemporaryRT(_ColorTex, cam.pixelWidth, cam.pixelHeight, 0, FilterMode.Bilinear);
+            cmd.GetTemporaryRT(_DepthTex, w, h,16,FilterMode.Bilinear, RenderTextureFormat.Default);
         }
     }
 }

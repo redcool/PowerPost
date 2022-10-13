@@ -136,10 +136,10 @@ static half2 offsets[OFFSET_COUNT] = {
     half2(0,-1)
 };
 
-half CalcDepthDeltaAround(TEXTURE2D_PARAM(depthTex,state),half depth,half2 depthUV,half scale){
-    half delta = 0;
+float CalcDepthDeltaAround(TEXTURE2D_PARAM(depthTex,state),float depth,float2 depthUV,half scale){
+    float delta = 0;
     for( int x = 0;x < OFFSET_COUNT ;x++){
-        delta += depth - Linear01Depth(SAMPLE_TEXTURE2D(depthTex,state, depthUV + offsets[x] * scale),_ZBufferParams);
+        delta += depth - Linear01Depth(SAMPLE_TEXTURE2D(depthTex,state, depthUV + offsets[x] * scale).x,_ZBufferParams);
     }
     return delta;
 }
