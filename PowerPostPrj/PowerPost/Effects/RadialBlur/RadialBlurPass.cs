@@ -21,11 +21,18 @@ namespace PowerPost
         static int _RadialInfo = Shader.PropertyToID(nameof(_RadialInfo));
         static int _NoiseMap = Shader.PropertyToID(nameof(_NoiseMap));
         static int _NoiseMapST = Shader.PropertyToID(nameof(_NoiseMapST));
+        static int _DissolveRate = Shader.PropertyToID(nameof(_DissolveRate));
+
         static int _GrayScale = Shader.PropertyToID(nameof(_GrayScale));
+
+        static int _BaseLineMap = Shader.PropertyToID(nameof(_BaseLineMap));
+        static int _RotateRate = Shader.PropertyToID(nameof(_RotateRate));
+        static int _BaseLineMapIntensity = Shader.PropertyToID(nameof(_BaseLineMapIntensity));
 
         const string RADIAL_TEX_ON = nameof(RADIAL_TEX_ON);
         const string _GRAY_SCALE_ON = nameof(_GRAY_SCALE_ON);
         const string _NOISE_MAP_ON = nameof(_NOISE_MAP_ON);
+        const string _BASE_LINE_MAP_ON = nameof(_BASE_LINE_MAP_ON);
 
         public override string PassName => nameof(RadialBlurPass);
 
@@ -51,7 +58,6 @@ namespace PowerPost
             // radial tex
             if (settings.radialTexOn.value)
             {
-                mat.EnableKeyword(RADIAL_TEX_ON);
                 mat.SetTexture(_RadialTex, settings.radialTex.value);
                 mat.SetVector(_RadialInfo, new Vector4(settings.radialScale.value.x,
                     settings.radialScale.value.y,
@@ -62,7 +68,8 @@ namespace PowerPost
                 if (settings.noiseMapOn.value)
                 {
                     mat.SetTexture(_NoiseMap, settings.noiseMap.value);
-                    mat.SetVector(_NoiseMapST,settings.noiseMapST.value);
+                    mat.SetVector(_NoiseMapST, settings.noiseMapST.value);
+                    mat.SetFloat(_DissolveRate, settings.dissolveRate.value);
                 }
             }
 
@@ -71,9 +78,17 @@ namespace PowerPost
                 mat.SetFloat(_GrayScale,settings.grayScale.value);
             }
 
+            if (settings.isBaseLineOn.value)
+            {
+                mat.SetTexture(_BaseLineMap, settings.baseLineMap.value);
+                mat.SetFloat(_RotateRate, settings.rotateRate.value);
+                mat.SetFloat(_BaseLineMapIntensity, settings.baseLineMapIntensity.value);
+            }
+
             mat.SetKeyword(RADIAL_TEX_ON, settings.radialTexOn.value);
             mat.SetKeyword(_GRAY_SCALE_ON, settings.isGrayScale.value);
             mat.SetKeyword(_NOISE_MAP_ON, settings.noiseMapOn.value);
+            mat.SetKeyword(_BASE_LINE_MAP_ON, settings.isBaseLineOn.value);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

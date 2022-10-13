@@ -9,6 +9,13 @@ Shader "Hidden/PowerPost/RadialBlur"
         _RadiusMax("_RadiusMax",range(0,1)) = 1
         _BlurSize("_BlurSize",float) = 0.5
         _RadialST("_RadialST",vector) = (1,1,1,1)
+
+        // noise
+        _DissolveRate("_DissolveRate",range(0,1)) = 0
+        
+        // baseLineMap rotate
+        _RotateRate("_RotateRate",range(0,1)) = 0
+        _BaseLineMapIntensity("_BaseLineMapIntensity",range(0,1)) = 0.5
     }
 
     SubShader
@@ -24,6 +31,7 @@ Shader "Hidden/PowerPost/RadialBlur"
             #pragma multi_compile_local_fragment _ RADIAL_TEX_ON
             #pragma shader_feature _GRAY_SCALE_ON
             #pragma shader_feature _NOISE_MAP_ON
+            #pragma shader_feature _BASE_LINE_MAP_ON
 
             #include "PowerPostLib.hlsl"
             TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
@@ -32,6 +40,9 @@ Shader "Hidden/PowerPost/RadialBlur"
             TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
             TEXTURE2D(_RadialTex);SAMPLER(sampler_RadialTex);
             TEXTURE2D(_NoiseMap);SAMPLER(sampler_NoiseMap);
+            TEXTURE2D(_BaseLineMap);SAMPLER(sampler_BaseLineMap);
+            float4 _BaseLineMap_TexelSize;
+
 CBUFFER_START(UnityPerMaterial)
             float2 _Center;
             float _RadiusMin,_RadiusMax;
@@ -39,8 +50,11 @@ CBUFFER_START(UnityPerMaterial)
 
             float4 _RadialInfo;
             float4 _NoiseMapST;
+            half _DissolveRate;
 
             float _GrayScale;
+            half _RotateRate;
+            half _BaseLineMapIntensity;
 CBUFFER_END
             float _Aspect; // camera rarget's width/height
 
@@ -70,32 +84,60 @@ CBUFFER_END
                 }
                 blurCol /= NUM_SAMPLES;
 
-
+//==================== radial tex
                 #if defined(RADIAL_TEX_ON)
-                half noise = 0;
-                #if defined(_NOISE_MAP_ON)
-                    noise = SAMPLE_TEXTURE2D(_NoiseMap,sampler_NoiseMap,i.texcoord * _NoiseMapST.xy + _NoiseMapST.zw).x;
-                    noise *= _NoiseMapScale;
+                {
+                    half noise = 0;
+                    half dissolve = 0;
+                    #if defined(_NOISE_MAP_ON)
+                    {
+                        noise = SAMPLE_TEXTURE2D(_NoiseMap,sampler_NoiseMap,i.texcoord * _NoiseMapST.xy + _NoiseMapST.zw).x;
+                        dissolve = (noise - _DissolveRate);//[-1,1]
+                        noise *= _NoiseMapScale;
+                        // clip(dissolve);
+                    }
+                    #endif
+
+                    float2 polarUV = ToPolar((i.texcoord - _Center)*2);
+                    polarUV *= _RadialST;
+                    // polarUV = lerp(polarUV,i.texcoord,noise);
+                    polarUV += noise;
+
+                    half4 radialTex = SAMPLE_TEXTURE2D(_RadialTex,sampler_RadialTex,polarUV);
+                    half radialIntensity = saturate(radialTex.x - 0.5);
+                    radialIntensity = lerp(radialIntensity,1,smoothstep(.15,1,dirLen*_RadialLength));
+
+                    // blurCol *= radialIntensity;
+                    half radialIntensityWithDissolve = lerp(1,radialIntensity,smoothstep(-1,0,dissolve));
+                    blurCol *= radialIntensityWithDissolve;
+                    return blurCol;
+                }
                 #endif
-// return noise;
-                float2 polarUV = ToPolar((i.texcoord - _Center)*2);
-                polarUV *= _RadialST;
-                // polarUV = lerp(polarUV,i.texcoord,noise);
-                polarUV += noise;
-
-                half4 radialTex = SAMPLE_TEXTURE2D(_RadialTex,sampler_RadialTex,polarUV);
-
-                half4 radialIntensity = saturate(radialTex - 0.5);
-
-                blurCol *= lerp(radialIntensity.x,1,smoothstep(.5,1,dirLen*_RadialLength));
-                #endif
-
+//==================== composite tex
                 half4 col = lerp(mainTex,blurCol,dist);
 
+//==================== Gray sclae
                 #if defined(_GRAY_SCALE_ON)
-                float gray = dot(half3(0.2,0.7,0.07),col.xyz);
-                col = pow(gray , _GrayScale);
-                // return smoothstep(0.,1,gray);
+                    float gray = dot(half3(0.2,0.7,0.07),col.xyz);
+                    col = pow(gray , _GrayScale);
+                    // return smoothstep(0.,1,gray);
+                #endif
+
+//==================== BaseLine
+                #if defined(_BASE_LINE_MAP_ON)
+                    half2 uvScale = _ScreenParams.xy/_BaseLineMap_TexelSize.zw; 
+                    half2 baseLineMapUV = (i.texcoord - 0.5);
+                    // rotate
+                    baseLineMapUV = ToPolar(baseLineMapUV * uvScale);
+                    baseLineMapUV.x += _RotateRate;
+                    baseLineMapUV = ToCartesian(baseLineMapUV);
+                    baseLineMapUV += 0.5;
+
+                    // return frac(baseLineMapUV.x);
+                    half4 baseLineMap = SAMPLE_TEXTURE2D(_BaseLineMap,sampler_BaseLineMap,baseLineMapUV);
+                    // return baseLineMap;
+                    col = lerp(col,baseLineMap,_BaseLineMapIntensity);
+                    // col += baseLineMap * _BaseLineMapIntensity;
                 #endif
 
                 return saturate(col);
