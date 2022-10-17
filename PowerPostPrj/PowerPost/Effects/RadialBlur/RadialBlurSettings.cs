@@ -32,7 +32,14 @@ namespace PowerPost
         public TextureParameter noiseMap = new TextureParameter(null);
         public Vector4Parameter noiseMapST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
         public ClampedFloatParameter noiseMapScale = new ClampedFloatParameter(1, 0, 1);
+
+        [Tooltip("径向层的溶解")]
+        [Header("Radial Layer Attenuation")]
+        public BoolParameter attenMapOn = new BoolParameter(false);
+        public TextureParameter attenMap = new TextureParameter(null);
+        public Vector4Parameter attenMapST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
         public ClampedFloatParameter dissolveRate = new ClampedFloatParameter(0, 0, 1);
+        public BoolParameter clipOn = new BoolParameter(false);
 
         [Tooltip("灰度显示")]
         [Header("Gray")]
