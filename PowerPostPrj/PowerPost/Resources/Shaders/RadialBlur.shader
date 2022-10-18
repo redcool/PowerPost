@@ -63,6 +63,7 @@ CBUFFER_START(UnityPerMaterial)
             float _GrayScale;
             half _RotateRate;
             half _BaseLineMapIntensity;
+            half4 _BaseLineMap_ST;
 
             half4 _MaxColor,_MinColor;
 CBUFFER_END
@@ -97,11 +98,12 @@ CBUFFER_END
 //==================== radial tex
                 #if defined(RADIAL_TEX_ON)
                 {
+                    float2 polarUV = ToPolar((i.texcoord - _Center)*2);
                     
                     half dissolve = 0;
                     #if defined(_ATTEN_MAP_ON)
                     {
-                        dissolve = SAMPLE_TEXTURE2D(_AttenMap,sampler_AttenMap,i.texcoord * _AttenMap_ST.xy + _AttenMap_ST.zw).x;
+                        dissolve = SAMPLE_TEXTURE2D(_AttenMap,sampler_AttenMap,polarUV * _AttenMap_ST.xy + _AttenMap_ST.zw).x;
                         dissolve = (dissolve - _DissolveRate);//[-1,1]
 
                         #if defined(_CLIP_ON)
@@ -110,7 +112,6 @@ CBUFFER_END
                     }
                     #endif
 
-                    float2 polarUV = ToPolar((i.texcoord - _Center)*2);
                     polarUV *= _RadialST;
                     // polarUV = lerp(polarUV,i.texcoord,noise);
                     #if defined(_NOISE_MAP_ON)
@@ -137,7 +138,7 @@ CBUFFER_END
 
 //==================== Gray sclae
                 #if defined(_GRAY_SCALE_ON)
-                    float gray = dot(half3(0.2,0.7,0.07),col.xyz);
+                    half gray = dot(half3(0.2,0.7,0.07),col.xyz);
                     gray = pow(gray , _GrayScale);
                     col = lerp(_MinColor,_MaxColor,gray);
                     // return smoothstep(0.,1,gray);
@@ -145,8 +146,8 @@ CBUFFER_END
 
 //==================== BaseLine
                 #if defined(_BASE_LINE_MAP_ON)
-                    half2 uvScale = _ScreenParams.xy/_BaseLineMap_TexelSize.zw; 
-                    half2 baseLineMapUV = (i.texcoord - 0.5);
+                    float2 uvScale = _ScreenParams.xy/(_BaseLineMap_TexelSize.zw * _BaseLineMap_ST.xy);
+                    float2 baseLineMapUV = (i.texcoord + _BaseLineMap_ST.zw - 0.5);
                     // rotate
                     baseLineMapUV = ToPolar(baseLineMapUV * uvScale);
                     baseLineMapUV.x += _RotateRate;
