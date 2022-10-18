@@ -137,7 +137,9 @@ CBUFFER_END
 
                     half4 radialTex = SAMPLE_TEXTURE2D(_RadialTex,sampler_RadialTex,polarUV);
                     half radialIntensity = saturate(radialTex.x - 0.5);
-                    radialIntensity = lerp(radialIntensity,1,smoothstep(.15,1,dirLen*_RadialLength));
+
+                    half dirLen2 = smoothstep(0.,2,saturate(1-dirLen)); //从内向外衰减
+                    radialIntensity = lerp(radialIntensity,1,smoothstep(.15,1,dirLen2 * _RadialLength));
 
                     // blurCol *= radialIntensity;
                     // alpha blend
