@@ -24,6 +24,10 @@ namespace PowerPost
 
         static int _AttenMap = Shader.PropertyToID(nameof(_AttenMap));
         static int _AttenMap_ST = Shader.PropertyToID(nameof(_AttenMap_ST));
+
+        static int _AttenMap2 = Shader.PropertyToID(nameof(_AttenMap2));
+        static int _AttenMap2_ST = Shader.PropertyToID(nameof(_AttenMap2_ST));
+
         static int _DissolveRate = Shader.PropertyToID(nameof(_DissolveRate));
 
         static int _GrayScale = Shader.PropertyToID(nameof(_GrayScale));
@@ -40,6 +44,7 @@ namespace PowerPost
         const string _NOISE_MAP_ON = nameof(_NOISE_MAP_ON);
         const string _BASE_LINE_MAP_ON = nameof(_BASE_LINE_MAP_ON);
         const string _ATTEN_MAP_ON = nameof(_ATTEN_MAP_ON);
+        const string _ATTEN_MAP2_ON = nameof(_ATTEN_MAP2_ON);
         const string _CLIP_ON = nameof(_CLIP_ON);
 
         public override string PassName => nameof(RadialBlurPass);
@@ -80,14 +85,21 @@ namespace PowerPost
                     mat.SetVector(_NoiseMapST, settings.noiseMapST.value);
                 }
                 //attenuation
-
                 if (settings.attenMapOn.value)
                 {
                     mat.SetTexture(_AttenMap, settings.attenMap.value);
                     mat.SetVector(_AttenMap_ST, settings.attenMapST.value);
 
                     var attenScale = settings.clipOn.value ? 1f : 2;
-                    mat.SetFloat(_DissolveRate, settings.dissolveRate.value * attenScale);
+                    var dissolveRate = settings.dissolveRate.value;
+
+                    mat.SetFloat(_DissolveRate, dissolveRate * attenScale);
+                }
+
+                if (settings.attenMap2On.value)
+                {
+                    mat.SetTexture(_AttenMap2, settings.attenMap2.value);
+                    mat.SetVector(_AttenMap2_ST, settings.attenMap2ST.value);
                 }
             }
 
@@ -111,6 +123,7 @@ namespace PowerPost
             mat.SetKeyword(_NOISE_MAP_ON, settings.noiseMapOn.value);
             mat.SetKeyword(_BASE_LINE_MAP_ON, settings.isBaseLineOn.value);
             mat.SetKeyword(_ATTEN_MAP_ON, settings.attenMapOn.value);
+            mat.SetKeyword(_ATTEN_MAP2_ON, settings.attenMap2On.value);
             mat.SetKeyword(_CLIP_ON, settings.clipOn.value);
         }
 

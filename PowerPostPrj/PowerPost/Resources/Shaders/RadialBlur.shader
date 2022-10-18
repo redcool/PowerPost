@@ -36,6 +36,7 @@ Shader "Hidden/PowerPost/RadialBlur"
             #pragma shader_feature_local_fragment _NOISE_MAP_ON
             #pragma shader_feature_local_fragment _BASE_LINE_MAP_ON
             #pragma shader_feature_local_fragment _ATTEN_MAP_ON
+            #pragma shader_feature_local_fragment _ATTEN_MAP2_ON
             #pragma shader_feature_local_fragment _CLIP_ON
 
             #include "PowerPostLib.hlsl"
@@ -46,6 +47,7 @@ Shader "Hidden/PowerPost/RadialBlur"
             TEXTURE2D(_RadialTex);SAMPLER(sampler_RadialTex);
             TEXTURE2D(_NoiseMap);SAMPLER(sampler_NoiseMap);
             TEXTURE2D(_AttenMap);SAMPLER(sampler_AttenMap);
+            TEXTURE2D(_AttenMap2);SAMPLER(sampler_AttenMap2);
             TEXTURE2D(_BaseLineMap);SAMPLER(sampler_BaseLineMap);
             float4 _BaseLineMap_TexelSize;
 
@@ -58,6 +60,7 @@ CBUFFER_START(UnityPerMaterial)
             float4 _NoiseMapST;
 
             half4 _AttenMap_ST;
+            half4 _AttenMap2_ST;
             half _DissolveRate;
 
             float _GrayScale;
@@ -99,12 +102,22 @@ CBUFFER_END
                 #if defined(RADIAL_TEX_ON)
                 {
                     float2 polarUV = ToPolar((i.texcoord - _Center)*2);
+                    polarUV.x = frac(polarUV.x);
                     
                     half dissolve = 0;
                     #if defined(_ATTEN_MAP_ON)
                     {
                         dissolve = SAMPLE_TEXTURE2D(_AttenMap,sampler_AttenMap,polarUV * _AttenMap_ST.xy + _AttenMap_ST.zw).x;
-                        dissolve = (dissolve - _DissolveRate);//[-1,1]
+
+                        #if defined(_ATTEN_MAP2_ON)
+                        {
+                            half attenMap2 = SAMPLE_TEXTURE2D(_AttenMap2,sampler_AttenMap2,polarUV * _AttenMap2_ST.xy+_AttenMap2_ST.zw).x;
+                            dissolve *= attenMap2;
+                        }
+                        #endif
+                        // dissolve = (dissolve - _DissolveRate);//[-1,1]
+                        half dirLen1 = smoothstep(0.,1,saturate(1-dirLen)); //从内向外衰减
+                        dissolve -= dirLen1 *5 * _DissolveRate; //组合径向距离
 
                         #if defined(_CLIP_ON)
                             clip(dissolve);
@@ -129,6 +142,7 @@ CBUFFER_END
                     // blurCol *= radialIntensity;
                     // alpha blend
                     half radialIntensityWithDissolve = lerp(1,radialIntensity,smoothstep(-1,0,dissolve));
+                    
                     blurCol *= radialIntensityWithDissolve;
                     // return blurCol;
                 }
