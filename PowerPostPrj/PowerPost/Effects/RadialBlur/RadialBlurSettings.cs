@@ -52,6 +52,7 @@ namespace PowerPost
         [Header("Base Line")]
         public BoolParameter isBaseLineOn = new BoolParameter(false);
         public TextureParameter baseLineMap = new TextureParameter(null);
+        public Vector4Parameter baseLineMap_ST = new Vector4Parameter(new Vector4(1,1,0,0));
         public ClampedFloatParameter rotateRate = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter baseLineMapIntensity = new ClampedFloatParameter(0.5f, 0, 1);
 

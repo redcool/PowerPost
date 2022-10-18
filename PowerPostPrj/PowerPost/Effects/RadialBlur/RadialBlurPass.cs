@@ -33,6 +33,7 @@ namespace PowerPost
         static int _BaseLineMap = Shader.PropertyToID(nameof(_BaseLineMap));
         static int _RotateRate = Shader.PropertyToID(nameof(_RotateRate));
         static int _BaseLineMapIntensity = Shader.PropertyToID(nameof(_BaseLineMapIntensity));
+        static int _BaseLineMap_ST = Shader.PropertyToID(nameof(_BaseLineMap_ST));
 
         const string RADIAL_TEX_ON = nameof(RADIAL_TEX_ON);
         const string _GRAY_SCALE_ON = nameof(_GRAY_SCALE_ON);
@@ -85,7 +86,7 @@ namespace PowerPost
                     mat.SetTexture(_AttenMap, settings.attenMap.value);
                     mat.SetVector(_AttenMap_ST, settings.attenMapST.value);
 
-                    var attenScale = settings.clipOn.value ? 1f : 1;
+                    var attenScale = settings.clipOn.value ? 1f : 2;
                     mat.SetFloat(_DissolveRate, settings.dissolveRate.value * attenScale);
                 }
             }
@@ -102,6 +103,7 @@ namespace PowerPost
                 mat.SetTexture(_BaseLineMap, settings.baseLineMap.value);
                 mat.SetFloat(_RotateRate, settings.rotateRate.value);
                 mat.SetFloat(_BaseLineMapIntensity, settings.baseLineMapIntensity.value);
+                mat.SetVector(_BaseLineMap_ST, settings.baseLineMap_ST.value);
             }
 
             mat.SetKeyword(RADIAL_TEX_ON, settings.radialTexOn.value);
