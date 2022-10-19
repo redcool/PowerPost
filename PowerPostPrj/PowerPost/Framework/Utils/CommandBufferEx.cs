@@ -59,7 +59,7 @@ namespace PowerPost
             }
         }
 
-        public static void BlitColorDepth(this CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass)
+        public static void BlitColorDepth(this CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass=0)
         {
             cmd.SetGlobalTexture(_MAIN_TEX_ID, source);
             cmd.SetRenderTarget(colorBuffer, depthBuffer);

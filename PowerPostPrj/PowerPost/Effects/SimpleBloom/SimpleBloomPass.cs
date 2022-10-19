@@ -13,7 +13,6 @@ namespace PowerPost
         const int BOX_UP = 2;
         const int COMBINE_PASS = 3;
         const string SHADER_NAME = "Hidden/PowerPost/SimpleBloom";
-        int _ColorRT = Shader.PropertyToID("_ColorRT");
 
         RenderTexture[] textures = new RenderTexture[16];
         RenderTextureFormat rtFormat;
@@ -39,7 +38,6 @@ namespace PowerPost
             // pass 0
             var buffer0 = textures[0] = RenderTexture.GetTemporary(w, h, 0, rtFormat);
 
-            cmd.Blit(ColorTarget, _ColorRT);
             cmd.BlitColorDepth(ColorTarget, buffer0, buffer0, mat, GRAB_ILLUM_PASS);
 
             //pass 1,downsample
@@ -71,7 +69,7 @@ namespace PowerPost
                 cmd.BlitColorDepth(buffer0, buffer1, buffer1, mat, BOX_UP);
                 buffer0 = buffer1;
             }
-            cmd.BlitColorDepth(buffer0, ColorTarget, DepthTarget, mat, BOX_UP);
+            cmd.BlitColorDepth(buffer0, ColorTarget, ColorTarget, mat, BOX_UP);
 
             //pass 3
             mat.SetFloat("_Intensity", Mathf.GammaToLinearSpace(settings.intensity.value));
@@ -79,23 +77,12 @@ namespace PowerPost
             mat.SetTexture("_BloomTex", buffer0);
             mat.SetColor("_BloomColor", settings.bloomColor.value);
 
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, mat, COMBINE_PASS);
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, COMBINE_PASS);
 
             for (i = 0; i < settings.iterators.value; i++)
             {
                 RenderTexture.ReleaseTemporary(textures[i]);
             }
-        }
-
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-        {
-            rtFormat = cameraTextureDescriptor.colorFormat;
-            cmd.GetTemporaryRT(_ColorRT, cameraTextureDescriptor);
-        }
-
-        public override void FrameCleanup(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_ColorRT);
         }
 
     }

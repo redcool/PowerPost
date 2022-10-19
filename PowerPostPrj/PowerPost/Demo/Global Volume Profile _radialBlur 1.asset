@@ -24,7 +24,7 @@ MonoBehaviour:
     m_Value: 0.072
   blurSize:
     m_OverrideState: 1
-    m_Value: 0.016
+    m_Value: 0.164
   roundness:
     m_OverrideState: 1
     m_Value: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Value: {x: 10, y: 0.12}
   radialLength:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 5.57
   noiseMapOn:
     m_OverrideState: 1
     m_Value: 1
@@ -72,7 +72,7 @@ MonoBehaviour:
     m_Value: {x: 1, y: 1, z: 0, w: 0}
   dissolveRate:
     m_OverrideState: 1
-    m_Value: 0.99
+    m_Value: 0
   clipOn:
     m_OverrideState: 1
     m_Value: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Global Volume Profile _radialBlur
+  m_Name: Global Volume Profile _radialBlur 1
   m_EditorClassIdentifier: 
   components:
   - {fileID: 3553498889064085604}
