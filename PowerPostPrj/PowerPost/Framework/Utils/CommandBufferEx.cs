@@ -6,7 +6,7 @@ namespace PowerPost
 {
     public static class CommandBufferEx
     {
-        public static readonly int _MAIN_TEX_ID = Shader.PropertyToID("_MainTex");
+        
         static Mesh fullscreenQuad;
         static Mesh fullscreenTriangle;
         public static Mesh FullscreenQuad
@@ -61,7 +61,7 @@ namespace PowerPost
 
         public static void BlitColorDepth(this CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass=0)
         {
-            cmd.SetGlobalTexture(_MAIN_TEX_ID, source);
+            cmd.SetGlobalTexture(ShaderPropertyIds._MainTex, source);
             cmd.SetRenderTarget(colorBuffer, depthBuffer);
             cmd.DrawMesh(FullscreenQuad, Matrix4x4.identity, mat, 0, pass);
 

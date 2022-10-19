@@ -6,7 +6,10 @@ namespace PowerPost
 {
     public static class ShaderPropertyIds
     {
-        public static int _CameraOpaqueTexture = Shader.PropertyToID(nameof(_CameraOpaqueTexture));
+        public static readonly int
+            _MainTex = Shader.PropertyToID("_MainTex"),
+            _CameraOpaqueTexture = Shader.PropertyToID(nameof(_CameraOpaqueTexture))
+            ;
 
     }
 }

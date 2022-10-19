@@ -14,6 +14,11 @@ namespace PowerPost
         const int COMBINE_PASS = 3;
         const string SHADER_NAME = "Hidden/PowerPost/SimpleBloom";
 
+        int _BloomTex = Shader.PropertyToID(nameof(_BloomTex));
+        int _Intensity = Shader.PropertyToID(nameof(_Intensity));
+        int _BloomColor = Shader.PropertyToID(nameof(_BloomColor));
+        int _Filter = Shader.PropertyToID(nameof(_Filter));
+
         RenderTexture[] textures = new RenderTexture[16];
         RenderTextureFormat rtFormat;
 
@@ -29,7 +34,7 @@ namespace PowerPost
             filter.y = filter.x - knee;
             filter.z = 2 * knee;
             filter.w = 0.25f / (knee + 0.0001f);
-            mat.SetVector("_Filter", filter);
+            mat.SetVector(_Filter, filter);
 
             var cam = renderingData.cameraData.camera;
             var w = cam.pixelWidth / 2;
@@ -63,7 +68,7 @@ namespace PowerPost
                 var buffer1 = textures[i];
                 if (lastId < textures.Length)
                 {
-                    mat.SetTexture("_BloomTex", textures[lastId]);
+                    mat.SetTexture(_BloomTex, textures[lastId]);
                     lastId--;
                 }
                 cmd.BlitColorDepth(buffer0, buffer1, buffer1, mat, BOX_UP);
@@ -72,10 +77,10 @@ namespace PowerPost
             cmd.BlitColorDepth(buffer0, ColorTarget, ColorTarget, mat, BOX_UP);
 
             //pass 3
-            mat.SetFloat("_Intensity", Mathf.GammaToLinearSpace(settings.intensity.value));
+            mat.SetFloat(_Intensity, Mathf.GammaToLinearSpace(settings.intensity.value));
             //mat.SetFloat("_SmoothBorder", Mathf.GammaToLinearSpace(settings.smoothBorder.value));
-            mat.SetTexture("_BloomTex", buffer0);
-            mat.SetColor("_BloomColor", settings.bloomColor.value);
+            mat.SetTexture(_BloomTex, buffer0);
+            mat.SetColor(_BloomColor, settings.bloomColor.value);
 
             cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, COMBINE_PASS);
 
