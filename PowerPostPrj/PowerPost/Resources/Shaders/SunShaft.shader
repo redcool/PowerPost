@@ -74,7 +74,7 @@ Shader "Hidden/PowerPost/SunShaft"
             half2 dir = _SunPos.xy - i.texcoord;
             half dist = saturate(_SunPos.w - length(dir));
 
-            half depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,sampler_CameraDepthTexture,i.texcoord);
+            float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,sampler_CameraDepthTexture,i.texcoord);
             depth = Linear01Depth(depth,_ZBufferParams);
 
             half4 col = 0;

@@ -14,8 +14,6 @@ namespace PowerPost
         // down size
         int _BlurRT = Shader.PropertyToID("_BlurRT");
         int _BlurRT2 = Shader.PropertyToID("_BlurRT2");
-        // full size
-        int _ResultTex = Shader.PropertyToID("_ResultTex");
 
         public override string PassName => nameof(SunShaftPass);
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SunShaftSettings settings,CommandBuffer cmd)
@@ -47,10 +45,6 @@ namespace PowerPost
 
             // 1 depth
             cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, mat, DEPTH_PASS);
-            //show pass 1
-            //cmd.BlitColorDepth(_BlurRT, ColorTarget, DepthTarget, DefaultMaterial, 0);
-            //context.ExecuteCommandBuffer(cmd);
-            //return;
 
             // 2 radial blur
             const float DELTA = 0.0078f;
@@ -69,9 +63,6 @@ namespace PowerPost
                 mat.SetVector("_BlurRadius4", new Vector4(offsets, offsets, 0, 0));
             }
 
-            //cmd.BlitColorDepth(_ShaftTex, ColorTarget, DepthTarget, DefaultMaterial, 0);
-            //context.ExecuteCommandBuffer(cmd);
-            //return;
             // 3 composite
             var sunColor = Color.clear;
             if (sunPos.z >= 0)
@@ -80,8 +71,7 @@ namespace PowerPost
             }
             mat.SetVector("_SunColor", sunColor);
 
-            cmd.BlitColorDepth(ColorTarget, _ResultTex, DepthTarget, mat, SCREEN_PASS);
-            cmd.BlitColorDepth(_ResultTex, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, SCREEN_PASS);
 
             CleanupTextures(cmd);
         }
@@ -92,14 +82,12 @@ namespace PowerPost
             var h = desc.height >> 2;
             cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
             cmd.GetTemporaryRT(_BlurRT2, w,h,16, FilterMode.Bilinear);
-            cmd.GetTemporaryRT(_ResultTex, desc);
         }
 
         void CleanupTextures(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_BlurRT);
             cmd.ReleaseTemporaryRT(_BlurRT2);
-            cmd.ReleaseTemporaryRT(_ResultTex);
         }
     }
 }
