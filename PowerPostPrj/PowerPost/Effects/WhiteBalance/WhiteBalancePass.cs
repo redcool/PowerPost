@@ -13,34 +13,16 @@ namespace PowerPost
     {
         int _ColorBalance = Shader.PropertyToID(nameof(_ColorBalance));
 
-        int _ColorRT = Shader.PropertyToID("_ColorRT");
-
         const string SHADER_NAME = "Hidden/PowerPost/WhiteBalance";
 
         public override string PassName => nameof(WhiteBalancePass);
-
-        void InitTextures(CommandBuffer cmd, RenderTextureDescriptor desc)
-        {
-            cmd.GetTemporaryRT(_ColorRT, desc);
-
-        }
-
-        void CleanTextures(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_ColorRT);
-        }
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, WhiteBalanceSettings settings,CommandBuffer cmd)
         {
             var mat = GetTargetMaterial(SHADER_NAME);
 
-            InitTextures(cmd,renderingData.cameraData.cameraTargetDescriptor);
-
             mat.SetVector(_ColorBalance,PostUtils.GetColorBalanceCoeffs(settings.temperature.value,settings.tint.value));
-
-            cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
-            CleanTextures(cmd);
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
         }
     }
 }

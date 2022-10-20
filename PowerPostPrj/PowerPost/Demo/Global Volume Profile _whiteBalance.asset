@@ -13,24 +13,15 @@ MonoBehaviour:
   m_Name: SSSSSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   strength:
     m_OverrideState: 1
     m_Value: {r: 1, g: 0, b: 0, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
   falloff:
     m_OverrideState: 1
     m_Value: {r: 0.8396226, g: 0.479922, b: 0.46337664, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
   blurScale:
     m_OverrideState: 1
     m_Value: 8.5
-    min: 0.01
-    max: 20
   layer:
     m_OverrideState: 1
     m_Value:
@@ -39,8 +30,6 @@ MonoBehaviour:
   stencilRef:
     m_OverrideState: 1
     m_Value: 5
-    min: 0
-    max: 255
 --- !u!114 &-6790473763136809269
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -54,33 +43,21 @@ MonoBehaviour:
   m_Name: SimpleBloomSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   intensity:
     m_OverrideState: 1
     m_Value: 10
-    min: 0
-    max: 10
   iterators:
     m_OverrideState: 1
     m_Value: 4
-    min: 1
-    max: 7
   threshold:
     m_OverrideState: 1
     m_Value: 1.04
-    min: 0
-    max: 10
   softThreshold:
     m_OverrideState: 1
     m_Value: 0.417
-    min: 0
-    max: 1
   bloomColor:
     m_OverrideState: 1
     m_Value: {r: 1, g: 0, b: 0, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
 --- !u!114 &-5984172738735940071
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -94,22 +71,15 @@ MonoBehaviour:
   m_Name: SimpleDOFSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   distance:
     m_OverrideState: 0
     m_Value: 1
-    min: 0
-    max: 1
   depthRange:
     m_OverrideState: 0
     m_Value: 0.05
-    min: 0
-    max: 1
   blurSize:
     m_OverrideState: 0
     m_Value: 1.1
-    min: 1
-    max: 8
   debugMode:
     m_OverrideState: 0
     m_Value: 0
@@ -126,17 +96,12 @@ MonoBehaviour:
   m_Name: WhiteBalanceSettings
   m_EditorClassIdentifier: 
   active: 1
-  m_AdvancedMode: 0
   temperature:
     m_OverrideState: 1
     m_Value: 0
-    min: -100
-    max: 100
   tint:
     m_OverrideState: 1
     m_Value: 0
-    min: -100
-    max: 100
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,27 +136,96 @@ MonoBehaviour:
   m_Name: RadialBlurSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   center:
     m_OverrideState: 1
     m_Value: {x: 0.4, y: 0.5}
   radiusMin:
     m_OverrideState: 1
     m_Value: 0.65
-    min: 0
-    max: 1
   radiusMax:
     m_OverrideState: 1
     m_Value: 0.31
-    min: 0
-    max: 1
   blurSize:
     m_OverrideState: 1
     m_Value: 0.18
-    min: 0
   roundness:
     m_OverrideState: 1
     m_Value: 1
+  radialTexOn:
+    m_OverrideState: 0
+    m_Value: 0
+  radialTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  radialScale:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1}
+  radialLength:
+    m_OverrideState: 0
+    m_Value: 1
+  noiseMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  noiseMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  noiseMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  noiseMapScale:
+    m_OverrideState: 0
+    m_Value: 1
+  attenMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  attenMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  attenMap2On:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap2:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  attenMap2ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  dissolveRate:
+    m_OverrideState: 0
+    m_Value: 0
+  clipOn:
+    m_OverrideState: 0
+    m_Value: 0
+  isGrayScale:
+    m_OverrideState: 0
+    m_Value: 0
+  grayScale:
+    m_OverrideState: 0
+    m_Value: 1
+  minColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  maxColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  isBaseLineOn:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  baseLineMap_ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  rotateRate:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMapIntensity:
+    m_OverrideState: 0
+    m_Value: 0.5
 --- !u!114 &4813415655309978088
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -205,7 +239,6 @@ MonoBehaviour:
   m_Name: ToneMappingSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
     m_Value: 3
@@ -218,16 +251,12 @@ MonoBehaviour:
   offset:
     m_OverrideState: 0
     m_Value: 0
-    min: 0
-    max: 1
   saturate:
     m_OverrideState: 0
     m_Value: 1
-    min: 0
   brightness:
     m_OverrideState: 0
     m_Value: 1
-    min: 0
 --- !u!114 &5404789168662656773
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -241,47 +270,30 @@ MonoBehaviour:
   m_Name: GlitchSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   glitchHorizontalIntensity:
     m_OverrideState: 0
     m_Value: 1
-    min: 0
-    max: 1
   scanlineJitter:
     m_OverrideState: 1
     m_Value: 0
-    min: 0
-    max: 1
   jitterBlockSize:
     m_OverrideState: 0
     m_Value: 1
-    min: 1
-    max: 1000
   snowFlakeAmplitude:
     m_OverrideState: 1
     m_Value: 0
-    min: 0
-    max: 1
   verticalJump:
     m_OverrideState: 1
     m_Value: 0.01
-    min: 0
-    max: 1
   horizontalShake:
     m_OverrideState: 1
     m_Value: 0
-    min: 0
-    max: 1
   colorDrift:
     m_OverrideState: 1
     m_Value: 0.51
-    min: 0
-    max: 1
   colorDriftSpeed:
     m_OverrideState: 1
     m_Value: 3.03
-    min: 1
-    max: 10000
   layer:
     m_OverrideState: 1
     m_Value:
@@ -290,8 +302,6 @@ MonoBehaviour:
   stencilRef:
     m_OverrideState: 1
     m_Value: 5
-    min: 0
-    max: 255
 --- !u!114 &7476134607694991065
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -305,7 +315,6 @@ MonoBehaviour:
   m_Name: SunShaftSettings
   m_EditorClassIdentifier: 
   active: 0
-  m_AdvancedMode: 0
   useRenderSettingsSun:
     m_OverrideState: 1
     m_Value: 1
@@ -318,32 +327,18 @@ MonoBehaviour:
   radialBlurIterations:
     m_OverrideState: 1
     m_Value: 2
-    min: 1
-    max: 4
   sunShaftBlurRadius:
     m_OverrideState: 1
     m_Value: 2.8
-    min: 1
-    max: 10
   sunThreshold:
     m_OverrideState: 1
     m_Value: {r: 0.9245283, g: 0.78856254, b: 0.65850836, a: 0}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
   sunColor:
     m_OverrideState: 1
     m_Value: {r: 1, g: 0.4721844, b: 0.051886797, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
   sunShaftIntensity:
     m_OverrideState: 1
     m_Value: 7.5
-    min: 0
-    max: 50
   maxRadius:
     m_OverrideState: 1
     m_Value: 0.18
-    min: 0
-    max: 1
