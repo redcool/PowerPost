@@ -18,7 +18,6 @@ Shader "Hidden/PowerPost/Outline"
             #include "PowerPostLib.hlsl"
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-            TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
             TEXTURE2D(_DepthTex);SAMPLER(sampler_DepthTex);
             half4 _DepthTex_TexelSize;
 
@@ -32,7 +31,7 @@ Shader "Hidden/PowerPost/Outline"
                 float2 depthUV = i.texcoord;
                 // depthUV.y = 1-depthUV.y;
 
-                half4 mainTex = (SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture, i.texcoord));
+                half4 mainTex = (SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord));
 
                 float depth = Linear01Depth(SAMPLE_TEXTURE2D(_DepthTex,sampler_DepthTex, depthUV).x,_ZBufferParams);
                 float depthDelta = CalcDepthDeltaAround(_DepthTex,sampler_DepthTex,depth,depthUV,_OutlineWidth * _DepthTex_TexelSize.xy);

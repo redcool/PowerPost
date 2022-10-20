@@ -34,13 +34,10 @@ namespace PowerPost {
             }
             else if (layer == -1)
             {
-                if (settings.downSamples.value > 1)
-                    cmd.BlitColorDepth("_CameraDepthTexture", _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
-                else
-                    cmd.SetGlobalTexture(_DepthTex, "_CameraDepthTexture");
+                cmd.BlitColorDepth(ShaderPropertyIds._CameraDepthTexture, _DepthTex, _DepthTex, DefaultBlitMaterial, 0);
             }
 
-            cmd.BlitColorDepth(0, ColorTarget, DepthTarget, outlineMat, 0);
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, outlineMat, 0);
 
             ReleaseTextures(cmd);
         }

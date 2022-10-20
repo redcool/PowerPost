@@ -8,7 +8,8 @@ namespace PowerPost
     {
         public static readonly int
             _MainTex = Shader.PropertyToID("_MainTex"),
-            _CameraOpaqueTexture = Shader.PropertyToID(nameof(_CameraOpaqueTexture))
+            _CameraOpaqueTexture = Shader.PropertyToID(nameof(_CameraOpaqueTexture)),
+            _CameraDepthTexture = Shader.PropertyToID(nameof(_CameraDepthTexture))
             ;
 
     }
