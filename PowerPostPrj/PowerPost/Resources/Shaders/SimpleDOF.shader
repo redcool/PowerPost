@@ -13,8 +13,8 @@ Shader "Hidden/PowerPost/SimpleDOF"
         TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
 		float4 _MainTex_TexelSize;
 
-        TEXTURE2D(_DepthRT);SAMPLER(sampler_DepthRT);
-        float4 _DepthRT_TexelSize;
+        // TEXTURE2D(_CameraDepthTexture);SAMPLER(sampler_CameraDepthTexture);
+        // float4 _CameraDepthTexture_TexelSize;
 
         TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
         float4 _BlurRT_TexelSize;
@@ -30,6 +30,8 @@ Shader "Hidden/PowerPost/SimpleDOF"
             HLSLPROGRAM
             #pragma vertex VertDefault
             #pragma fragment frag
+            #pragma shader_feature _DEBUG
+
             CBUFFER_START(UnityPerMaterial)
             float _BlurSize;
 
@@ -41,18 +43,19 @@ Shader "Hidden/PowerPost/SimpleDOF"
             float4 frag (VaryingsDefault i) : SV_Target
             {
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
-                // float4 blurCol = SampleBox(_MainTex,sampler_MainTex,_DepthRT_TexelSize,i.texcoord,_BlurSize);
+     
                 float4 blurCol = SampleGaussian(_BlurRT,sampler_BlurRT,_BlurRT_TexelSize.xy * _BlurSize,i.texcoord);
 
-                float depth = SAMPLE_TEXTURE2D(_DepthRT,sampler_DepthRT,i.texcoord).r;
+                float depth = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,i.texcoord).r;
                 depth = Linear01Depth(depth,_ZBufferParams);
 
                 float rate = abs(depth - _Distance)*5;
                 rate = saturate(max(rate-_DepthRange,0)); // flat center point to center line
                 rate = smoothstep(0.0001,0.1,rate);
 
-                if(_Debug)
+                #if defined(_DEBUG)
                     blurCol *= float4(1,0,0,1);
+                #endif
                 return lerp(col,blurCol,rate);
             }
             ENDHLSL
