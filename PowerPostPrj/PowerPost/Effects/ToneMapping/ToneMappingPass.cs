@@ -23,24 +23,10 @@
 
         const string TONE_MAPPING_SHADER = "Hidden/PowerPost/ToneMapping";
 
-        void InitTextures(CommandBuffer cmd, RenderTextureDescriptor desc)
-        {
-            cmd.GetTemporaryRT(_ColorRT, desc);
-
-        }
-
-        void CleanTextures(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_ColorRT);
-        }
-
         public override string PassName => nameof(ToneMappingPass);
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, ToneMappingSettings settings,CommandBuffer cmd)
         {
-            var desc = renderingData.cameraData.cameraTargetDescriptor;
-
-            InitTextures(cmd, desc);
             var mat = GetTargetMaterial(TONE_MAPPING_SHADER);
             mat.SetInt(_Mode, (int)settings.mode.value);
             mat.SetFloat(_Weight, settings.weight.value);
@@ -50,10 +36,7 @@
             mat.SetFloat(_Scale, settings.scale.value);
             mat.SetFloat(_Offset, settings.offset.value);
 
-            cmd.BlitColorDepth(ColorTarget, _ColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_ColorRT, ColorTarget, DepthTarget, DefaultBlitMaterial, 0);
-
-            CleanTextures(cmd);
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
         }
     }
 }

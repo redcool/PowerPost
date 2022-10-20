@@ -131,6 +131,81 @@ MonoBehaviour:
   roundness:
     m_OverrideState: 1
     m_Value: 1
+  radialTexOn:
+    m_OverrideState: 0
+    m_Value: 0
+  radialTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  radialScale:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1}
+  radialLength:
+    m_OverrideState: 0
+    m_Value: 1
+  noiseMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  noiseMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  noiseMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  noiseMapScale:
+    m_OverrideState: 0
+    m_Value: 1
+  attenMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  attenMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  attenMap2On:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap2:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  attenMap2ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  dissolveRate:
+    m_OverrideState: 0
+    m_Value: 0
+  clipOn:
+    m_OverrideState: 0
+    m_Value: 0
+  isGrayScale:
+    m_OverrideState: 0
+    m_Value: 0
+  grayScale:
+    m_OverrideState: 0
+    m_Value: 1
+  minColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  maxColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  isBaseLineOn:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  baseLineMap_ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  rotateRate:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMapIntensity:
+    m_OverrideState: 0
+    m_Value: 0.5
 --- !u!114 &4813415655309978088
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -146,7 +221,7 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 8
+    m_Value: 5
   weight:
     m_OverrideState: 1
     m_Value: 1.79
@@ -157,10 +232,10 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   saturate:
-    m_OverrideState: 0
-    m_Value: 1.7
+    m_OverrideState: 1
+    m_Value: 1
   brightness:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
 --- !u!114 &5404789168662656773
 MonoBehaviour:
