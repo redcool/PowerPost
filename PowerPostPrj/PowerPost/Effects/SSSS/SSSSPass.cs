@@ -10,7 +10,6 @@ namespace PowerPost {
     {
         const string DIFFUSE_PROFILE_SHADER = "Hidden/PowerPost/ScreenDiffuseProfile";
 
-        int _SceneColorRT = Shader.PropertyToID("_SceneColorRT");
         int _Kernel = Shader.PropertyToID("_Kernel");
         int _BlurSize = Shader.PropertyToID("_BlurSize");
         int _StencilRef = Shader.PropertyToID("_StencilRef");
@@ -51,18 +50,8 @@ namespace PowerPost {
             mat.SetFloat(_BlurSize,settings.blurScale.value);
             mat.SetInt(_StencilRef, settings.stencilRef.value);
 
-            cmd.BlitColorDepth(ColorTarget, _SceneColorRT, DepthTarget, mat, 0);
-            cmd.BlitColorDepth(_SceneColorRT, ColorTarget, DepthTarget, mat, 1);
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
         }
 
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-        {
-            cmd.GetTemporaryRT(_SceneColorRT, cameraTextureDescriptor);
-        }
-
-        public override void FrameCleanup(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_SceneColorRT);
-        }
     }
 }

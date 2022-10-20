@@ -57,9 +57,9 @@ Shader "Hidden/PowerPost/ScreenDiffuseProfile"
             
             float _BlurSize;
 
-            fixed4 frag (v2f i) : SV_Target
+            half4 frag (v2f i) : SV_Target
             {
-                float4 mainColor = tex2D(_MainTex,i.uv);
+                half4 mainColor = tex2D(_MainTex,i.uv);
                 // return mainColor * 0.5;
                 float3 c = DiffuseProfile(mainColor,_MainTex,i.uv,float2(_MainTex_TexelSize.x,0) * _BlurSize,1);
                 c += DiffuseProfile(mainColor,_MainTex,i.uv,float2(0,_MainTex_TexelSize.y)  * _BlurSize,1);
@@ -69,17 +69,5 @@ Shader "Hidden/PowerPost/ScreenDiffuseProfile"
             ENDCG
         }
 
-        Pass{
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            sampler2D _MainTex;
-
-            fixed4 frag(v2f i):SV_Target{
-                return tex2D(_MainTex,i.uv);
-            }
-
-            ENDCG
-        }
     }
 }
