@@ -19,6 +19,9 @@ namespace PowerPost
         //radial tex
         static int _RadialTex = Shader.PropertyToID(nameof(_RadialTex));
         static int _RadialInfo = Shader.PropertyToID(nameof(_RadialInfo));
+        static int _RadialIntensityRange = Shader.PropertyToID(nameof(_RadialIntensityRange));
+        static int _RadialColor = Shader.PropertyToID(nameof(_RadialColor));
+
         static int _NoiseMap = Shader.PropertyToID(nameof(_NoiseMap));
         static int _NoiseMapST = Shader.PropertyToID(nameof(_NoiseMapST));
 
@@ -77,7 +80,9 @@ namespace PowerPost
                     settings.radialLength.value,
                     settings.noiseMapScale.value
                     ));
-
+                mat.SetVector(_RadialIntensityRange, new Vector4(settings.minRadialIntensity.value,
+                    settings.maxRadialIntensity.value,0,0));
+                mat.SetColor(_RadialColor, settings.radialColor.value);
                 // distortion
                 if (settings.noiseMapOn.value)
                 {

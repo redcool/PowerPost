@@ -25,6 +25,10 @@ namespace PowerPost
         public TextureParameter radialTex = new TextureParameter(null);
         public Vector2Parameter radialScale = new Vector2Parameter(new Vector2(1,1));
         public MinFloatParameter radialLength = new MinFloatParameter(1,0);
+        [Header("Radial Line")]
+        public ClampedFloatParameter minRadialIntensity = new ClampedFloatParameter(0, 0, 1);
+        public ClampedFloatParameter maxRadialIntensity = new ClampedFloatParameter(1, 0, 1);
+        public ColorParameter radialColor = new ColorParameter(Color.white,true,false,true);
 
         [Tooltip("径向层的扰动效果")]
         [Header("Radial Layer Noise")]
@@ -45,7 +49,7 @@ namespace PowerPost
         public Vector4Parameter attenMap2ST = new Vector4Parameter(new Vector4(1, 1, 0, 0));
 
         [Space(10)]
-        public ClampedFloatParameter dissolveRate = new ClampedFloatParameter(0, 0, 1);
+        public ClampedFloatParameter dissolveRate = new ClampedFloatParameter(0, -1, 1);
         public BoolParameter clipOn = new BoolParameter(false);
 
         [Tooltip("灰度显示")]

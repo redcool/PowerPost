@@ -230,7 +230,7 @@ MonoBehaviour:
     m_Value: 1
   radialBlurIterations:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 1
   sunShaftBlurRadius:
     m_OverrideState: 1
     m_Value: 3

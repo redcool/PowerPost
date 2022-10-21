@@ -58,6 +58,8 @@ CBUFFER_START(UnityPerMaterial)
 
             float4 _RadialInfo;
             float4 _NoiseMapST;
+            float4 _RadialIntensityRange;
+            half4 _RadialColor;
 
             half4 _AttenMap_ST;
             half4 _AttenMap2_ST;
@@ -76,6 +78,8 @@ CBUFFER_END
             #define _RadialST _RadialInfo.xy
             #define _RadialLength _RadialInfo.z
             #define _NoiseMapScale _RadialInfo.w
+            #define _MinRadialIntensity _RadialIntensityRange.x
+            #define _MaxRadialIntensity _RadialIntensityRange.y
 
             float4 frag (VaryingsDefault i) : SV_Target
             {
@@ -104,6 +108,7 @@ CBUFFER_END
                     float2 polarUV = ToPolar((i.texcoord - _Center)*2);
                     polarUV.x = frac(polarUV.x);
                     
+                    //使用图控制衰减
                     half dissolve = 0;
                     #if defined(_ATTEN_MAP_ON)
                     {
@@ -140,13 +145,14 @@ CBUFFER_END
 
                     half dirLen2 = smoothstep(0.,2,saturate(1-dirLen)); //从内向外衰减
                     radialIntensity = lerp(radialIntensity,1,smoothstep(.15,1,dirLen2 * _RadialLength));
+                    radialIntensity = smoothstep(_MinRadialIntensity,_MaxRadialIntensity,radialIntensity);
 
                     // blurCol *= radialIntensity;
-                    // alpha blend
+                    // blurCol blend
                     half radialIntensityWithDissolve = lerp(1,radialIntensity,smoothstep(-1,0,dissolve));
-                    
-                    blurCol *= radialIntensityWithDissolve;
-                    // return blurCol;
+                    half4 radialCol = lerp(_RadialColor,1,radialIntensityWithDissolve);
+                    // blurCol *= radialCol;
+                    blurCol = lerp(blurCol,_RadialColor,radialIntensityWithDissolve);
                 }
                 #endif
 //==================== composite tex
