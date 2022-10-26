@@ -36,6 +36,7 @@ namespace PowerPost
         static int _GrayScale = Shader.PropertyToID(nameof(_GrayScale));
         static int _MinColor = Shader.PropertyToID(nameof(_MinColor));
         static int _MaxColor = Shader.PropertyToID(nameof(_MaxColor));
+        static int _GrayRange = Shader.PropertyToID(nameof(_GrayRange));
 
         static int _BaseLineMap = Shader.PropertyToID(nameof(_BaseLineMap));
         static int _RotateRate = Shader.PropertyToID(nameof(_RotateRate));
@@ -81,7 +82,7 @@ namespace PowerPost
                     settings.noiseMapScale.value
                     ));
                 mat.SetVector(_RadialIntensityRange, new Vector4(settings.minRadialIntensity.value,
-                    settings.maxRadialIntensity.value,0,0));
+                    settings.maxRadialIntensity.value, 0, 0));
                 mat.SetColor(_RadialColor, settings.radialColor.value);
                 // distortion
                 if (settings.noiseMapOn.value)
@@ -95,11 +96,11 @@ namespace PowerPost
                     mat.SetTexture(_AttenMap, settings.attenMap.value);
                     mat.SetVector(_AttenMap_ST, settings.attenMapST.value);
 
-                    var attenScale = settings.clipOn.value ? 1f : 2;
-                    var dissolveRate = settings.dissolveRate.value;
-
-                    mat.SetFloat(_DissolveRate, dissolveRate * attenScale);
                 }
+                //var attenScale = settings.clipOn.value ? 1f : 2;
+                var dissolveRate = settings.dissolveRate.value;
+
+                mat.SetFloat(_DissolveRate, dissolveRate * 1);
 
                 if (settings.attenMap2On.value)
                 {
@@ -110,9 +111,13 @@ namespace PowerPost
 
             if (settings.isGrayScale.value)
             {
-                mat.SetFloat(_GrayScale,settings.grayScale.value);
                 mat.SetColor(_MinColor, settings.minColor.value);
                 mat.SetColor(_MaxColor, settings.maxColor.value);
+                mat.SetVector(_GrayRange, new Vector4(
+                    settings.minGray.value,
+                    settings.maxGray.value,
+                    0,0
+                    ));
             }
 
             if (settings.isBaseLineOn.value)
@@ -129,7 +134,7 @@ namespace PowerPost
             mat.SetKeyword(_BASE_LINE_MAP_ON, settings.isBaseLineOn.value);
             mat.SetKeyword(_ATTEN_MAP_ON, settings.attenMapOn.value);
             mat.SetKeyword(_ATTEN_MAP2_ON, settings.attenMap2On.value);
-            mat.SetKeyword(_CLIP_ON, settings.clipOn.value);
+            //mat.SetKeyword(_CLIP_ON, settings.clipOn.value);
         }
 
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)

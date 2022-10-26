@@ -19,6 +19,7 @@ Shader "Hidden/PowerPost/RadialBlur"
 
         _MinColor("_MinColor",color) = (0,0,0,0)
         _MaxColor("_MaxColor",color) = (1,1,1,1)
+        _GrayRange("_GrayRange",vector) = (0,1,0,0)
     }
 
     SubShader
@@ -65,12 +66,12 @@ CBUFFER_START(UnityPerMaterial)
             half4 _AttenMap2_ST;
             half _DissolveRate;
 
-            float _GrayScale;
             half _RotateRate;
             half _BaseLineMapIntensity;
             half4 _BaseLineMap_ST;
 
             half4 _MaxColor,_MinColor;
+            half4 _GrayRange;
 CBUFFER_END
             float _Aspect; // camera rarget's width/height
 
@@ -80,6 +81,9 @@ CBUFFER_END
             #define _NoiseMapScale _RadialInfo.w
             #define _MinRadialIntensity _RadialIntensityRange.x
             #define _MaxRadialIntensity _RadialIntensityRange.y
+
+            #define _MinGray _GrayRange.x
+            #define _MaxGray _GrayRange.y
 
             float4 frag (VaryingsDefault i) : SV_Target
             {
@@ -108,8 +112,9 @@ CBUFFER_END
                     float2 polarUV = ToPolar((i.texcoord - _Center)*2);
                     polarUV.x = frac(polarUV.x);
                     
+                    half dissolve = 1;
+
                     //使用图控制衰减
-                    half dissolve = 0;
                     #if defined(_ATTEN_MAP_ON)
                     {
                         dissolve = SAMPLE_TEXTURE2D(_AttenMap,sampler_AttenMap,polarUV * _AttenMap_ST.xy + _AttenMap_ST.zw).x;
@@ -120,15 +125,15 @@ CBUFFER_END
                             dissolve *= attenMap2;
                         }
                         #endif
-                        // dissolve = (dissolve - _DissolveRate);//[-1,1]
-                        half dirLen1 = smoothstep(0.,1,saturate(1-dirLen)); //从内向外衰减
-                        dissolve -= dirLen1 *5 * _DissolveRate; //组合径向距离
-
-                        #if defined(_CLIP_ON)
-                            clip(dissolve);
-                        #endif
                     }
                     #endif
+
+                    //dissolve rate
+                    half dirLen1 = smoothstep(0.,1,saturate(1-dirLen)); //从内向外衰减
+                    dissolve -= dirLen1 * _DissolveRate*4; //组合径向距离
+                    // #if defined(_CLIP_ON)
+                    //     clip(dissolve);
+                    // #endif
 
                     polarUV *= _RadialST;
                     // polarUV = lerp(polarUV,i.texcoord,noise);
@@ -141,18 +146,11 @@ CBUFFER_END
                     #endif
 
                     half4 radialTex = SAMPLE_TEXTURE2D(_RadialTex,sampler_RadialTex,polarUV);
-                    half radialIntensity = saturate(radialTex.x - 0.5);
-
-                    half dirLen2 = smoothstep(0.,2,saturate(1-dirLen)); //从内向外衰减
-                    radialIntensity = lerp(radialIntensity,1,smoothstep(.15,1,dirLen2 * _RadialLength));
+                    half radialIntensity = saturate(radialTex.x - .5);
                     radialIntensity = smoothstep(_MinRadialIntensity,_MaxRadialIntensity,radialIntensity);
-
-                    // blurCol *= radialIntensity;
-                    // blurCol blend
-                    half radialIntensityWithDissolve = lerp(1,radialIntensity,smoothstep(-1,0,dissolve));
-                    half4 radialCol = lerp(_RadialColor,1,radialIntensityWithDissolve);
-                    // blurCol *= radialCol;
-                    blurCol = lerp(blurCol,_RadialColor,radialIntensityWithDissolve);
+                    radialIntensity *= dissolve;
+                    // return radialIntensity;
+                    blurCol = lerp(blurCol,_RadialColor,saturate(radialIntensity));
                 }
                 #endif
 //==================== composite tex
@@ -161,7 +159,7 @@ CBUFFER_END
 //==================== Gray sclae
                 #if defined(_GRAY_SCALE_ON)
                     half gray = dot(half3(0.2,0.7,0.07),col.xyz);
-                    gray = pow(gray , _GrayScale);
+                    gray = smoothstep(_MinGray,_MaxGray,gray);
                     col = lerp(_MinColor,_MaxColor,gray);
                     // return smoothstep(0.,1,gray);
                 #endif
