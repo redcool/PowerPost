@@ -78,7 +78,7 @@ namespace PowerPost
                 mat.SetTexture(_RadialTex, settings.radialTex.value);
                 mat.SetVector(_RadialInfo, new Vector4(settings.radialScale.value.x,
                     settings.radialScale.value.y,
-                    settings.radialLength.value,
+                    0,
                     settings.noiseMapScale.value
                     ));
                 mat.SetVector(_RadialIntensityRange, new Vector4(settings.minRadialIntensity.value,

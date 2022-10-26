@@ -24,7 +24,6 @@ namespace PowerPost
         public BoolParameter radialTexOn = new BoolParameter(false);
         public TextureParameter radialTex = new TextureParameter(null);
         public Vector2Parameter radialScale = new Vector2Parameter(new Vector2(1,1));
-        public MinFloatParameter radialLength = new MinFloatParameter(1,0);
         [Header("Radial Line")]
         public ClampedFloatParameter minRadialIntensity = new ClampedFloatParameter(0, 0, 1);
         public ClampedFloatParameter maxRadialIntensity = new ClampedFloatParameter(0.2f, 0, 1);

@@ -38,7 +38,6 @@ Shader "Hidden/PowerPost/RadialBlur"
             #pragma shader_feature_local_fragment _BASE_LINE_MAP_ON
             #pragma shader_feature_local_fragment _ATTEN_MAP_ON
             #pragma shader_feature_local_fragment _ATTEN_MAP2_ON
-            #pragma shader_feature_local_fragment _CLIP_ON
 
             #include "PowerPostLib.hlsl"
             TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
@@ -131,9 +130,6 @@ CBUFFER_END
                     //dissolve rate
                     half dirLen1 = smoothstep(0.,1,saturate(1-dirLen)); //从内向外衰减
                     dissolve -= dirLen1 * _DissolveRate*4; //组合径向距离
-                    // #if defined(_CLIP_ON)
-                    //     clip(dissolve);
-                    // #endif
 
                     polarUV *= _RadialST;
                     // polarUV = lerp(polarUV,i.texcoord,noise);
