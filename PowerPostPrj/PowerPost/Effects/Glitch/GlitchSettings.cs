@@ -13,10 +13,16 @@
     public class GlitchSettings : BasePostExSettings
     {
         [Header("Global")]
+        [Tooltip("glitch intensity, 0 will disable glitch")]
         public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
+
         [Header("Jitter")]
+        [Tooltip("scanline jitter intensity")]
         public ClampedFloatParameter scanlineJitter = new ClampedFloatParameter(0, 0, 1);
-        public ClampedFloatParameter jitterBlockSize = new ClampedFloatParameter(1, 1,1000);
+
+        [Tooltip("scanline jitter block size")]
+        public ClampedFloatParameter jitterBlockSize = new ClampedFloatParameter(1, 1,200);
+
         [Header("Snow Flake")]
         public ClampedFloatParameter snowFlakeAmplitude = new ClampedFloatParameter(0, 0, 1);
         [Header("Vertical Jump")]

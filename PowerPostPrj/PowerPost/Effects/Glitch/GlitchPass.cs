@@ -17,9 +17,7 @@ namespace PowerPost
         int _StencilRef = Shader.PropertyToID("_StencilRef");
         int _BlockSize = Shader.PropertyToID("_BlockSize");
 
-        
         float verticalJumpTime;
-        int _ColorRT = Shader.PropertyToID("_ColorRT");
 
         public override string PassName => nameof(GlitchPass);
 
@@ -38,34 +36,36 @@ namespace PowerPost
             var mat = GetTargetMaterial(GLITCH_SHADER);
             
             //jitter
-            var sl_threshold = (settings.scanlineJitter.value * 1.2f);
-            var sl_disp = 0.002f + Mathf.Pow(settings.scanlineJitter.value, 3) * 0.05f;
-            mat.SetVector(_ScanlineJiiterId, new Vector4(sl_threshold, sl_disp,1f/settings.jitterBlockSize.value,settings.glitchHorizontalIntensity.value));
+            var jitterIntensity = (settings.scanlineJitter.value * 1.2f);
+            var jitterThreshold = 0.002f + Mathf.Pow(settings.scanlineJitter.value, 3) * 0.05f;
+            mat.SetVector(_ScanlineJiiterId, new Vector4(
+                jitterIntensity, 
+                jitterThreshold,
+                1f/settings.jitterBlockSize.value, 
+                settings.glitchHorizontalIntensity.value
+                ));
             // snow flake
-            mat.SetVector(_SnowFlake, new Vector2(Mathf.Sin(Random.value) * 0.1f, settings.snowFlakeAmplitude.value));
+            mat.SetVector(_SnowFlake, new Vector2(
+                Mathf.Sin(Random.value) * 2,
+                settings.snowFlakeAmplitude.value));
 
             verticalJumpTime += Time.deltaTime * settings.verticalJump.value * 10;
-            mat.SetVector(_VerticalJump, new Vector2(settings.verticalJump.value, verticalJumpTime));
+            mat.SetVector(_VerticalJump, new Vector2(
+                settings.verticalJump.value,
+                verticalJumpTime));
             mat.SetFloat(_HorizontalShake, settings.horizontalShake.value * 0.2f);
 
             //sin(y) * x :
             //x: amplitude, y : period
-            mat.SetVector(_ColorDrift, new Vector2(settings.colorDrift.value * 0.04f, Time.time * settings.colorDriftSpeed.value));
+            mat.SetVector(_ColorDrift, new Vector2(
+                settings.colorDrift.value * 0.4f,
+                Time.time * settings.colorDriftSpeed.value));
+
             mat.SetInt(_StencilRef, settings.layer.value != 0 ? settings.stencilRef.value : 0);
 
 
             cmd.BlitColorDepth(BuiltinRenderTextureType.None, ColorTarget, ColorTarget, mat, 0);
 
-        }
-
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-        {
-            cmd.GetTemporaryRT(_ColorRT, cameraTextureDescriptor);
-        }
-
-        public override void FrameCleanup(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_ColorRT);
         }
     }
 }
