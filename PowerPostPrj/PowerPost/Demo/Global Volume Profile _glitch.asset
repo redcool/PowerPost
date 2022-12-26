@@ -157,10 +157,10 @@ MonoBehaviour:
   active: 1
   glitchHorizontalIntensity:
     m_OverrideState: 1
-    m_Value: 0.047
+    m_Value: 0.014
   scanlineJitter:
     m_OverrideState: 1
-    m_Value: 0.18
+    m_Value: 0
   jitterBlockSize:
     m_OverrideState: 1
     m_Value: 1
@@ -169,13 +169,13 @@ MonoBehaviour:
     m_Value: 0
   verticalJump:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.035
   horizontalShake:
     m_OverrideState: 1
     m_Value: 0
   colorDrift:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.278
   colorDriftSpeed:
     m_OverrideState: 1
     m_Value: 1
@@ -183,7 +183,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 8
   stencilRef:
     m_OverrideState: 1
     m_Value: 6
@@ -224,9 +224,15 @@ MonoBehaviour:
   radialScale:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
-  radialLength:
+  minRadialIntensity:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
+  maxRadialIntensity:
+    m_OverrideState: 0
+    m_Value: 0.2
+  radialColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   noiseMapOn:
     m_OverrideState: 0
     m_Value: 0
@@ -239,9 +245,54 @@ MonoBehaviour:
   noiseMapScale:
     m_OverrideState: 0
     m_Value: 1
+  attenMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  attenMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  attenMap2On:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap2:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  attenMap2ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  dissolveRate:
+    m_OverrideState: 0
+    m_Value: 0
   isGrayScale:
     m_OverrideState: 0
     m_Value: 0
-  grayScale:
+  minGray:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0.1
+  maxGray:
+    m_OverrideState: 0
+    m_Value: 0.2
+  minColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  maxColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  isBaseLineOn:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  baseLineMap_ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  rotateRate:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMapIntensity:
+    m_OverrideState: 0
+    m_Value: 0.5

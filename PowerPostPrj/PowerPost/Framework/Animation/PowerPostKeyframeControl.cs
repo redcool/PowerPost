@@ -26,26 +26,20 @@ namespace PowerPost.KeyFrame
         public float ssss_blurScale = 0.1f;
         public LayerMask ssss_layer = 0;
         public int ssss_stencilRef = 5;
-        [Header("---")]
-        public Vector2 radialBlur_center = new Vector2(.5f, .5f);
-        public float radialBlur_radiusMin = 0;
-        public float radialBlur_radiusMax = 1;
-        public float radialBlur_blurSize = 0;
-        public bool radialBlur_roundness = false;
 
 
         GlitchSettings glitchSettings;
         SSSSSettings ssssSettings;
-        RadialBlurSettings radialBlurSettings;
 
         private void OnEnable()
         {
             if (!volume)
-                return;
+            {
+                volume = GetComponent<Volume>();
+            }
 
             volume.profile.TryGet(out glitchSettings);
             volume.profile.TryGet(out ssssSettings);
-            volume.profile.TryGet(out radialBlurSettings);
         }
 
         private void Update()
@@ -55,18 +49,6 @@ namespace PowerPost.KeyFrame
 
             UpdateGlitch();
             UpdateSSSS();
-            UpdateRadialBlur();
-        }
-
-        private void UpdateRadialBlur()
-        {
-            if (!radialBlurSettings)
-                return;
-            radialBlurSettings.center.value = radialBlur_center;
-            radialBlurSettings.blurSize.value = radialBlur_blurSize;
-            radialBlurSettings.radiusMin.value = radialBlur_radiusMin;
-            radialBlurSettings.radiusMax.value = radialBlur_radiusMax;
-            radialBlurSettings.roundness.value = radialBlur_roundness;
         }
 
         private void UpdateSSSS()
