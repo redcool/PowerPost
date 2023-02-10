@@ -28,7 +28,7 @@ namespace PowerUtilities
         public float updateCount = 5;
         float intervalTime = 1;
 
-        Volume postVolume;
+        public Volume postVolume;
         RadialBlurSettings radialBlurSettings;
 
         [Tooltip("¾¶ÏòÄ£ºý")]
@@ -91,7 +91,9 @@ namespace PowerUtilities
         // Start is called before the first frame update
         void OnEnable()
         {
-            postVolume = GetComponent<Volume>();
+            if (!postVolume)
+                postVolume = GetComponent<Volume>();
+
             if (postVolume && postVolume.profile)
             {
                 postVolume.profile.TryGet(out radialBlurSettings);
