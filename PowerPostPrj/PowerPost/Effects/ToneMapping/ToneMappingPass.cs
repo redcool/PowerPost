@@ -11,15 +11,22 @@
 
     public class ToneMappingPass : BasePostExPass<ToneMappingSettings>
     {
-        int _ColorRT = Shader.PropertyToID(nameof(_ColorRT));
-        int _Mode = Shader.PropertyToID(nameof(_Mode));
-        int _Weight = Shader.PropertyToID(nameof(_Weight));
+        int
+            _ColorRT = Shader.PropertyToID(nameof(_ColorRT)),
+            _Mode = Shader.PropertyToID(nameof(_Mode)),
+            _Weight = Shader.PropertyToID(nameof(_Weight)),
 
-        int _Saturate = Shader.PropertyToID(nameof(_Saturate));
-        int _Brightness = Shader.PropertyToID(nameof(_Brightness));
-        int _Hue = Shader.PropertyToID(nameof(_Hue));
-        int _Scale = Shader.PropertyToID(nameof(_Scale));
-        int _Offset = Shader.PropertyToID(nameof(_Offset));
+            _Saturate = Shader.PropertyToID(nameof(_Saturate)),
+            _Brightness = Shader.PropertyToID(nameof(_Brightness)),
+            _Hue = Shader.PropertyToID(nameof(_Hue)),
+            _Scale = Shader.PropertyToID(nameof(_Scale)),
+            _Offset = Shader.PropertyToID(nameof(_Offset)),
+
+            _UseColorGradingLUT = Shader.PropertyToID(nameof(_UseColorGradingLUT)),
+            _ColorGradingLUT = Shader.PropertyToID(nameof(_ColorGradingLUT)),
+            _ColorGradingLUTParams = Shader.PropertyToID(nameof(_ColorGradingLUTParams)),
+            _ColorGradingUseLogC = Shader.PropertyToID(nameof(_ColorGradingUseLogC))
+            ;
 
         const string TONE_MAPPING_SHADER = "Hidden/PowerPost/ToneMapping";
 
@@ -37,6 +44,15 @@
             mat.SetFloat(_Offset, settings.offset.value);
 
             cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
+
+            var gradingLut = settings.colorGradingLut.value;
+            if (gradingLut)
+            {
+                cmd.SetGlobalVector(_ColorGradingLUTParams, new Vector4(1f/gradingLut.width, 1f/gradingLut.height, gradingLut.height-1));
+            }
+            cmd.SetGlobalTexture(_ColorGradingLUT,settings.colorGradingLut.value);
+            cmd.SetGlobalFloat(_UseColorGradingLUT, gradingLut ? 1 : 0);
+            cmd.SetGlobalFloat(_ColorGradingUseLogC, settings.colorGradingUseLogC.value ? 1 : 0);
         }
     }
 }

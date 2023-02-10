@@ -35,6 +35,10 @@ namespace PowerPost
         public MinFloatParameter saturate = new MinFloatParameter(1,0);
         public MinFloatParameter brightness = new MinFloatParameter(1,0);
 
+        [Header("ColorGrading")]
+        public TextureParameter colorGradingLut = new TextureParameter(null);
+        public BoolParameter colorGradingUseLogC = new BoolParameter(false);
+
         public override BasePostExPass CreateNewInstance()
         {
             var pass = new ToneMappingPass();

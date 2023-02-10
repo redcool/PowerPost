@@ -333,8 +333,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
 --- !u!4 &140964121 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
   m_PrefabInstance: {fileID: 140964120}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &158386813
@@ -396,8 +395,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
 --- !u!4 &158386814 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
   m_PrefabInstance: {fileID: 158386813}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &385000744
@@ -459,8 +457,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
 --- !u!4 &385000745 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
   m_PrefabInstance: {fileID: 385000744}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &393355014
@@ -522,8 +519,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
 --- !u!4 &393355015 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
   m_PrefabInstance: {fileID: 393355014}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &452932951
@@ -682,8 +678,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
 --- !u!4 &812652697 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 472700, guid: 48eea1d12bdec4a4ea9402d0035f5b3f, type: 3}
   m_PrefabInstance: {fileID: 812652696}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1047203828
