@@ -11,6 +11,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Codice.CM.SEIDInfo;
+using System.Text.RegularExpressions;
 
 namespace PowerUtilities { 
     public class PowerPostKeyframeAnimGen
@@ -73,9 +74,9 @@ namespace PowerUtilities {
             return typeName;
         }
 
-        static void AnalystCodeString(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
+        static void AnalystCodeString1(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
-            Debug.Log(type.ToString());
+
             //var inst = Activator.CreateInstance(type);
             var inst = ScriptableObject.CreateInstance(type);
 
@@ -91,7 +92,42 @@ namespace PowerUtilities {
                 fieldsSB.AppendLine(fieldString);
             });
         }
+        static void AnalystCodeString(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
+        {
+            var texts = GetPowerPostSettings();
+            foreach (var ta in texts)
+            {
+                Debug.Log(ta.name);
+                //var lines = ta.text.Split('\n');
+                //foreach (var line in lines)
+                //{
 
+                //    Debug.Log(line);
+                //}
+
+                //public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
+                const string linePattern = @"(\w+)Parameter (\w+) ?= *\w+ *\w+\((\w+),?";
+                var items = Regex.Matches(ta.text, linePattern);
+                foreach (Match match in items)
+                {
+                    Debug.Log($"{match.Groups[1]} {match.Groups[2]} {match.Groups[3]}");
+                }
+                break;
+            }
+        }
+
+        private static TextAsset[] GetPowerPostSettings()
+        {
+            var items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("PowerPost l:Architecture");
+            if (items.Length == 0)
+                throw new Exception("PowerPost.asmdef canot found!");
+
+            var path = AssetDatabase.GetAssetPath(items[0]);
+            var asmdefDir = PathTools.GetAssetDir(path);
+
+            items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("*Settings", $"{asmdefDir}/PowerPost/Effects");
+            return items;
+        }
 
         const string CODE_TEMPLATE = @"namespace PowerUtilities
 {{
