@@ -21,7 +21,7 @@
         public ClampedFloatParameter scanlineJitter = new ClampedFloatParameter(0, 0, 1);
 
         [Tooltip("scanline jitter block size")]
-        public ClampedFloatParameter jitterBlockSize = new ClampedFloatParameter(1, 1,200);
+        public FloatParameter jitterBlockSize = new FloatParameter(1);
 
         [Header("Snow Flake")]
         public ClampedFloatParameter snowFlakeAmplitude = new ClampedFloatParameter(0, 0, 1);
