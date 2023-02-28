@@ -157,35 +157,35 @@ MonoBehaviour:
   active: 1
   glitchHorizontalIntensity:
     m_OverrideState: 1
-    m_Value: 0.014
+    m_Value: 0.043
   scanlineJitter:
     m_OverrideState: 1
     m_Value: 0
   jitterBlockSize:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1000
   snowFlakeAmplitude:
     m_OverrideState: 1
     m_Value: 0
   verticalJump:
     m_OverrideState: 1
-    m_Value: 0.035
+    m_Value: 0
   horizontalShake:
     m_OverrideState: 1
     m_Value: 0
   colorDrift:
     m_OverrideState: 1
-    m_Value: 0.278
+    m_Value: 0.247
   colorDriftSpeed:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 191
   layer:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value:
       serializedVersion: 2
       m_Bits: 8
   stencilRef:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 6
 --- !u!114 &7130441275232656504
 MonoBehaviour:

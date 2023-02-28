@@ -16,7 +16,7 @@ namespace PowerUtilities
     {
         const string PATH = "Assets/PowerPostAnimCodeGen/";
 
-        [MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFramae Mono")]
+        [MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
         public static void GenCode()
         {
             var fieldsSB = new StringBuilder();
@@ -24,16 +24,19 @@ namespace PowerUtilities
             var gettersSB = new StringBuilder();
 
             PathTools.CreateAbsFolderPath(PATH);
-
-            var typeList = TypeCache.GetTypesDerivedFrom<BasePostExSettings>();
-            foreach (var type in typeList)
+            var settingTextAssets = GetPowerPostSettings();
+            foreach (var textAsset in settingTextAssets)
             {
-                AnalystCodeString(type, fieldsSB, null, null);
+                AnalystCodeString(textAsset, fieldsSB, settersSB, gettersSB);
 
-                var path = $"{PathTools.GetAssetAbsPath(PATH)}/{type}Control.cs";
-                File.WriteAllText(path, string.Format(CODE_TEMPLATE, type, fieldsSB));
+                var className = textAsset.name;
+                var path = $"{PathTools.GetAssetAbsPath(PATH)}/{className}Control.cs";
+                File.WriteAllText(path, string.Format(CODE_TEMPLATE, className, fieldsSB, settersSB,gettersSB));
 
-                break;
+                //break;
+                fieldsSB.Clear();
+                settersSB.Clear();
+                gettersSB.Clear();
             }
 
         }
@@ -68,8 +71,8 @@ namespace PowerUtilities
 
             if (typeName.Contains("AnimationCurve")) return "AnimationCurve";
 
-            //if (typeName.Contains("ToneMappingMode")) return "ToneMappingModeParameter";
-            return typeName;
+            if (typeName.Contains("ToneMappingMode")) return "ToneMappingSettings.Mode";
+            throw new ArgumentException(typeName);
         }
 
         static void AnalystCodeString1(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
@@ -90,33 +93,35 @@ namespace PowerUtilities
                 fieldsSB.AppendLine(fieldString);
             });
         }
-        static void AnalystCodeString(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
+        
+        static void AnalystCodeString(TextAsset textAsset, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
-            var texts = GetPowerPostSettings();
-            foreach (var ta in texts)
+            //public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
+            const string linePattern = @"(//\s*\w+\s*)*(\w+)Parameter (\w+) ?= *\w+ *\w+\((\w+),?";
+            var items = Regex.Matches(textAsset.text, linePattern);
+            foreach (Match match in items)
             {
-                Debug.Log(ta.name);
-                //var lines = ta.text.Split('\n');
-                //foreach (var line in lines)
-                //{
+                // comments line
+                if (match.Groups[0].Value.Contains("//"))
+                    continue;
 
-                //    Debug.Log(line);
-                //}
-
-                //public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
-                const string linePattern = @"(\w+)Parameter (\w+) ?= *\w+ *\w+\((\w+),?";
-                var items = Regex.Matches(ta.text, linePattern);
-                foreach (Match match in items)
-                {
-                    Debug.Log($"{match.Groups[1]} {match.Groups[2]} {match.Groups[3]}");
-                }
-                break;
+                var varType = match.Groups[2].Value;
+                var varName = match.Groups[3].Value;
+                var defaultValue = match.Groups[4].Value;
+                fieldsSB.AppendLine($"public {ConvertVolumeParameter(varType)} {varName};");
+                // setters
+                //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+                setterSB.AppendLine($"settings.{varName}.value = {varName};");
+                // getters
+                //rotateRate = settings.rotateRate.value;
+                getterSB.AppendLine($"{varName} = settings.{varName}.value;");
             }
         }
 
         private static TextAsset[] GetPowerPostSettings()
         {
-            var items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("PowerPost l:Architecture");
+            var items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("PowerPost");
+            items = items.Where(item => item.name == "PowerPost").ToArray();
             if (items.Length == 0)
                 throw new Exception("PowerPost.asmdef canot found!");
 
@@ -126,7 +131,12 @@ namespace PowerUtilities
             items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("*Settings", $"{asmdefDir}/PowerPost/Effects");
             return items;
         }
-
+        /**
+        0 : className
+        1 : fields
+        2 : setters
+        3 : getters
+         */
         const string CODE_TEMPLATE = @"namespace PowerUtilities
 {{
     using PowerPost;
@@ -151,17 +161,24 @@ namespace PowerUtilities
         }}
     }}
 #endif
-
+    
+    [ExecuteInEditMode]
     public class {0}Control : MonoBehaviour
     {{
         public float updateCount = 5;
         float intervalTime = 1;
 
         public Volume postVolume;
-        {0} settings;
+        [Header(""Volume Parameters"")]
+        public {0} settings;
         
         // variables
         {1}
+
+        void Awake()
+        {{
+            RecordVars();
+        }}
 
         // Start is called before the first frame update
         void OnEnable()
@@ -187,7 +204,7 @@ namespace PowerUtilities
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
-            
+            {2}
         }}
 
         public void RecordVars()
@@ -205,7 +222,7 @@ namespace PowerUtilities
                 return;
             
             //rotateRate = settings.rotateRate.value;
-            
+            {3}
         }}
     }}
 }}

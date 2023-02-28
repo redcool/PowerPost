@@ -342,78 +342,63 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.111
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.02036928
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0.9997925
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 177.666
       objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -8679921383154817045, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: -7511558181221131132, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: fc1c1c697200f1c4286f86ac6dcd36db, type: 2}
-    - target: {fileID: 919132149155446097, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: 919132149155446097, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_Name
       value: Head2
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: 919132149155446097, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 9f30df847baadd14da99138a254fa202,
-        type: 3}
+    - target: {fileID: 919132149155446097, guid: 9f30df847baadd14da99138a254fa202, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -430,7 +415,6 @@ GameObject:
   - component: {fileID: 1047203830}
   - component: {fileID: 1047203829}
   - component: {fileID: 1047203832}
-  - component: {fileID: 1047203831}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -470,43 +454,9 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1047203831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047203828}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99df289097bc8f24e8f147e0a0697d6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volume: {fileID: 0}
-  glitch_scanlineJitter: 0
-  glitch_snowFlakeAmplitude: 0
-  glitch_verticalJump: 0
-  glitch_horizontalShake: 0
-  glitch_colorDrift: 0
-  glitch_layer:
-    serializedVersion: 2
-    m_Bits: 0
-  glitch_stencilRef: 6
-  ssss_strength: {r: 1, g: 1, b: 1, a: 1}
-  ssss_falloff: {r: 1, g: 0, b: 0, a: 1}
-  ssss_blurScale: 0.1
-  ssss_layer:
-    serializedVersion: 2
-    m_Bits: 0
-  ssss_stencilRef: 5
-  radialBlur_center: {x: 0.5, y: 0.5}
-  radialBlur_radiusMin: 0
-  radialBlur_radiusMax: 1
-  radialBlur_blurSize: 0
-  radialBlur_roundness: 0
 --- !u!95 &1047203832
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -523,7 +473,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1333867540
 GameObject:
   m_ObjectHideFlags: 0

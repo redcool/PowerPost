@@ -95,7 +95,7 @@ MonoBehaviour:
     m_Value: {r: 0.8584906, g: 0.0040494935, b: 0.0040494935, a: 1}
   outlineWidth:
     m_OverrideState: 1
-    m_Value: 0.1
+    m_Value: 0.5
 --- !u!114 &-522830349771770714
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -367,9 +367,15 @@ MonoBehaviour:
   radialScale:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
-  radialLength:
+  minRadialIntensity:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
+  maxRadialIntensity:
+    m_OverrideState: 0
+    m_Value: 0.2
+  radialColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   noiseMapOn:
     m_OverrideState: 0
     m_Value: 0
@@ -403,15 +409,15 @@ MonoBehaviour:
   dissolveRate:
     m_OverrideState: 0
     m_Value: 0
-  clipOn:
-    m_OverrideState: 0
-    m_Value: 0
   isGrayScale:
     m_OverrideState: 0
     m_Value: 0
-  grayScale:
+  minGray:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0.1
+  maxGray:
+    m_OverrideState: 0
+    m_Value: 0.2
   minColor:
     m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}

@@ -1,4 +1,4 @@
-﻿namespace PowerUtilities
+namespace PowerUtilities
 {
     using PowerPost;
     using System.Collections;
@@ -7,34 +7,47 @@
     using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Security.Cryptography;
 
-    [CustomEditor(typeof(PowerPostAnimTemplate))]
-    public class PowerPostAnimTemplateEditor : Editor
+    [CustomEditor(typeof(VignetteSettingsControl))]
+    public class VignetteSettingsControlEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Record Vars"))
             {
-                var inst = target as PowerPostAnimTemplate;
+                var inst = target as VignetteSettingsControl;
                 inst.RecordVars();
             }
         }
     }
 #endif
-
+    
     [ExecuteInEditMode]
-    public class PowerPostAnimTemplate : MonoBehaviour
+    public class VignetteSettingsControl : MonoBehaviour
     {
         public float updateCount = 5;
         float intervalTime = 1;
 
         public Volume postVolume;
         [Header("Volume Parameters")]
-        RadialBlurSettings settings;
-
+        public VignetteSettings settings;
+        
         // variables
+        public float intensity;
+public float smoothness;
+public bool rounded;
+public Color color;
+public float centerX;
+public float centerY;
+public float ovalX;
+public float ovalY;
+
+
+        void Awake()
+        {
+            RecordVars();
+        }
 
         // Start is called before the first frame update
         void OnEnable()
@@ -60,6 +73,14 @@
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+            settings.intensity.value = intensity;
+settings.smoothness.value = smoothness;
+settings.rounded.value = rounded;
+settings.color.value = color;
+settings.centerX.value = centerX;
+settings.centerY.value = centerY;
+settings.ovalX.value = ovalX;
+settings.ovalY.value = ovalY;
 
         }
 
@@ -76,8 +97,17 @@
 
             if (!settings)
                 return;
-
+            
             //rotateRate = settings.rotateRate.value;
+            intensity = settings.intensity.value;
+smoothness = settings.smoothness.value;
+rounded = settings.rounded.value;
+color = settings.color.value;
+centerX = settings.centerX.value;
+centerY = settings.centerY.value;
+ovalX = settings.ovalX.value;
+ovalY = settings.ovalY.value;
+
         }
     }
 }

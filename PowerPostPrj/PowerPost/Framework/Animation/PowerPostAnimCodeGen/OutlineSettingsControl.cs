@@ -1,4 +1,4 @@
-﻿namespace PowerUtilities
+namespace PowerUtilities
 {
     using PowerPost;
     using System.Collections;
@@ -7,34 +7,43 @@
     using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Security.Cryptography;
 
-    [CustomEditor(typeof(PowerPostAnimTemplate))]
-    public class PowerPostAnimTemplateEditor : Editor
+    [CustomEditor(typeof(OutlineSettingsControl))]
+    public class OutlineSettingsControlEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Record Vars"))
             {
-                var inst = target as PowerPostAnimTemplate;
+                var inst = target as OutlineSettingsControl;
                 inst.RecordVars();
             }
         }
     }
 #endif
-
+    
     [ExecuteInEditMode]
-    public class PowerPostAnimTemplate : MonoBehaviour
+    public class OutlineSettingsControl : MonoBehaviour
     {
         public float updateCount = 5;
         float intervalTime = 1;
 
         public Volume postVolume;
         [Header("Volume Parameters")]
-        RadialBlurSettings settings;
-
+        public OutlineSettings settings;
+        
         // variables
+        public int downSamples;
+public LayerMask layer;
+public Color outlineColor;
+public float outlineWidth;
+
+
+        void Awake()
+        {
+            RecordVars();
+        }
 
         // Start is called before the first frame update
         void OnEnable()
@@ -60,6 +69,10 @@
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+            settings.downSamples.value = downSamples;
+settings.layer.value = layer;
+settings.outlineColor.value = outlineColor;
+settings.outlineWidth.value = outlineWidth;
 
         }
 
@@ -76,8 +89,13 @@
 
             if (!settings)
                 return;
-
+            
             //rotateRate = settings.rotateRate.value;
+            downSamples = settings.downSamples.value;
+layer = settings.layer.value;
+outlineColor = settings.outlineColor.value;
+outlineWidth = settings.outlineWidth.value;
+
         }
     }
 }

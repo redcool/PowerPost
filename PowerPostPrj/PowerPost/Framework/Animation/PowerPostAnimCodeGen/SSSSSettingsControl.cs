@@ -1,4 +1,4 @@
-﻿namespace PowerUtilities
+namespace PowerUtilities
 {
     using PowerPost;
     using System.Collections;
@@ -7,34 +7,43 @@
     using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Security.Cryptography;
 
-    [CustomEditor(typeof(PowerPostAnimTemplate))]
-    public class PowerPostAnimTemplateEditor : Editor
+    [CustomEditor(typeof(SSSSSettingsControl))]
+    public class SSSSSettingsControlEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Record Vars"))
             {
-                var inst = target as PowerPostAnimTemplate;
+                var inst = target as SSSSSettingsControl;
                 inst.RecordVars();
             }
         }
     }
 #endif
-
+    
     [ExecuteInEditMode]
-    public class PowerPostAnimTemplate : MonoBehaviour
+    public class SSSSSettingsControl : MonoBehaviour
     {
         public float updateCount = 5;
         float intervalTime = 1;
 
         public Volume postVolume;
         [Header("Volume Parameters")]
-        RadialBlurSettings settings;
-
+        public SSSSSettings settings;
+        
         // variables
+        public Color strength;
+public float blurScale;
+public LayerMask layer;
+public int stencilRef;
+
+
+        void Awake()
+        {
+            RecordVars();
+        }
 
         // Start is called before the first frame update
         void OnEnable()
@@ -60,6 +69,10 @@
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+            settings.strength.value = strength;
+settings.blurScale.value = blurScale;
+settings.layer.value = layer;
+settings.stencilRef.value = stencilRef;
 
         }
 
@@ -76,8 +89,13 @@
 
             if (!settings)
                 return;
-
+            
             //rotateRate = settings.rotateRate.value;
+            strength = settings.strength.value;
+blurScale = settings.blurScale.value;
+layer = settings.layer.value;
+stencilRef = settings.stencilRef.value;
+
         }
     }
 }

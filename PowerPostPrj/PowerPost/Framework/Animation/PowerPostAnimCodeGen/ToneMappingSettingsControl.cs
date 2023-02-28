@@ -1,4 +1,4 @@
-﻿namespace PowerUtilities
+namespace PowerUtilities
 {
     using PowerPost;
     using System.Collections;
@@ -7,34 +7,47 @@
     using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Security.Cryptography;
 
-    [CustomEditor(typeof(PowerPostAnimTemplate))]
-    public class PowerPostAnimTemplateEditor : Editor
+    [CustomEditor(typeof(ToneMappingSettingsControl))]
+    public class ToneMappingSettingsControlEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Record Vars"))
             {
-                var inst = target as PowerPostAnimTemplate;
+                var inst = target as ToneMappingSettingsControl;
                 inst.RecordVars();
             }
         }
     }
 #endif
-
+    
     [ExecuteInEditMode]
-    public class PowerPostAnimTemplate : MonoBehaviour
+    public class ToneMappingSettingsControl : MonoBehaviour
     {
         public float updateCount = 5;
         float intervalTime = 1;
 
         public Volume postVolume;
         [Header("Volume Parameters")]
-        RadialBlurSettings settings;
-
+        public ToneMappingSettings settings;
+        
         // variables
+        public ToneMappingSettings.Mode mode;
+public float weight;
+public float scale;
+public float offset;
+public float saturate;
+public float brightness;
+public Texture colorGradingLut;
+public bool colorGradingUseLogC;
+
+
+        void Awake()
+        {
+            RecordVars();
+        }
 
         // Start is called before the first frame update
         void OnEnable()
@@ -60,6 +73,14 @@
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+            settings.mode.value = mode;
+settings.weight.value = weight;
+settings.scale.value = scale;
+settings.offset.value = offset;
+settings.saturate.value = saturate;
+settings.brightness.value = brightness;
+settings.colorGradingLut.value = colorGradingLut;
+settings.colorGradingUseLogC.value = colorGradingUseLogC;
 
         }
 
@@ -76,8 +97,17 @@
 
             if (!settings)
                 return;
-
+            
             //rotateRate = settings.rotateRate.value;
+            mode = settings.mode.value;
+weight = settings.weight.value;
+scale = settings.scale.value;
+offset = settings.offset.value;
+saturate = settings.saturate.value;
+brightness = settings.brightness.value;
+colorGradingLut = settings.colorGradingLut.value;
+colorGradingUseLogC = settings.colorGradingUseLogC.value;
+
         }
     }
 }

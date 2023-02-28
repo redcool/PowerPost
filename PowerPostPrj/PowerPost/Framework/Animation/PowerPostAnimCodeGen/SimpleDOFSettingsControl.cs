@@ -1,4 +1,4 @@
-﻿namespace PowerUtilities
+namespace PowerUtilities
 {
     using PowerPost;
     using System.Collections;
@@ -7,34 +7,43 @@
     using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
-    using System.Security.Cryptography;
 
-    [CustomEditor(typeof(PowerPostAnimTemplate))]
-    public class PowerPostAnimTemplateEditor : Editor
+    [CustomEditor(typeof(SimpleDOFSettingsControl))]
+    public class SimpleDOFSettingsControlEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Record Vars"))
             {
-                var inst = target as PowerPostAnimTemplate;
+                var inst = target as SimpleDOFSettingsControl;
                 inst.RecordVars();
             }
         }
     }
 #endif
-
+    
     [ExecuteInEditMode]
-    public class PowerPostAnimTemplate : MonoBehaviour
+    public class SimpleDOFSettingsControl : MonoBehaviour
     {
         public float updateCount = 5;
         float intervalTime = 1;
 
         public Volume postVolume;
         [Header("Volume Parameters")]
-        RadialBlurSettings settings;
-
+        public SimpleDOFSettings settings;
+        
         // variables
+        public float distance;
+public float depthRange;
+public float blurSize;
+public bool debugMode;
+
+
+        void Awake()
+        {
+            RecordVars();
+        }
 
         // Start is called before the first frame update
         void OnEnable()
@@ -60,6 +69,10 @@
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+            settings.distance.value = distance;
+settings.depthRange.value = depthRange;
+settings.blurSize.value = blurSize;
+settings.debugMode.value = debugMode;
 
         }
 
@@ -76,8 +89,13 @@
 
             if (!settings)
                 return;
-
+            
             //rotateRate = settings.rotateRate.value;
+            distance = settings.distance.value;
+depthRange = settings.depthRange.value;
+blurSize = settings.blurSize.value;
+debugMode = settings.debugMode.value;
+
         }
     }
 }
