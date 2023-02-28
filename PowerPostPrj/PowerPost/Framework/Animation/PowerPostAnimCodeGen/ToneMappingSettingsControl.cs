@@ -1,10 +1,7 @@
 namespace PowerUtilities
 {
     using PowerPost;
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
-    using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
 
@@ -24,15 +21,8 @@ namespace PowerUtilities
 #endif
     
     [ExecuteInEditMode]
-    public class ToneMappingSettingsControl : MonoBehaviour
+    public class ToneMappingSettingsControl : BaseSettingsControl<ToneMappingSettings>
     {
-        public float updateCount = 5;
-        float intervalTime = 1;
-
-        public Volume postVolume;
-        [Header("Volume Parameters")]
-        public ToneMappingSettings settings;
-        
         // variables
         public ToneMappingSettings.Mode mode;
 public float weight;
@@ -44,31 +34,7 @@ public Texture colorGradingLut;
 public bool colorGradingUseLogC;
 
 
-        void Awake()
-        {
-            RecordVars();
-        }
-
-        // Start is called before the first frame update
-        void OnEnable()
-        {
-            if (!postVolume)
-                postVolume = GetComponent<Volume>();
-
-            if (postVolume && postVolume.profile)
-            {
-                postVolume.profile.TryGet(out settings);
-            }
-
-            intervalTime = 1f / updateCount;
-            InvokeRepeating(nameof(UpdateVars), 0, intervalTime);
-        }
-        private void OnDisable()
-        {
-            if (IsInvoking(nameof(UpdateVars)))
-                CancelInvoke(nameof(UpdateVars));
-        }
-        void UpdateVars()
+        public override void UpdateVars()
         {
             if (!settings)
                 return;
@@ -84,17 +50,9 @@ settings.colorGradingUseLogC.value = colorGradingUseLogC;
 
         }
 
-        public void RecordVars()
+        public override void RecordVars()
         {
-            if (!settings)
-            {
-                postVolume = GetComponent<Volume>();
-                if (postVolume && postVolume.profile)
-                {
-                    postVolume.profile.TryGet(out settings);
-                }
-            }
-
+            base.RecordVars();
             if (!settings)
                 return;
             

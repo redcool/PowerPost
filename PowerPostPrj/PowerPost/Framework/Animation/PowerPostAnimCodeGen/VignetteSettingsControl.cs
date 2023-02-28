@@ -1,10 +1,7 @@
 namespace PowerUtilities
 {
     using PowerPost;
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
-    using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
 
@@ -24,15 +21,8 @@ namespace PowerUtilities
 #endif
     
     [ExecuteInEditMode]
-    public class VignetteSettingsControl : MonoBehaviour
+    public class VignetteSettingsControl : BaseSettingsControl<VignetteSettings>
     {
-        public float updateCount = 5;
-        float intervalTime = 1;
-
-        public Volume postVolume;
-        [Header("Volume Parameters")]
-        public VignetteSettings settings;
-        
         // variables
         public float intensity;
 public float smoothness;
@@ -44,31 +34,7 @@ public float ovalX;
 public float ovalY;
 
 
-        void Awake()
-        {
-            RecordVars();
-        }
-
-        // Start is called before the first frame update
-        void OnEnable()
-        {
-            if (!postVolume)
-                postVolume = GetComponent<Volume>();
-
-            if (postVolume && postVolume.profile)
-            {
-                postVolume.profile.TryGet(out settings);
-            }
-
-            intervalTime = 1f / updateCount;
-            InvokeRepeating(nameof(UpdateVars), 0, intervalTime);
-        }
-        private void OnDisable()
-        {
-            if (IsInvoking(nameof(UpdateVars)))
-                CancelInvoke(nameof(UpdateVars));
-        }
-        void UpdateVars()
+        public override void UpdateVars()
         {
             if (!settings)
                 return;
@@ -84,17 +50,9 @@ settings.ovalY.value = ovalY;
 
         }
 
-        public void RecordVars()
+        public override void RecordVars()
         {
-            if (!settings)
-            {
-                postVolume = GetComponent<Volume>();
-                if (postVolume && postVolume.profile)
-                {
-                    postVolume.profile.TryGet(out settings);
-                }
-            }
-
+            base.RecordVars();
             if (!settings)
                 return;
             
