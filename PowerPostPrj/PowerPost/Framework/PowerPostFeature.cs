@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using PowerUtilities;
 
 namespace PowerPost
 {
+    using System.Linq;
 #if UNITY_EDITOR
     using UnityEditor;
+    using static UnityEditor.Progress;
+
     [CustomEditor(typeof(PowerPostFeature))]
     public class PowerPostFeatureEditor : Editor
     {
@@ -24,7 +28,7 @@ namespace PowerPost
                 //var settingsProp = serializedObject.FindProperty("powerPostExSettingTypes");
                 //EditorGUILayout.PropertyField(settingsProp);
                 EditorGUILayout.BeginVertical("Box");
-                foreach (var item in inst.postExSettingTypes)
+                foreach (var item in inst.PostSettingList)
                 {
                     EditorGUILayout.LabelField(item.FullName);
                 }
@@ -35,83 +39,77 @@ namespace PowerPost
 #endif
     public class PowerPostFeature : ScriptableRendererFeature
     {
-        static HashSet<Type> postExSettingSet = new HashSet<Type>();
-        public List<Type> postExSettingTypes = new List<Type>();
 
-        Dictionary<Type, BasePostExPass> postPassDict = new Dictionary<Type, BasePostExPass>();
-        PowerPostFeaturePass postPass;
         public List<BasePostExPass> PostExPassList{private set;get;}
+        public List<Type> PostSettingList => postSettingList;
+
+
+        static HashSet<Type> postSettingTypeSet = new HashSet<Type>();
+        //save and sort
+        List<Type> postSettingList = new List<Type>();
+        
+        // for cache post pass
+        List<BasePostExPass> postPassList = new List<BasePostExPass>();
+
+        // cache settingType and pass corresponded
+        Dictionary<Type, BasePostExPass> postPassDict = new Dictionary<Type, BasePostExPass>();
+
+        PowerPostFeaturePass postPass;
 
         public static void AddSetting(BasePostExSettings setting)
         {
-            postExSettingSet.Add(setting.GetType());
+            var type = setting.GetType();
+            postSettingTypeSet.Add(type);
         }
 
-        //public static void RemoveSetting(BasePostExSettings setting)
-        //{
-        //    postExSettingSet.Remove(setting.GetType());
-        //}
-
-        void InitPostExSettingTypes()
+        void TryInitPostSettingList()
         {
-            postExSettingTypes.Clear();
-            foreach (var item in postExSettingSet)
-            {
-                postExSettingTypes.Add(item);
-            }
-            
-        }
+            if (postSettingList == default || postSettingList.Count == postSettingTypeSet.Count)
+                return;
 
+            postSettingList = postSettingTypeSet.ToList();
+        }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            if (postExSettingTypes.Count != postExSettingSet.Count)
-                InitPostExSettingTypes();
+            ref CameraData cameraData = ref renderingData.cameraData;
+            if (!cameraData.postProcessEnabled)
+                return;
 
-            AddPostPassByTypes(renderer, postExSettingTypes);
+            TryInitPostSettingList();
 
-            //postPass.passList = PostExPassList;
-            //renderer.EnqueuePass(postPass);
+            postPassList = postSettingList.Select(type => GetPostExPass(type))
+            .Where(item => item != default)
+            .OrderBy(item => item.order)
+            .ToList();
+
+            postPassList.ForEach((item, id) => renderer.EnqueuePass(item.Init(id, postPassList.Count())));
+            //postPassList.ForEach((item)=> Debug.Log(item.ToString()));
         }
 
         public override void Create()
         {
-            InitPostExSettingTypes();
             postPass = new PowerPostFeaturePass();
             postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
-
-            PostExPassList = new List<BasePostExPass>();
         }
 
-        void AddPostPassByTypes(ScriptableRenderer renderer,List<Type> postSettingTypes)
+        BasePostExPass GetPostExPass(Type type)
         {
-            var id = 0;
-            PostExPassList.Clear();
-            foreach (var t in postSettingTypes)
+            if (type == default)
+                return default;
+
+            var settings = VolumeManager.instance.stack.GetComponent(type) as BasePostExSettings;
+            if (settings == null || !settings.IsActive())
+                return default;
+
+            BasePostExPass pass;
+            var settingType = settings.GetType();
+            if (!postPassDict.TryGetValue(settingType, out pass))
             {
-                if (t == null)
-                {
-                    Debug.LogWarning($"PowerPostData.SettingsNames ,Element {id} can't found.");
-                    continue;
-                }
-
-                var settings = VolumeManager.instance.stack.GetComponent(t) as BasePostExSettings;
-                if (settings == null || !settings.IsActive())
-                    continue;
-
-                BasePostExPass pass;
-                var settingType = settings.GetType();
-                if (!postPassDict.TryGetValue(settingType, out pass))
-                {
-                    postPassDict[settingType] = pass = settings.CreateNewInstance();
-                    //pass.ConfigureTarget(renderer.cameraColorTarget, renderer.cameraDepthTarget);
-                }
-                renderer.EnqueuePass(pass);
-                PostExPassList.Add(pass);
-
-
-                id++;
+                postPassDict[settingType] = pass = settings.CreateNewInstance();
+                pass.order = settings.Order;
             }
+            return postPassDict[settingType];
         }
     }
 

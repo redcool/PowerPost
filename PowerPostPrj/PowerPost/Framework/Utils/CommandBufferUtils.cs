@@ -11,7 +11,7 @@ namespace PowerPost
     {
 
 
-        public static CommandBuffer Get(ScriptableRenderContext context,string name ="")
+        public static CommandBuffer Get(ref ScriptableRenderContext context,string name ="")
         {
             var cmd = CommandBufferPool.Get(name);
             context.ExecuteCommandBuffer(cmd);

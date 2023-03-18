@@ -2,7 +2,7 @@ Shader "Hidden/PowerPost/RadialBlur"
 {
     Properties
     {
-        // _CameraOpaqueTexture ("Texture", 2D) = "white" {}
+        // _MainTex ("Texture", 2D) = "white" {}
 
         _Center("_Center",vector) = (0.5,0.5,0,0)
         _RadiusMin("_RadiusMin",range(0,1)) = 0
@@ -40,8 +40,8 @@ Shader "Hidden/PowerPost/RadialBlur"
             #pragma shader_feature_local_fragment _ATTEN_MAP2_ON
 
             #include "PowerPostLib.hlsl"
-            TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
-            // float4 _CameraOpaqueTexture_TexelSize;
+            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
+            // float4 _MainTex_TexelSize;
 
             TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
             TEXTURE2D(_RadialTex);SAMPLER(sampler_RadialTex);
@@ -92,7 +92,7 @@ CBUFFER_END
                 float dirLen = length(dir);
                 float dist = smoothstep(_RadiusMin,_RadiusMax,dirLen);
 
-                half4 mainTex = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture, i.texcoord);
+                half4 mainTex = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord);
                 
                 float blurSize = max(0.0001,_BlurSize.x);
                 // float4 blurCol = SampleDirBlur(_BlurRT,sampler_BlurRT,i.texcoord,dir / dirLen * blurSize);

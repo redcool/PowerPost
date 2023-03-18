@@ -35,10 +35,9 @@ namespace PowerPost
             mat.SetVector(_Center, new Vector4(settings.centerX.value, settings.centerY.value));
             mat.SetColor(_VignetteColor, settings.color.value);
 
-            InitTextures(ref renderingData.cameraData.cameraTargetDescriptor,cmd);
+            Init(cmd,ref renderingData.cameraData);
 
-            cmd.BlitColorDepth(ColorTarget, _ColorTex, _ColorTex, mat, 0);
-            cmd.BlitColorDepth(_ColorTex, ColorTarget, ColorTarget, DefaultBlitMaterial, 0);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
             CleanTextures(cmd);
         }
@@ -48,9 +47,9 @@ namespace PowerPost
             cmd.ReleaseTemporaryRT(_ColorTex);
         }
 
-        private void InitTextures(ref RenderTextureDescriptor desc, CommandBuffer cmd)
+        private void Init(CommandBuffer cmd,ref CameraData cameraData)
         {
-            cmd.GetTemporaryRT(_ColorTex, desc);
+            cmd.GetTemporaryRT(_ColorTex, cameraData.cameraTargetDescriptor);
         }
     }
 }

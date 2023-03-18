@@ -9,7 +9,7 @@ namespace PowerPost {
     [Serializable, VolumeComponentMenu("PowerPostEx/SSAO")]
     public class SSAOSettings : BasePostExSettings
     {
-        public ClampedFloatParameter intensity = new ClampedFloatParameter(0, 0f, 5f);
+        public ClampedFloatParameter intensity = new ClampedFloatParameter(0, 0f, 50f);
         public ClampedFloatParameter radius = new ClampedFloatParameter(0.1f, 0.00001f, 0.2f);
         public BoolParameter downSample = new BoolParameter(true);
         [Header("Samples")]

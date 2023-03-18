@@ -51,7 +51,7 @@ namespace PowerPost
             return mode != Mode.None;
         }
 
-        public new int ID => int.MaxValue;
+        public override int Order => int.MaxValue;
     }
 
     [Serializable]

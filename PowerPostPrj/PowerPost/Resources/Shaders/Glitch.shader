@@ -7,8 +7,8 @@ Shader "Hidden/PowerPost/Glitch"
 
     HLSLINCLUDE
         #include "PowerPostLib.hlsl"
-        TEXTURE2D(_CameraOpaqueTexture);SAMPLER(sampler_CameraOpaqueTexture);
-        float4 _CameraOpaqueTexture_TexelSize;
+        TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
+        float4 _MainTex_TexelSize;
     ENDHLSL
 
     SubShader
@@ -67,8 +67,8 @@ Shader "Hidden/PowerPost/Glitch"
 
                 float u1 = (jitter + snowFlake.x + hshake) * _Intensity;
                 float u2 = (jitter + snowFlake.x + hshake + drift ) * _Intensity;
-                float4 c1 = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,frac(float2(u + u1,jump)));
-                float4 c2 = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,frac(float2(u + u2 ,jump)));
+                float4 c1 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + u1,jump)));
+                float4 c2 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,frac(float2(u + u2 ,jump)));
                 return float4(c1.r,c2.g,c1.b,1);
             }
 
@@ -88,8 +88,8 @@ Shader "Hidden/PowerPost/Glitch"
                 float u1 = jitter + jump + hshake;
                 float u2 = u1 + drift;
                 
-                float4 c1 = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,float2(u+u1*0.01,jump));
-                float4 c2 = SAMPLE_TEXTURE2D(_CameraOpaqueTexture,sampler_CameraOpaqueTexture,float2(u+u2*0.01,jump));
+                float4 c1 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,float2(u+u1*0.01,jump));
+                float4 c2 = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,float2(u+u2*0.01,jump));
                 return float4(c2.x,c1.y,c2.b,1);
             }
             ENDHLSL

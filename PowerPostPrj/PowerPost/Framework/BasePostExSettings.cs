@@ -16,8 +16,10 @@ namespace PowerPost
         public abstract bool IsActive();
 
         public virtual bool IsTileCompatible() => true;
-
-        public int ID => 0;
+        /// <summary>
+        /// Execute order in powerpost group
+        /// </summary>
+        public virtual int Order => 0;
         protected override void OnEnable()
         {
             PowerPostFeature.AddSetting(this);

@@ -24,26 +24,31 @@
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings,CommandBuffer cmd)
         {
+            ref CameraData cameraData = ref renderingData.cameraData;
+            Init(cmd, cameraData.cameraTargetDescriptor);
+
             var mat = GetTargetMaterial(SHADER_NAME);
 
             mat.SetFloat(_Distance, settings.distance.value);
             mat.SetFloat(_BlurSize, settings.blurSize.value);
             mat.SetFloat(_DepthRange, settings.depthRange.value);
 
-            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultBlitMaterial, 0);
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
+            cmd.BlitColorDepth(sourceTex, _BlurRT, _BlurRT, DefaultBlitMaterial);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
             mat.SetKeyword(ShaderPropertyIds._DEBUG, settings.debugMode.value);
+
+            Release(cmd);
         }
 
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor rtDesc)
+        void Init(CommandBuffer cmd, RenderTextureDescriptor rtDesc)
         {
             var w = rtDesc.width >> 1;
             var h = rtDesc.height >> 1;
             cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
         }
 
-        public override void FrameCleanup(CommandBuffer cmd)
+        void Release(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_BlurRT);
         }

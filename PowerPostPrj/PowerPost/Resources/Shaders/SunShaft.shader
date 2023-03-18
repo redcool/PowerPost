@@ -13,17 +13,12 @@ Shader "Hidden/PowerPost/SunShaft"
         TEXTURE2D(_BlurRT);SAMPLER(sampler_BlurRT);
 		half4 _MainTex_TexelSize;
 
-        // TEXTURE2D(_CameraDepthTexture);SAMPLER(sampler_CameraDepthTexture);
         half4 _CameraDepthTexture_TexelSize;
-
-
 
         half4 _SunPos;
         half4 _SunThreshold;
         half4 _SunColor;
         half4 _BlurRadius4;
-        
-
 
         struct VaryingsRadialBlur{
             half4 vertex:SV_POSITION;

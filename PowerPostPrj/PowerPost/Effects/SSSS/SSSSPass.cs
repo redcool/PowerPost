@@ -50,7 +50,8 @@ namespace PowerPost {
             mat.SetFloat(_BlurSize,settings.blurScale.value);
             mat.SetInt(_StencilRef, settings.stencilRef.value);
 
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
+            cmd.BlitColorDepth(sourceTex, targetTex, ColorTarget, mat, 0);
         }
 
     }

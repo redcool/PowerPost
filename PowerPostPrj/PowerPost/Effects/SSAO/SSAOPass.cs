@@ -29,39 +29,37 @@ namespace PowerPost {
             mat.SetFloat(_Downsample, settings.downSample.value ? 0.5f : 1f);
             mat.SetInt(_SampleCount, settings.sampleCount.value);
             
-
             InitTextures(cmd, cam, settings);
 
             //// 0 calc ssao mask 
-            cmd.BlitColorDepth(ColorTarget, _SSAOMask, _SSAOMask, mat, 0);
+            cmd.BlitColorDepth(sourceTex, _SSAOMask, _SSAOMask, mat, 0);
 
             //// 1 h blur
             cmd.BlitColorDepth(_SSAOMask, _BlurTex, _BlurTex, mat, 3);
             //// 2 v blur
             cmd.BlitColorDepth(_BlurTex, _SSAOMask, _SSAOMask, mat, 5);
-            //cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, DefaultBlitMaterial, 0);
+
+            //cmd.BlitColorDepth(_SSAOMask, targetTex, targetTex, DefaultBlitMaterial);
             //return;
 
-            //cmd.Blit(ColorTarget, Shader.PropertyToID("_CameraOpaqueTexture"));
-
             //// 3 composite
-            cmd.BlitColorDepth(_SSAOMask, ColorTarget, ColorTarget, mat, 6);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat, 6);
 
             ReleaseTextures(cmd);
         }
 
-        private void ReleaseTextures(CommandBuffer cmd)
+        void ReleaseTextures(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_SSAOMask);
             cmd.ReleaseTemporaryRT(_BlurTex);
         }
 
-        private void InitTextures(CommandBuffer cmd,Camera cam, SSAOSettings settings)
+        void InitTextures(CommandBuffer cmd,Camera cam, SSAOSettings settings)
         {
             var w = cam.pixelWidth >> (settings.downSample.value ? 1 : 0);
             var h = cam.pixelHeight >> (settings.downSample.value ? 1 : 0);
 
-            cmd.GetTemporaryRT(_SSAOMask, w, h, 0, FilterMode.Bilinear, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            cmd.GetTemporaryRT(_SSAOMask, w, h, 0, FilterMode.Bilinear, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
             cmd.GetTemporaryRT(_BlurTex, cam.pixelWidth>>1, cam.pixelHeight>>1, 0,FilterMode.Bilinear);
         }
     }

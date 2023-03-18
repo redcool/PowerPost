@@ -9,7 +9,10 @@ namespace PowerPost
         public static readonly int
             _MainTex = Shader.PropertyToID("_MainTex"),
             _CameraOpaqueTexture = Shader.PropertyToID(nameof(_CameraOpaqueTexture)),
-            _CameraDepthTexture = Shader.PropertyToID(nameof(_CameraDepthTexture))
+            _CameraDepthTexture = Shader.PropertyToID(nameof(_CameraDepthTexture)),
+            _CameraColorAttachmentA = Shader.PropertyToID(nameof(_CameraColorAttachmentA)),
+            _CameraColorAttachmentB = Shader.PropertyToID(nameof(_CameraColorAttachmentB)),
+            _CameraDepthAttachment = Shader.PropertyToID(nameof(_CameraDepthAttachment))
             ;
 
         public const string _DEBUG = nameof(_DEBUG)

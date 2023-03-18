@@ -60,8 +60,8 @@ sampler2D _MainTex;
 float4 _MainTex_TexelSize;
 half4 _MainTex_ST;
 
-sampler2D _CameraOpaqueTexture;
-half4 _CameraOpaqueTexture_TexelSize;
+sampler2D _SSAOMask;
+half4 _SSAOMask_TexelSize;
 
 // Other parameters
 half _Intensity;

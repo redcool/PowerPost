@@ -74,7 +74,6 @@ namespace PowerPost
                 cmd.BlitColorDepth(buffer0, buffer1, buffer1, mat, BOX_UP);
                 buffer0 = buffer1;
             }
-            cmd.BlitColorDepth(buffer0, ColorTarget, ColorTarget, mat, BOX_UP);
 
             //pass 3
             mat.SetFloat(_Intensity, Mathf.GammaToLinearSpace(settings.intensity.value));
@@ -82,7 +81,7 @@ namespace PowerPost
             mat.SetTexture(_BloomTex, buffer0);
             mat.SetColor(_BloomColor, settings.bloomColor.value);
 
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, COMBINE_PASS);
+            cmd.BlitColorDepth(sourceTex, targetTex,targetTex, mat, COMBINE_PASS);
 
             for (i = 0; i < settings.iterators.value; i++)
             {

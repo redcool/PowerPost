@@ -56,7 +56,7 @@ public class DiffuseProfileFeature : ScriptableRendererFeature
             cmd.Clear();
 
             if (!mat)
-                mat = new Material(Shader.Find("Hidden/PostProcessingEx/ScreenDiffuseProfile"));
+                mat = new Material(Shader.Find("Hidden/PowerPost/ScreenDiffuseProfile"));
 
             SSSSKernel.CalculateKernel(kernels, 25, settings.strength, settings.falloff);
             mat.SetVectorArray("_Kernel", kernels);

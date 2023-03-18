@@ -22,7 +22,7 @@ namespace PowerPost
             var mat = GetTargetMaterial(SHADER_NAME);
 
             mat.SetVector(_ColorBalance,PostUtils.GetColorBalanceCoeffs(settings.temperature.value,settings.tint.value));
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
         }
     }
 }

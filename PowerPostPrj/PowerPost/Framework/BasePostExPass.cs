@@ -27,6 +27,13 @@ namespace PowerPost
             }
         }
 
+        public RenderTargetIdentifier sourceTex, targetTex;
+        /// <summary>
+        /// pass's order inject from PowerPostFeature.cs, used for sort
+        /// </summary>
+        public int order;
+
+        public bool isNeedCopyBackAndRelease, isNeedInit;
         public BasePostExPass()
         {
             renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing-1;
@@ -50,7 +57,15 @@ namespace PowerPost
         {
             get { return Renderer.cameraColorTarget; }
         }
-
+        public BasePostExPass Init(int id, int count)
+        {
+            var isOdd = id %2 !=0;
+            isNeedInit = id ==0;
+            isNeedCopyBackAndRelease = (id ==count-1) && !isOdd;
+            sourceTex = isOdd ? ShaderPropertyIds._CameraColorAttachmentB : ShaderPropertyIds._CameraColorAttachmentA;
+            targetTex = isOdd ? ShaderPropertyIds._CameraColorAttachmentA : ShaderPropertyIds._CameraColorAttachmentB;
+            return this;
+        }
     }
 
     public abstract class BasePostExPass<T> : BasePostExPass where T : BasePostExSettings
@@ -71,15 +86,41 @@ namespace PowerPost
             
             Renderer = renderingData.cameraData.renderer;
 
-            var cmd = CommandBufferUtils.Get(context, PassName);
+            var cmd = CommandBufferUtils.Get(ref context, PassName);
+            ref var cameraData = ref renderingData.cameraData;
+
+            if (isNeedInit)
+            {
+                InitGlobal(cmd,ref cameraData);
+            }
+
             OnExecute(context, ref renderingData, settings,cmd);
+
+            if (isNeedCopyBackAndRelease)
+            {
+                ReleaseGlobal(cmd);
+            }
 
             context.ExecuteCommandBuffer(cmd);
             CommandBufferUtils.ClearRelease(cmd);
         }
 
+
         public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,T settings,CommandBuffer cmd);
         public abstract string PassName { get; }
+
+
+        void InitGlobal(CommandBuffer cmd, ref CameraData cameraData)
+        {
+            cmd.GetTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB, cameraData.cameraTargetDescriptor);
+        }
+        void ReleaseGlobal(CommandBuffer cmd)
+        {
+            cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentA, DefaultBlitMaterial);
+            cmd.ReleaseTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB);
+        }
+
+
     }
 
 }

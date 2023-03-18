@@ -44,13 +44,11 @@ half BlurSmall(sampler2D tex, float2 uv, float2 delta)
 */
 half4 frag_composition(v2f i) : SV_Target
 {
-    float2 delta = _MainTex_TexelSize.xy / _Downsample;
-    half ao = BlurSmall(_MainTex, i.uvAlt, delta);
-    // half ao = tex2D(_MainTex,i.uvAlt);
-// return ao;
-    half4 color = tex2D(_CameraOpaqueTexture, i.uv);
+    float2 delta = _SSAOMask_TexelSize.xy / _Downsample;
+    half ao = BlurSmall(_SSAOMask, i.uvAlt, delta);
+    // half ao = tex2D(_SSAOMask,i.uvAlt);
+    half4 color = tex2D(_MainTex, i.uv);
     color.rgb *= 1 - EncodeAO(ao);
-
     return color;
 }
 

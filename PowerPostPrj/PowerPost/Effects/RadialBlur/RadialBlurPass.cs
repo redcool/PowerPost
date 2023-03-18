@@ -55,7 +55,11 @@ namespace PowerPost
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, RadialBlurSettings settings, CommandBuffer cmd)
         {
-            var cam = renderingData.cameraData.camera;
+            ref var cameraData = ref renderingData.cameraData;
+            var cam = cameraData.camera;
+
+            Init(cmd, cameraData.cameraTargetDescriptor);
+
             var aspect = cam.pixelWidth / (float)cam.pixelHeight;
 
             var mat = GetTargetMaterial(SHADER_PATH);
@@ -68,9 +72,9 @@ namespace PowerPost
             mat.SetFloat(_Aspect, settings.roundness.value ? aspect : 1);
 
             // blur (downsample only)
-            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, DefaultBlitMaterial, 0);
+            cmd.BlitColorDepth(sourceTex, _BlurRT, _BlurRT, DefaultBlitMaterial);
 
-            cmd.BlitColorDepth(BuiltinRenderTextureType.None, ColorTarget, ColorTarget, mat, 0);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
             // radial tex
             if (settings.radialTexOn.value)
@@ -135,16 +139,18 @@ namespace PowerPost
             mat.SetKeyword(_ATTEN_MAP_ON, settings.attenMapOn.value);
             mat.SetKeyword(_ATTEN_MAP2_ON, settings.attenMap2On.value);
             //mat.SetKeyword(_CLIP_ON, settings.clipOn.value);
+
+            Release(cmd);
         }
 
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
+        void Init(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
             var w = cameraTextureDescriptor.width >> 3;
             var h = cameraTextureDescriptor.height >> 3;
             cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
         }
 
-        public override void FrameCleanup(CommandBuffer cmd)
+        void Release(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_BlurRT);
         }

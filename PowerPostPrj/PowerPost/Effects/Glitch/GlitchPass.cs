@@ -64,7 +64,7 @@ namespace PowerPost
             mat.SetInt(_StencilRef, settings.layer.value != 0 ? settings.stencilRef.value : 0);
 
 
-            cmd.BlitColorDepth(BuiltinRenderTextureType.None, ColorTarget, ColorTarget, mat, 0);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
         }
     }

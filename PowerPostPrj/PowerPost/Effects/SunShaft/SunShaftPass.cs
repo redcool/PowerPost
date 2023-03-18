@@ -32,19 +32,22 @@ namespace PowerPost
                 {
                     var cos = Vector3.Dot(cam.transform.forward, sun.transform.forward);
                     if (cos > 0)
+                    {
+                        cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
                         return;
+                    }
                 }
             }
 
             var mat = GetTargetMaterial(SHADER_NAME);
-            InitTextures(cmd, renderingData.cameraData.cameraTargetDescriptor);
+            Init(cmd, renderingData.cameraData.cameraTargetDescriptor);
 
             mat.SetVector("_BlurRadius4", new Vector4(1, 1, 0, 0) * settings.sunShaftBlurRadius.value);
             mat.SetVector("_SunPos", sunPos);
             mat.SetVector("_SunThreshold", settings.sunThreshold.value);
 
             // 1 depth
-            cmd.BlitColorDepth(ColorTarget, _BlurRT, _BlurRT, mat, DEPTH_PASS);
+            cmd.BlitColorDepth(sourceTex, _BlurRT, _BlurRT, mat, DEPTH_PASS);
 
             // 2 radial blur
             const float DELTA = 0.0078f;
@@ -71,12 +74,12 @@ namespace PowerPost
             }
             mat.SetVector("_SunColor", sunColor);
 
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, SCREEN_PASS);
+            cmd.BlitColorDepth(sourceTex, targetTex,targetTex, mat, SCREEN_PASS);
 
-            CleanupTextures(cmd);
+            Release(cmd);
         }
 
-        void InitTextures(CommandBuffer cmd, RenderTextureDescriptor desc)
+        void Init(CommandBuffer cmd, RenderTextureDescriptor desc)
         {
             var w = desc.width >> 2;
             var h = desc.height >> 2;
@@ -84,7 +87,7 @@ namespace PowerPost
             cmd.GetTemporaryRT(_BlurRT2, w,h,16, FilterMode.Bilinear);
         }
 
-        void CleanupTextures(CommandBuffer cmd)
+        void Release(CommandBuffer cmd)
         {
             cmd.ReleaseTemporaryRT(_BlurRT);
             cmd.ReleaseTemporaryRT(_BlurRT2);

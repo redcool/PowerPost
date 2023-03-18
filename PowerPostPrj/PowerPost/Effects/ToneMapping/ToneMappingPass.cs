@@ -43,7 +43,6 @@
             mat.SetFloat(_Scale, settings.scale.value);
             mat.SetFloat(_Offset, settings.offset.value);
 
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraOpaqueTexture, ColorTarget, ColorTarget, mat, 0);
 
             var gradingLut = settings.colorGradingLut.value;
             if (gradingLut)
@@ -53,6 +52,9 @@
             cmd.SetGlobalTexture(_ColorGradingLUT,settings.colorGradingLut.value);
             cmd.SetGlobalFloat(_UseColorGradingLUT, gradingLut ? 1 : 0);
             cmd.SetGlobalFloat(_ColorGradingUseLogC, settings.colorGradingUseLogC.value ? 1 : 0);
+
+
+            cmd.BlitColorDepth(sourceTex,targetTex,targetTex, mat, 0);
         }
     }
 }
