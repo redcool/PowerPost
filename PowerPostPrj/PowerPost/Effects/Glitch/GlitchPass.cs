@@ -21,27 +21,28 @@ namespace PowerPost
 
         public override string PassName => nameof(GlitchPass);
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,GlitchSettings settings,CommandBuffer cmd)
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, GlitchSettings settings, CommandBuffer cmd)
         {
+            var mat = GetTargetMaterial(GLITCH_SHADER);
+
+            var stencilRef = settings.stencilRef.value;
+            var layer = settings.layer.value;
             // draw layer's objects
-            if (settings.layer.value != 0)
+            if (layer != 0)
             {
-                var stencilRef = settings.stencilRef.value;
-                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, settings.layer.value, (ref RenderStateBlock block) =>
+                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, (ref RenderStateBlock block) =>
                 {
                     GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
                 });
             }
 
-            var mat = GetTargetMaterial(GLITCH_SHADER);
-            
             //jitter
             var jitterIntensity = (settings.scanlineJitter.value * 1.2f);
             var jitterThreshold = 0.002f + Mathf.Pow(settings.scanlineJitter.value, 3) * 0.05f;
             mat.SetVector(_ScanlineJiiterId, new Vector4(
-                jitterIntensity, 
+                jitterIntensity,
                 jitterThreshold,
-                1f/settings.jitterBlockSize.value, 
+                1f / settings.jitterBlockSize.value,
                 settings.glitchHorizontalIntensity.value
                 ));
             // snow flake
@@ -61,10 +62,10 @@ namespace PowerPost
                 settings.colorDrift.value * 0.4f,
                 Time.time * settings.colorDriftSpeed.value));
 
-            mat.SetInt(_StencilRef, settings.layer.value != 0 ? settings.stencilRef.value : 0);
+            mat.SetInt(_StencilRef, layer != 0 ? stencilRef : 0);
 
-
-            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
+            cmd.BlitColorDepth(sourceTex, targetTex, ShaderPropertyIds._CameraDepthAttachment, mat);
 
         }
     }

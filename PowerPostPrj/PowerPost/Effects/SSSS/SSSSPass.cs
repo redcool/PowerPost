@@ -30,28 +30,30 @@ namespace PowerPost {
 
         public override string PassName => nameof(SSSSPass);
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSSSSettings settings,CommandBuffer cmd)
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SSSSSettings settings, CommandBuffer cmd)
         {
             //update kernel 
             CalcSSSSKernel(settings, kernels);
 
             var layer = settings.layer.value;
-            if(layer != 0)
+            int stencilRef = settings.stencilRef.value;
+            if (layer != 0)
             {
-                int stencilRef = settings.stencilRef.value;
-                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, (ref RenderStateBlock block) => {
+                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, (ref RenderStateBlock block) =>
+                {
                     GraphicsUtils.SetStencilState(ref block, stencilRef, new StencilState(passOperation: StencilOp.Replace));
                 });
             }
 
             // update material
             var mat = GetTargetMaterial(DIFFUSE_PROFILE_SHADER);
-            mat.SetVectorArray(_Kernel,kernels);
-            mat.SetFloat(_BlurSize,settings.blurScale.value);
-            mat.SetInt(_StencilRef, settings.stencilRef.value);
+            mat.SetVectorArray(_Kernel, kernels);
+            mat.SetFloat(_BlurSize, settings.blurScale.value);
+            mat.SetInt(_StencilRef, layer != 0 ? stencilRef : 0);
+
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
-            cmd.BlitColorDepth(sourceTex, targetTex, ColorTarget, mat, 0);
+            cmd.BlitColorDepth(sourceTex, targetTex, ShaderPropertyIds._CameraDepthAttachment, mat, 0);
         }
 
     }
