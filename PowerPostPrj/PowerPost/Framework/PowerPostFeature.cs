@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using PowerUtilities;
+using System.Reflection;
 
 namespace PowerPost
 {
@@ -70,6 +71,7 @@ namespace PowerPost
             postSettingList = postSettingTypeSet.ToList();
         }
 
+
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
             ref CameraData cameraData = ref renderingData.cameraData;
@@ -83,7 +85,9 @@ namespace PowerPost
             .OrderBy(item => item.order)
             .ToList();
 
-            postPassList.ForEach((item, id) => renderer.EnqueuePass(item.Init(id, postPassList.Count())));
+            var needSwapTarget = renderer.cameraColorTarget.IsTargetIdEquals(ShaderPropertyIds._CameraColorAttachmentB);
+
+            postPassList.ForEach((item, id) => renderer.EnqueuePass(item.Init(id, postPassList.Count(), needSwapTarget)));
             //postPassList.ForEach((item)=> Debug.Log(item.ToString()));
         }
 

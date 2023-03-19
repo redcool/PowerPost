@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PowerUtilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,10 @@ namespace PowerPost
         /// </summary>
         public int order;
 
-        public bool isNeedCopyBackAndRelease, isNeedInit;
+        public bool isNeedReleaseGlobal, isNeedInitGlobal;
+
+        protected bool isCameraSwapTarget;
+
         public BasePostExPass()
         {
             renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing-1;
@@ -57,13 +61,17 @@ namespace PowerPost
         {
             get { return Renderer.cameraColorTarget; }
         }
-        public BasePostExPass Init(int id, int count)
+        public BasePostExPass Init(int id, int count,bool needSwapTarget)
         {
-            var isOdd = id %2 !=0;
-            isNeedInit = id ==0;
-            isNeedCopyBackAndRelease = (id ==count-1) && !isOdd;
-            sourceTex = isOdd ? ShaderPropertyIds._CameraColorAttachmentB : ShaderPropertyIds._CameraColorAttachmentA;
-            targetTex = isOdd ? ShaderPropertyIds._CameraColorAttachmentA : ShaderPropertyIds._CameraColorAttachmentB;
+            isCameraSwapTarget = needSwapTarget;
+            // target is A , post target is B, otherwist swap
+            var isOdd = (id % 2 != 0);
+            var isSwap = needSwapTarget? !isOdd : isOdd;
+
+            isNeedInitGlobal = id ==0;
+            isNeedReleaseGlobal = (id ==count-1) && !isOdd;
+            sourceTex = isSwap ? ShaderPropertyIds._CameraColorAttachmentB : ShaderPropertyIds._CameraColorAttachmentA;
+            targetTex = isSwap ? ShaderPropertyIds._CameraColorAttachmentA : ShaderPropertyIds._CameraColorAttachmentB;
             return this;
         }
     }
@@ -89,14 +97,14 @@ namespace PowerPost
             var cmd = CommandBufferUtils.Get(ref context, PassName);
             ref var cameraData = ref renderingData.cameraData;
 
-            if (isNeedInit)
+            if (isNeedInitGlobal)
             {
                 InitGlobal(cmd,ref cameraData);
             }
 
             OnExecute(context, ref renderingData, settings,cmd);
 
-            if (isNeedCopyBackAndRelease)
+            if (isNeedReleaseGlobal)
             {
                 ReleaseGlobal(cmd);
             }
@@ -116,8 +124,15 @@ namespace PowerPost
         }
         void ReleaseGlobal(CommandBuffer cmd)
         {
-            cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentA, DefaultBlitMaterial);
-            cmd.ReleaseTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB);
+            if (isCameraSwapTarget)
+            {
+                cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentB, DefaultBlitMaterial);
+            }
+            else
+            {
+                cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentA, DefaultBlitMaterial);
+            }
+            //cmd.ReleaseTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB);
         }
 
 
