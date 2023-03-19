@@ -21,7 +21,7 @@ namespace PowerPost {
 
         public override bool IsActive()
         {
-            return layer.value != 0;
+            return layer.value!=0;
         }
     }
 }

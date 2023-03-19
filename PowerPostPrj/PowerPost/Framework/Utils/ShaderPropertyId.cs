@@ -15,7 +15,8 @@ namespace PowerPost
             _CameraDepthAttachment = Shader.PropertyToID(nameof(_CameraDepthAttachment))
             ;
 
-        public const string _DEBUG = nameof(_DEBUG)
+        public const string _DEBUG = nameof(_DEBUG),
+            _CUSTOM_DEPTH_TEXTURE = nameof(_CUSTOM_DEPTH_TEXTURE)
             ;
     }
 }

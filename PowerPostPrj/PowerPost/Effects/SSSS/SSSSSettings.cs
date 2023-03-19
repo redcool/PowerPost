@@ -37,7 +37,7 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return blurScale.value > 0.1f || layer.value != 0;
+            return blurScale.value > 0.1f && layer.value != 0;
         }
 
     }

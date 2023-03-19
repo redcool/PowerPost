@@ -37,7 +37,7 @@ namespace PowerPost {
 
             var layer = settings.layer.value;
             int stencilRef = settings.stencilRef.value;
-            if (layer != 0)
+            if (layer > 0)
             {
                 GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, (ref RenderStateBlock block) =>
                 {
@@ -49,10 +49,10 @@ namespace PowerPost {
             var mat = GetTargetMaterial(DIFFUSE_PROFILE_SHADER);
             mat.SetVectorArray(_Kernel, kernels);
             mat.SetFloat(_BlurSize, settings.blurScale.value);
-            mat.SetInt(_StencilRef, layer != 0 ? stencilRef : 0);
-
+            mat.SetInt(_StencilRef, layer > 0 ? stencilRef : 0);
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
+
             cmd.BlitColorDepth(sourceTex, targetTex, ShaderPropertyIds._CameraDepthAttachment, mat, 0);
         }
 
