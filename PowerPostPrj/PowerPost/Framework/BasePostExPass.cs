@@ -97,14 +97,14 @@ namespace PowerPost
             var cmd = CommandBufferUtils.Get(ref context, PassName);
             ref var cameraData = ref renderingData.cameraData;
 
-            if (isNeedInitGlobal)
+            if (isNeedInitGlobal && settings.NeedWriteToTarget())
             {
                 InitGlobal(cmd,ref cameraData);
             }
 
             OnExecute(context, ref renderingData, settings,cmd);
 
-            if (isNeedReleaseGlobal)
+            if (isNeedReleaseGlobal && settings.NeedWriteToTarget())
             {
                 ReleaseGlobal(cmd);
             }
@@ -112,7 +112,6 @@ namespace PowerPost
             context.ExecuteCommandBuffer(cmd);
             CommandBufferUtils.ClearRelease(cmd);
         }
-
 
         public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,T settings,CommandBuffer cmd);
         public abstract string PassName { get; }
@@ -122,8 +121,10 @@ namespace PowerPost
         {
             cmd.GetTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB, cameraData.cameraTargetDescriptor);
         }
+
         void ReleaseGlobal(CommandBuffer cmd)
         {
+            // last blit to camera current targetTex
             if (isCameraSwapTarget)
             {
                 cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentB, DefaultBlitMaterial);

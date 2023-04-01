@@ -66,7 +66,7 @@ namespace PowerPost
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
 
-            cmd.BlitColorDepth(sourceTex, targetTex, ShaderPropertyIds._CameraDepthAttachment, mat);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
         }
     }

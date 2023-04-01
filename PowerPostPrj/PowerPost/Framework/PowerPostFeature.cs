@@ -29,7 +29,7 @@ namespace PowerPost
                 //var settingsProp = serializedObject.FindProperty("powerPostExSettingTypes");
                 //EditorGUILayout.PropertyField(settingsProp);
                 EditorGUILayout.BeginVertical("Box");
-                foreach (var item in inst.PostSettingList)
+                foreach (var item in inst.postSettingList)
                 {
                     EditorGUILayout.LabelField(item.FullName);
                 }
@@ -40,16 +40,12 @@ namespace PowerPost
 #endif
     public class PowerPostFeature : ScriptableRendererFeature
     {
-
-        public List<BasePostExPass> PostExPassList{private set;get;}
-        public List<Type> PostSettingList => postSettingList;
-
-
+        /// <summary>
+        /// passes need write to targetTex
+        /// </summary>
         static HashSet<Type> postSettingTypeSet = new HashSet<Type>();
         //save and sort
-        List<Type> postSettingList = new List<Type>();
-        
-        // for cache post pass
+        public List<Type> postSettingList = new List<Type>();
         List<BasePostExPass> postPassList = new List<BasePostExPass>();
 
         // cache settingType and pass corresponded
@@ -63,12 +59,12 @@ namespace PowerPost
             postSettingTypeSet.Add(type);
         }
 
-        void TryInitPostSettingList()
+        void TryInitPostSettingList(ref List<Type> list,ref HashSet<Type> set)
         {
-            if (postSettingList == default || postSettingList.Count == postSettingTypeSet.Count)
+            if (list == default || list.Count == set.Count)
                 return;
 
-            postSettingList = postSettingTypeSet.ToList();
+            list = set.ToList();
         }
 
 
@@ -78,7 +74,7 @@ namespace PowerPost
             if (!cameraData.postProcessEnabled)
                 return;
 
-            TryInitPostSettingList();
+            TryInitPostSettingList(ref postSettingList,ref postSettingTypeSet);
 
             postPassList = postSettingList.Select(type => GetPostExPass(type))
             .Where(item => item != default)
@@ -89,6 +85,13 @@ namespace PowerPost
 
             postPassList.ForEach((item, id) => renderer.EnqueuePass(item.Init(id, postPassList.Count(), needSwapTarget)));
             //postPassList.ForEach((item)=> Debug.Log(item.ToString()));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            postSettingTypeSet.Clear();
+
         }
 
         public override void Create()
