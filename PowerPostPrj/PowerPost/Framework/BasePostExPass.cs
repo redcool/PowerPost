@@ -124,7 +124,15 @@ namespace PowerPost
 
         void ReleaseGlobal(CommandBuffer cmd)
         {
-            // last blit to camera current targetTex
+            if (SystemInfo.copyTextureSupport == CopyTextureSupport.Basic)
+                CopyTargetTextures(cmd);
+            else
+                BlitTargetTextures(cmd);
+            //cmd.ReleaseTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB);
+        }
+
+        void BlitTargetTextures(CommandBuffer cmd)
+        {
             if (isCameraSwapTarget)
             {
                 cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentB, DefaultBlitMaterial);
@@ -133,10 +141,19 @@ namespace PowerPost
             {
                 cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentA, DefaultBlitMaterial);
             }
-            //cmd.ReleaseTemporaryRT(ShaderPropertyIds._CameraColorAttachmentB);
         }
 
-
+        void CopyTargetTextures(CommandBuffer cmd)
+        {
+            if (isCameraSwapTarget)
+            {
+                cmd.CopyTexture(ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentB);
+            }
+            else
+            {
+                cmd.CopyTexture(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA);
+            }
+        }
     }
 
 }
