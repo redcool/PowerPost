@@ -101,6 +101,9 @@ VaryingsDefault VertDefault(AttributesDefault input){
     VaryingsDefault output;
     output.vertex = float4(input.vertex.xy,0,1);
     output.texcoord = input.texcoord;//(input.vertex.xy + 1) * 0.5;
+    #if! defined(UNITY_UV_STARTS_AT_TOP)
+        output.texcoord.y = 1 - output.texcoord.y;
+    #endif
     return output;
 }
 

@@ -6,28 +6,7 @@ Shader "Hidden/PowerPost/ScreenDiffuseProfile"
         _BlurSize("_BlurSize",range(0,10)) = 0.1
         _StencilRef("_StencilRef",int) = 5
     }
-    CGINCLUDE
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-            };
 
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
-            };
-
-
-            v2f vert (appdata v)
-            {
-                v2f o;
-                o.vertex = (v.vertex);
-                o.uv = v.uv;
-                return o;
-            }
-    ENDCG
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -43,13 +22,12 @@ Shader "Hidden/PowerPost/ScreenDiffuseProfile"
 
         Pass
         {
-            CGPROGRAM
-            #pragma vertex vert
+            HLSLPROGRAM
+            #pragma vertex VertDefault
             #pragma fragment frag
 
-            #include "UnityCG.cginc"
+            #include "PowerPostLib.hlsl"
             #include "DiffuseProfile.cginc"
-
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -57,16 +35,16 @@ Shader "Hidden/PowerPost/ScreenDiffuseProfile"
             
             float _BlurSize;
 
-            half4 frag (v2f i) : SV_Target
+            half4 frag (VaryingsDefault i) : SV_Target
             {
-                half4 mainColor = tex2D(_MainTex,i.uv);
+                half4 mainColor = tex2D(_MainTex,i.texcoord);
                 // return mainColor * 0.5;
-                float3 c = DiffuseProfile(mainColor,_MainTex,i.uv,float2(_MainTex_TexelSize.x,0) * _BlurSize,1);
-                c += DiffuseProfile(mainColor,_MainTex,i.uv,float2(0,_MainTex_TexelSize.y)  * _BlurSize,1);
+                float3 c = DiffuseProfile(mainColor,_MainTex,i.texcoord,float2(_MainTex_TexelSize.x,0) * _BlurSize,1);
+                c += DiffuseProfile(mainColor,_MainTex,i.texcoord,float2(0,_MainTex_TexelSize.y)  * _BlurSize,1);
                 c/=2;
                 return float4(c,1);
             }
-            ENDCG
+            ENDHLSL
         }
 
     }
