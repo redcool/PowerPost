@@ -16,6 +16,11 @@ namespace PowerPost
         public abstract bool IsActive();
 
         public virtual bool IsTileCompatible() => true;
+        /// <summary>
+        /// This pass dont need camera color target(_CameraColorAttachmentA,_CameraColorAttachmentB)
+        /// set false,when render a texture for later rendering
+        /// </summary>
+        /// <returns></returns>
         public virtual bool NeedWriteToTarget() => true;
         /// <summary>
         /// Execute order in powerpost group
