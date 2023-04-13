@@ -4,8 +4,9 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Filtering.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/Shaders/PostProcessing/Common.hlsl"
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+
 #include "../../../../../PowerShaderLib/Lib/CoordinateSystem.hlsl"
+#include "../../../../../PowerShaderLib/Lib/CameraTextures.hlsl"
 
 float4 SampleBox(TEXTURE2D_PARAM(tex,state), float4 texel, float2 uv, float delta) {
 	float2 p = texel.xy * delta;
