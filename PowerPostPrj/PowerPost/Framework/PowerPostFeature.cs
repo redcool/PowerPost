@@ -61,12 +61,26 @@ namespace PowerPost
 
         void TryInitPostSettingList(ref List<Type> list,ref HashSet<Type> set)
         {
+            // find all again,when change RenderScale,will trigger this
+            if (set.Count == 0) 
+            {
+                FindAllSettingTypes(set);
+            }
+
             if (list == default || list.Count == set.Count)
                 return;
 
             list = set.ToList();
         }
 
+        public static void FindAllSettingTypes(HashSet<Type> set)
+        {
+            var settingTypes = TypeCache.GetTypesDerivedFrom<BasePostExSettings>();
+            foreach (var setting in settingTypes)
+            {
+                set.Add(setting);
+            }
+        }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
