@@ -26,11 +26,6 @@ namespace PowerPost
         /// Execute order in powerpost group
         /// </summary>
         public virtual int Order => 0;
-        protected override void OnEnable()
-        {
-            PowerPostFeature.AddSetting(this);
-            base.OnEnable();
-        }
 
     }
 }

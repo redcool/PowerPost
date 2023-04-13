@@ -34,13 +34,13 @@ namespace PowerPost
         /// </summary>
         public int order;
 
-        public bool isNeedReleaseGlobal, isNeedInitGlobal;
 
+        public bool isNeedReleaseGlobal, isNeedInitGlobal;
         protected bool isCameraSwapTarget;
 
         public BasePostExPass()
         {
-            renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing-1;
+            renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
         public T GetSettings<T>() where T :BasePostExSettings
@@ -61,7 +61,8 @@ namespace PowerPost
         {
             get { return Renderer.cameraColorTarget; }
         }
-        public BasePostExPass Init(int id, int count,bool needSwapTarget)
+
+        public BasePostExPass InitStatesForWrtieCameraTarget(int id, int count,bool needSwapTarget)
         {
             isCameraSwapTarget = needSwapTarget;
             // target is A , post target is B, otherwist swap
