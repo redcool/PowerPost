@@ -18,7 +18,7 @@ float4 SampleBox(TEXTURE2D_PARAM(tex,state), float4 texel, float2 uv, float delt
 	return c * 0.25;
 }
 
-float4 SampleBox(TEXTURE2D_PARAM(tex,state),float4 texel,float2 uv, float delta,float sideWeight,float centerWeight) {
+float4 SampleBox(TEXTURE2D_PARAM(tex,state),float4 texel,float2 uv, float delta,float sideWeight,float centerWeight=0) {
     float2 p = texel.xy * delta;
     float4 c = SAMPLE_TEXTURE2D(tex,state,uv + float2(-1,-1) * p) * sideWeight;
     c += SAMPLE_TEXTURE2D(tex,state,uv + float2(1,-1) * p) * sideWeight;

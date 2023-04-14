@@ -105,6 +105,15 @@ MonoBehaviour:
   m_Name: VolumeLightingSettings
   m_EditorClassIdentifier: 
   active: 1
+  enabled:
+    m_OverrideState: 1
+    m_Value: 1
+  stepCount:
+    m_OverrideState: 1
+    m_Value: 20
+  intenstiy:
+    m_OverrideState: 1
+    m_Value: 4.48
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +171,7 @@ MonoBehaviour:
   radialTex:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   radialScale:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
@@ -180,6 +190,7 @@ MonoBehaviour:
   noiseMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   noiseMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -192,6 +203,7 @@ MonoBehaviour:
   attenMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -201,6 +213,7 @@ MonoBehaviour:
   attenMap2:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMap2ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -228,6 +241,7 @@ MonoBehaviour:
   baseLineMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   baseLineMap_ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
