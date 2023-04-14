@@ -22,7 +22,8 @@ Shader "Hidden/PowerPost/VolumeLight"
             {
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord);
 
-                float depth = SampleCameraDepthTexture(i.texcoord);
+                float depth = GetScreenDepth(i.texcoord);
+                // depth = trunc(depth*10000)/10000;
                 float3 worldPos = ComputeWorldSpacePosition(i.texcoord,depth,UNITY_MATRIX_I_VP);
                 
                 return col;

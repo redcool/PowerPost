@@ -6,7 +6,7 @@
 #include "Packages/com.unity.render-pipelines.universal/Shaders/PostProcessing/Common.hlsl"
 
 #include "../../../../../PowerShaderLib/Lib/CoordinateSystem.hlsl"
-#include "../../../../../PowerShaderLib/Lib/CameraTextures.hlsl"
+#include "../../../../../PowerShaderLib/Lib/ScreenTextures.hlsl"
 
 float4 SampleBox(TEXTURE2D_PARAM(tex,state), float4 texel, float2 uv, float delta) {
 	float2 p = texel.xy * delta;

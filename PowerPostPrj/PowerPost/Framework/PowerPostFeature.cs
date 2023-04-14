@@ -23,17 +23,30 @@ namespace PowerPost
 
             var inst = target as PowerPostFeature;
             isShowSettingName = EditorGUILayout.Foldout(isShowSettingName, "Current Working Effects:", true);
-            if (isShowSettingName)
+            if (isShowSettingName && inst.postSettingTypeList!=null)
             {
-                //var settingsProp = serializedObject.FindProperty("powerPostExSettingTypes");
-                //EditorGUILayout.PropertyField(settingsProp);
-                EditorGUILayout.BeginVertical("Box");
-                foreach (var item in inst.postSettingTypeList)
-                {
-                    EditorGUILayout.LabelField(item.FullName);
-                }
-                EditorGUILayout.EndVertical();
+                var list = inst.postSettingTypeList
+                    .Select(type => inst.GetPassSettings(type, true))
+                    .Where(type => type != default)
+                    .OrderBy(settings => settings.Order)
+                    ;
+                Drawlist(list.Where(settings => settings.NeedWriteToTarget()), "List need cameraTarget");
+                Drawlist(list.Where(settings => !settings.NeedWriteToTarget()), "List dont need cameraTarget");
             }
+
+        }
+
+        private static void Drawlist(IEnumerable<BasePostExSettings> list,string name)
+        {
+            EditorGUILayout.BeginVertical("Box");
+            EditorGUILayout.LabelField(name,list.Count().ToString());
+            EditorGUI.indentLevel++;
+            list.ForEach((item, id) =>
+            {
+                EditorGUILayout.SelectableLabel($"{id} : {item.GetType().FullName}", GUILayout.Height(18));
+            });
+            EditorGUI.indentLevel--;
+            EditorGUILayout.EndVertical();
         }
     }
 #endif
@@ -65,9 +78,11 @@ namespace PowerPost
             list = set.ToList();
         }
 
+
         public static void FindAllSettingTypes(HashSet<Type> set)
         {
-            var settingTypes = TypeCache.GetTypesDerivedFrom<BasePostExSettings>();
+            var settingTypes = ReflectionTools.GetTypesDerivedFrom<BasePostExSettings>();
+
             foreach (var setting in settingTypes)
             {
                 set.Add(setting);
@@ -124,13 +139,13 @@ namespace PowerPost
             postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
-        public BasePostExSettings GetPassSettings(Type type)
+        public BasePostExSettings GetPassSettings(Type type,bool includeInactive=false)
         {
             if (type == default)
                 return default;
 
             var settings = VolumeManager.instance.stack.GetComponent(type) as BasePostExSettings;
-            if (settings == null || !settings.IsActive())
+            if (settings == null || settings.IsActive() == includeInactive)
                 return default;
 
             return settings;

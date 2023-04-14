@@ -9,6 +9,7 @@ namespace PowerPost
     [Serializable, VolumeComponentMenu("PowerPostEx/VolumeLighting")]
     public class VolumeLightingSettings : BasePostExSettings
     {
+        public BoolParameter enabled = new BoolParameter(false);
         public override BasePostExPass CreateNewInstance()
         {
             return new VolumeLighting();
@@ -16,7 +17,7 @@ namespace PowerPost
 
         public override bool IsActive()
         {
-            return false;
+            return enabled.value;
         }
     }
 }
