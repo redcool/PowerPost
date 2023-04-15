@@ -14,7 +14,6 @@ namespace PowerPost
 
         readonly int
             _StepCount = Shader.PropertyToID(nameof(_StepCount)),
-            _Intenstiy = Shader.PropertyToID(nameof(_Intenstiy)),
             _BlurSize = Shader.PropertyToID(nameof(_BlurSize)),
             _ReverseLight = Shader.PropertyToID(nameof(_ReverseLight)),
 
@@ -35,7 +34,6 @@ namespace PowerPost
 
             var mat = GetTargetMaterial("Hidden/PowerPost/VolumeLight");
             mat.SetInt(_StepCount, settings.stepCount.value);
-            mat.SetFloat(_Intenstiy, settings.intenstiy.value);
 
             // light pass
             cmd.BlitColorDepth(sourceTex, _BlurTexA, _BlurTexA, mat, 0);
@@ -43,14 +41,14 @@ namespace PowerPost
             //cmd.BlitColorDepth(_BlurTexA, targetTex, targetTex, DefaultBlitMaterial);
             //return;
 
-
+            //1,3,5,7
             // blur pass
             for (int i = 0; i < settings.iterators.value; i++)
             {
-                mat.SetFloat(_BlurSize, (i+1));
+                mat.SetFloat(_BlurSize, (i*2)*2+1);
                 cmd.BlitColorDepth(_BlurTexA, _BlurTexB, _BlurTexB, mat,1);
 
-                mat.SetFloat(_BlurSize,(i+2));
+                mat.SetFloat(_BlurSize,((i*2)*2+3));
                 cmd.BlitColorDepth(_BlurTexB, _BlurTexA, _BlurTexA, mat, 1);
             }
             // composite pass

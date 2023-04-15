@@ -25,7 +25,6 @@ Shader "Hidden/PowerPost/VolumeLight"
 
             #define RAY_MAX_LENGTH 20
             float _StepCount;
-            float _Intenstiy;
 
             float GetLightAtten(float3 pos){
                 float4 shadowPos = TransformWorldToShadowCoord(pos);
@@ -57,8 +56,8 @@ Shader "Hidden/PowerPost/VolumeLight"
 
                 float2 screenPos = i.texcoord * _ScreenParams.xy;
                 // float seed = random(i.texcoord.y * _ScreenParams.y + i.texcoord.x);
-                // seed = InterleavedGradientNoise(i.texcoord*_ScreenParams.xy,0);
                 float seed = N21(screenPos);
+                // seed = InterleavedGradientNoise(i.texcoord*_ScreenParams.xy,0);
                 float3 posOffset = GradientNoise(worldPos + _Time.y)*0.1;
 
                 for(float x=0;x<1;x+=step.x){
@@ -94,7 +93,6 @@ Shader "Hidden/PowerPost/VolumeLight"
             }
 
             ENDHLSL
-
         }
 
         //2 composite
@@ -125,6 +123,47 @@ Shader "Hidden/PowerPost/VolumeLight"
 
             ENDHLSL
 
+        }
+
+                //3 blur
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex VertDefault
+            #pragma fragment frag
+            #include "PowerPostLib.hlsl"
+
+            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
+            float4 _MainTex_TexelSize;
+            float _BlurSize;
+
+            half4 frag(VaryingsDefault i):SV_TARGET{
+                // half4 c = KawaseBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize,_BlurSize);
+                half4 c = GaussBlur(_MainTex,sampler_MainTex,i.texcoord,float2(_MainTex_TexelSize.x,0) * _BlurSize,true);
+                return c;
+            }
+
+            ENDHLSL
+        }
+
+                Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex VertDefault
+            #pragma fragment frag
+            #include "PowerPostLib.hlsl"
+
+            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
+            float4 _MainTex_TexelSize;
+            float _BlurSize;
+
+            half4 frag(VaryingsDefault i):SV_TARGET{
+                // half4 c = KawaseBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize,_BlurSize);
+                half4 c = GaussBlur(_MainTex,sampler_MainTex,i.texcoord,float2(0,_MainTex_TexelSize.y) * _BlurSize,true);
+                return c;
+            }
+
+            ENDHLSL
         }
     }
 }

@@ -10,7 +10,6 @@ namespace PowerPost
     public class VolumeLightingSettings : BasePostExSettings
     {
         public BoolParameter enabled = new BoolParameter(false);
-        public ClampedFloatParameter intenstiy = new ClampedFloatParameter(1,0,1);
         public BoolParameter reverseLight = new BoolParameter(false);
         public ColorParameter color = new ColorParameter(Color.white, true, true, true);
 
