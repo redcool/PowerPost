@@ -110,10 +110,16 @@ MonoBehaviour:
     m_Value: 1
   stepCount:
     m_OverrideState: 1
-    m_Value: 20
+    m_Value: 10
   intenstiy:
     m_OverrideState: 1
-    m_Value: 4.48
+    m_Value: 1
+  iterators:
+    m_OverrideState: 1
+    m_Value: 2
+  downSampers:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

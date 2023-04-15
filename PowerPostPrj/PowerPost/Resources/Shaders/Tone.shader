@@ -21,7 +21,6 @@ Shader "Hidden/PowerPost/ToneMapping"
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
             TEXTURE2D(_ColorGradingLUT);
-            SAMPLER(sampler_linear_clamp);
             // SAMPLER(sampler_ColorGradingLUT);
 
             int _Mode;

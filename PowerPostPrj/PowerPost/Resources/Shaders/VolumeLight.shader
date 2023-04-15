@@ -4,6 +4,7 @@ Shader "Hidden/PowerPost/VolumeLight"
     {
         
     }
+
     SubShader
     {
         // No culling or depth
@@ -18,9 +19,7 @@ Shader "Hidden/PowerPost/VolumeLight"
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
 
             #include "../../../../../PowerShaderLib/UrpLib/URP_MainLightShadows.hlsl"
-            #include "../../../../../PowerShaderLib/Lib/NoiseLib.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Random.hlsl"
-// #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
 
@@ -42,7 +41,9 @@ Shader "Hidden/PowerPost/VolumeLight"
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex, i.texcoord);
 
                 float depth = GetScreenDepth(i.texcoord);
-                // depth = trunc(depth*10000)/10000;
+                
+                // if(0.999 < depth) return 0;
+                
                 float3 worldPos = ComputeWorldSpacePosition(i.texcoord,depth,UNITY_MATRIX_I_VP);
                 float3 startPos = _WorldSpaceCameraPos.xyz;
                 float3 dir = normalize(worldPos - startPos);
@@ -52,26 +53,78 @@ Shader "Hidden/PowerPost/VolumeLight"
 
                 float3 intensity = 0;
                 float2 step = 1.0/_StepCount;
-                step.y *=0.4;
+                // step.y *=0.4;
 
-                float seed = random(i.texcoord.y * _ScreenParams.y + i.texcoord.x);
-                // seed = N21(i.texcoord * _ScreenParams.xy * 1);
+                float2 screenPos = i.texcoord * _ScreenParams.xy;
+                // float seed = random(i.texcoord.y * _ScreenParams.y + i.texcoord.x);
                 // seed = InterleavedGradientNoise(i.texcoord*_ScreenParams.xy,0);
-                for(float i=0;i<1;i+=step.x){
-                    seed = random(seed);
-                    float3 curPos = lerp(startPos,finalPos,i + seed * step.y);
-                    float atten = GetLightAtten(curPos) * _Intenstiy;
+                float seed = N21(screenPos);
+                float3 posOffset = GradientNoise(worldPos + _Time.y)*0.1;
+
+                for(float x=0;x<1;x+=step.x){
+                    seed = N21(screenPos * seed);
+                    // seed = random(seed);
+                    float3 curPos = lerp(startPos,finalPos,x + seed * step.x + posOffset);
+                    float atten = GetLightAtten(curPos);
 
                     float3 light = atten;
                     intensity += light;
                 }
-                intensity *= rcp(_StepCount);
-                // col.xyz *= lerp(1,intensity , _Intenstiy);
-                col.xyz += intensity;
-                
-                return col;
+                intensity *= step.x;
+                return float4(max(0.0,intensity),1);
             }
             ENDHLSL
+        }
+
+        //1 blur
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex VertDefault
+            #pragma fragment frag
+            #include "PowerPostLib.hlsl"
+
+            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
+            float4 _MainTex_TexelSize;
+            float _BlurSize;
+
+            half4 frag(VaryingsDefault i):SV_TARGET{
+                half4 c = KawaseBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize,_BlurSize);
+                return c;
+            }
+
+            ENDHLSL
+
+        }
+
+        //2 composite
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex VertDefault
+            #pragma fragment frag
+            #include "PowerPostLib.hlsl"
+
+            TEXTURE2D(_LightTex);
+            TEXTURE2D(_MainTex);
+            half _ReverseLight;
+            // half _Intenstiy;
+            half4 _Color;
+
+            half4 frag(VaryingsDefault i):SV_TARGET{
+                half4 c = 0;
+                half4 lightCol = SAMPLE_TEXTURE2D(_LightTex,sampler_linear_clamp,i.texcoord);
+                lightCol = lerp(lightCol,1 - lightCol,_ReverseLight);
+                lightCol *= _Color * _MainLightColor;
+                // lightCol *= ValueNoise(i.texcoord*10 + _Time.x*10);
+
+                half4 mainCol = SAMPLE_TEXTURE2D(_MainTex,sampler_linear_clamp,i.texcoord);
+                c.xyz = mainCol.xyz + lightCol;
+                return c;
+            }
+
+            ENDHLSL
+
         }
     }
 }

@@ -10,8 +10,15 @@ namespace PowerPost
     public class VolumeLightingSettings : BasePostExSettings
     {
         public BoolParameter enabled = new BoolParameter(false);
-        public ClampedIntParameter stepCount = new ClampedIntParameter(10,1,20);
         public ClampedFloatParameter intenstiy = new ClampedFloatParameter(1,0,1);
+        public BoolParameter reverseLight = new BoolParameter(false);
+        public ColorParameter color = new ColorParameter(Color.white, true, true, true);
+
+        [Header("Key Options")]
+        public ClampedIntParameter stepCount = new ClampedIntParameter(10,1,20);
+        public ClampedIntParameter iterators = new ClampedIntParameter(1, 0, 3);
+        public ClampedIntParameter downSampers = new ClampedIntParameter(1, 1, 3);
+
         public override BasePostExPass CreateNewInstance()
         {
             return new VolumeLighting();

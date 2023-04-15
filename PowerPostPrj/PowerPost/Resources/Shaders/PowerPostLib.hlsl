@@ -7,7 +7,13 @@
 
 #include "../../../../../PowerShaderLib/Lib/CoordinateSystem.hlsl"
 #include "../../../../../PowerShaderLib/Lib/ScreenTextures.hlsl"
+#include "../../../../../PowerShaderLib/Lib/NoiseLib.hlsl"
 
+SAMPLER(sampler_linear_clamp);
+
+//----------------
+// Box blur
+//----------------
 float4 SampleBox(TEXTURE2D_PARAM(tex,state), float4 texel, float2 uv, float delta) {
 	float2 p = texel.xy * delta;
 	float4 c = SAMPLE_TEXTURE2D(tex, state, uv + float2(-1, -1) * p);
@@ -70,17 +76,21 @@ float4 SampleDirBlur(TEXTURE2D_PARAM(tex,state),float2 uv,float2 dir){
     return c / (DIR_BLUR_SAMPLES);
 }
 
+//----------------
+// Kawase blur
+//----------------
+float4 KawaseBlur(TEXTURE2D_PARAM(tex,state),float2 uv,float2 texelSize,float blurSize){
+    const half2 offsets[4] = {-1,-1, 1,1, -1,1, 1,-1};
+    float4 c = 0;
+    for(int x=0;x<4;x++){
+        c += SAMPLE_TEXTURE2D(tex,state,uv + offsets[x] * texelSize * blurSize);
+    }
+    c *= 0.25;
+    return c;
+}
 
 float Gray(float3 c){
     return dot(float3(0.2,0.7,0.07),c);
-}
-
-float N21(float2 p){
-    return frac(sin(dot(p,float2(100,7890)))*12345);
-}
-
-float N11(float c,float x=9.456){
-    return frac(sin(c+x) * 12345.6789);
 }
 
 struct AttributesDefault{
