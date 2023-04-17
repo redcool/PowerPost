@@ -16,7 +16,7 @@ namespace PowerPost
         [Header("Key Options")]
         public ClampedIntParameter stepCount = new ClampedIntParameter(10,1,20);
         public ClampedIntParameter iterators = new ClampedIntParameter(1, 0, 3);
-        public ClampedIntParameter downSampers = new ClampedIntParameter(1, 1, 3);
+        public ClampedIntParameter downSampers = new ClampedIntParameter(1, 0, 3);
 
         public override BasePostExPass CreateNewInstance()
         {

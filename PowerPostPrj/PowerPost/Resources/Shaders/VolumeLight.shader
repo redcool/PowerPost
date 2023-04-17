@@ -125,45 +125,5 @@ Shader "Hidden/PowerPost/VolumeLight"
 
         }
 
-                //3 blur
-        Pass
-        {
-            HLSLPROGRAM
-            #pragma vertex VertDefault
-            #pragma fragment frag
-            #include "PowerPostLib.hlsl"
-
-            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-            float4 _MainTex_TexelSize;
-            float _BlurSize;
-
-            half4 frag(VaryingsDefault i):SV_TARGET{
-                // half4 c = KawaseBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize,_BlurSize);
-                half4 c = GaussBlur(_MainTex,sampler_MainTex,i.texcoord,float2(_MainTex_TexelSize.x,0) * _BlurSize,true);
-                return c;
-            }
-
-            ENDHLSL
-        }
-
-                Pass
-        {
-            HLSLPROGRAM
-            #pragma vertex VertDefault
-            #pragma fragment frag
-            #include "PowerPostLib.hlsl"
-
-            TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
-            float4 _MainTex_TexelSize;
-            float _BlurSize;
-
-            half4 frag(VaryingsDefault i):SV_TARGET{
-                // half4 c = KawaseBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize,_BlurSize);
-                half4 c = GaussBlur(_MainTex,sampler_MainTex,i.texcoord,float2(0,_MainTex_TexelSize.y) * _BlurSize,true);
-                return c;
-            }
-
-            ENDHLSL
-        }
     }
 }
