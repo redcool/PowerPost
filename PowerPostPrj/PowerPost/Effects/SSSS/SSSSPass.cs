@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using PowerUtilities;
 
 namespace PowerPost {
     public class SSSSPass : BasePostExPass<SSSSSettings>
