@@ -13,10 +13,10 @@ public abstract class BaseSettingsControl<T> : MonoBehaviour
     public Volume postVolume;
     [Header("Volume Parameters")]
     public T settings;
-    void Awake()
-    {
-        RecordVars();
-    }
+    //void Awake()
+    //{
+    //    RecordVars();
+    //}
 
     // Start is called before the first frame update
     void OnEnable()
