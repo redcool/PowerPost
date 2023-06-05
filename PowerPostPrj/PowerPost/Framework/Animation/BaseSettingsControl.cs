@@ -25,12 +25,21 @@ public abstract class BaseSettingsControl<T> : MonoBehaviour
 
         intervalTime = 1f / updateCount;
         InvokeRepeating(nameof(UpdateVars), 0, intervalTime);
+
+        if(settings) {
+            settings.active=true;
+        }
     }
 
     private void OnDisable()
     {
         if (IsInvoking(nameof(UpdateVars)))
             CancelInvoke(nameof(UpdateVars));
+
+        if (settings)
+        {
+            settings.active=false;
+        }
     }
 
     public void SetupSettings()
