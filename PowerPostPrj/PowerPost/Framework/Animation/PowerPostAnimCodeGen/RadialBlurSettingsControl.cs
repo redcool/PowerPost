@@ -26,6 +26,7 @@ namespace PowerUtilities
         // variables
         public Vector2 center;
 public float radiusMin;
+public float radiusMax;
 public float blurSize;
 public bool roundness;
 public bool radialTexOn;
@@ -64,6 +65,7 @@ public float baseLineMapIntensity;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
             settings.center.value = center;
 settings.radiusMin.value = radiusMin;
+settings.radiusMax.value = radiusMax;
 settings.blurSize.value = blurSize;
 settings.roundness.value = roundness;
 settings.radialTexOn.value = radialTexOn;
@@ -105,6 +107,7 @@ settings.baseLineMapIntensity.value = baseLineMapIntensity;
             //rotateRate = settings.rotateRate.value;
             center = settings.center.value;
 radiusMin = settings.radiusMin.value;
+radiusMax = settings.radiusMax.value;
 blurSize = settings.blurSize.value;
 roundness = settings.roundness.value;
 radialTexOn = settings.radialTexOn.value;

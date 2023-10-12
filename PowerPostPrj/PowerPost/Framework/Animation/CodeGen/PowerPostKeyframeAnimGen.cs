@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using PowerPost;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,31 +13,43 @@ namespace PowerUtilities
 {
     public class PowerPostKeyframeAnimGen
     {
-        const string PATH = "Assets/PowerPostAnimCodeGen/";
+        public const string 
+            POWER_POST_SAVE_PATH = "Assets/PowerPostAnimCodeGen/",
+            URP_POST_SAVE_PATH = "Assets/URPPostAnimCodeGen/";
+        
 
         [MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
         public static void GenCode()
+        {
+            var settingTextAssets = GetPowerPostSettings();
+            GenCode(POWER_POST_SAVE_PATH,settingTextAssets);
+        }
+
+        /// <summary>
+        /// generate post control save to outputFolderPath
+        /// </summary>
+        /// <param name="outputFolderPath"></param>
+        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets)
         {
             var fieldsSB = new StringBuilder();
             var settersSB = new StringBuilder();
             var gettersSB = new StringBuilder();
 
-            PathTools.CreateAbsFolderPath(PATH);
-            var settingTextAssets = GetPowerPostSettings();
+            PathTools.CreateAbsFolderPath(outputFolderPath);
+
             foreach (var textAsset in settingTextAssets)
             {
-                AnalystCodeString(textAsset, fieldsSB, settersSB, gettersSB);
+                AnalystCodeString(textAsset.text, fieldsSB, settersSB, gettersSB);
 
                 var className = textAsset.name;
-                var path = $"{PathTools.GetAssetAbsPath(PATH)}/{className}Control.cs";
-                File.WriteAllText(path, string.Format(CODE_TEMPLATE, className, fieldsSB, settersSB,gettersSB));
+                var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{className}Control.cs";
+                File.WriteAllText(path, string.Format(CODE_TEMPLATE, className, fieldsSB, settersSB, gettersSB));
 
                 //break;
                 fieldsSB.Clear();
                 settersSB.Clear();
                 gettersSB.Clear();
             }
-
         }
 
         private static void OutputVolumeParameters()
@@ -50,7 +61,7 @@ namespace PowerUtilities
             Debug.Log(sb);
         }
 
-        static string ConvertVolumeParameter(string typeName)
+        public static string ConvertVolumeParameter(string typeName)
         {
             if (typeName.Contains("Float")) return "float";
             if (typeName.Contains("Int")) return "int";
@@ -75,7 +86,7 @@ namespace PowerUtilities
             throw new ArgumentException(typeName);
         }
 
-        static void AnalystCodeString1(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
+        public static void AnalystCodeString1(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
 
             //var inst = Activator.CreateInstance(type);
@@ -94,11 +105,11 @@ namespace PowerUtilities
             });
         }
         
-        static void AnalystCodeString(TextAsset textAsset, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
+        public static void AnalystCodeString(string codeText, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
             //public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
-            const string linePattern = @"(//\s*\w+\s*)*(\w+)Parameter (\w+) ?= *\w+ *\w+\((\w+),?";
-            var items = Regex.Matches(textAsset.text, linePattern);
+            const string linePattern = @"(//\s*\w+\s*)*(\w+)Parameter (\w+) *= ";
+            var items = Regex.Matches(codeText, linePattern);
             foreach (Match match in items)
             {
                 // comments line

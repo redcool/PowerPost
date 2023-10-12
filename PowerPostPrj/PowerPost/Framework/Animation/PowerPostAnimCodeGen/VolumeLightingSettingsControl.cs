@@ -5,15 +5,15 @@ namespace PowerUtilities
 #if UNITY_EDITOR
     using UnityEditor;
 
-    [CustomEditor(typeof(SimpleBloomSettingsControl))]
-    public class SimpleBloomSettingsControlEditor : Editor
+    [CustomEditor(typeof(VolumeLightingSettingsControl))]
+    public class VolumeLightingSettingsControlEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             if (GUILayout.Button("Record Vars"))
             {
-                var inst = target as SimpleBloomSettingsControl;
+                var inst = target as VolumeLightingSettingsControl;
                 inst.RecordVars();
             }
         }
@@ -21,14 +21,15 @@ namespace PowerUtilities
 #endif
     
     [ExecuteInEditMode]
-    public class SimpleBloomSettingsControl : BaseSettingsControl<SimpleBloomSettings>
+    public class VolumeLightingSettingsControl : BaseSettingsControl<VolumeLightingSettings>
     {
         // variables
-        public float intensity;
+        public bool enabled;
+public bool reverseLight;
+public Color color;
+public int stepCount;
 public int iterators;
-public float threshold;
-public float softThreshold;
-public Color bloomColor;
+public int downSampers;
 
 
         public override void UpdateVars()
@@ -36,11 +37,12 @@ public Color bloomColor;
             if (!settings)
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
-            settings.intensity.value = intensity;
+            settings.enabled.value = enabled;
+settings.reverseLight.value = reverseLight;
+settings.color.value = color;
+settings.stepCount.value = stepCount;
 settings.iterators.value = iterators;
-settings.threshold.value = threshold;
-settings.softThreshold.value = softThreshold;
-settings.bloomColor.value = bloomColor;
+settings.downSampers.value = downSampers;
 
         }
 
@@ -51,11 +53,12 @@ settings.bloomColor.value = bloomColor;
                 return;
             
             //rotateRate = settings.rotateRate.value;
-            intensity = settings.intensity.value;
+            enabled = settings.enabled.value;
+reverseLight = settings.reverseLight.value;
+color = settings.color.value;
+stepCount = settings.stepCount.value;
 iterators = settings.iterators.value;
-threshold = settings.threshold.value;
-softThreshold = settings.softThreshold.value;
-bloomColor = settings.bloomColor.value;
+downSampers = settings.downSampers.value;
 
         }
     }

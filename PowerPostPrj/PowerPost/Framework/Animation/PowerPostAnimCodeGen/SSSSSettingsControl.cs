@@ -25,6 +25,7 @@ namespace PowerUtilities
     {
         // variables
         public Color strength;
+public Color falloff;
 public float blurScale;
 public LayerMask layer;
 public int stencilRef;
@@ -36,6 +37,7 @@ public int stencilRef;
                 return;
             //settings.baseLineMapIntensity.value = baseLineMapIntensity;
             settings.strength.value = strength;
+settings.falloff.value = falloff;
 settings.blurScale.value = blurScale;
 settings.layer.value = layer;
 settings.stencilRef.value = stencilRef;
@@ -50,6 +52,7 @@ settings.stencilRef.value = stencilRef;
             
             //rotateRate = settings.rotateRate.value;
             strength = settings.strength.value;
+falloff = settings.falloff.value;
 blurScale = settings.blurScale.value;
 layer = settings.layer.value;
 stencilRef = settings.stencilRef.value;
