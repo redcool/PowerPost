@@ -4,6 +4,7 @@ namespace PowerUtilities
     using System.Collections;
     using System.Collections.Generic;
     using UnityEditor;
+    using UnityEditor.Graphs;
     using UnityEngine;
     using static UnityEditor.PlayerSettings;
 
@@ -15,19 +16,34 @@ namespace PowerUtilities
         public override void DrawInspectorUI(PostControlCodeGenSettings inst)
         {
 
-            GUILayout.BeginVertical("PowerPost");
-            if (GUILayout.Button("Gen PowerPost Control code"))
+            GUILayout.BeginVertical();
+            EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("PowerPost"));
+            if (GUILayout.Button(GUIContentEx.TempContent("Gen PowerPost Control code", "generate power post control codes")))
             {
                 PowerPostKeyframeAnimGen.GenCode();
             }
 
             // line
+            EditorGUILayout.Space(20);
             var pos = EditorGUILayout.GetControlRect(GUILayout.Height(2));
             EditorGUITools.DrawColorLine(pos);
 
-            urpFolderPath = EditorGUILayout.TextArea(urpFolderPath);
+            DrawURPPostGen();
+            GUILayout.EndVertical();
+        }
 
-            if (GUILayout.Button("Gen URP Post Control code"))
+        private void DrawURPPostGen()
+        {
+            EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("URP post"));
+
+            EditorGUI.indentLevel++;
+
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("URP post folder path:", EditorStylesEx.BoldLabel);
+            urpFolderPath = EditorGUILayout.TextArea(urpFolderPath);
+            GUILayout.EndHorizontal();
+
+            if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
             {
                 if (!AssetDatabase.IsValidFolder(urpFolderPath))
                     return;
@@ -36,9 +52,11 @@ namespace PowerUtilities
 
                 PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
             }
-            GUILayout.EndVertical();
+            EditorGUI.indentLevel--;
         }
+
     }
+
 
     [ProjectSettingGroup(ProjectSettingGroupAttribute.POWER_UTILS+"/PostControlCodeGen")]
     [SOAssetPath(nameof(PostControlCodeGenSettings))]

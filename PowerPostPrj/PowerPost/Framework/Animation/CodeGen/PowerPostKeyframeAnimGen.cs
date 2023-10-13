@@ -13,16 +13,16 @@ namespace PowerUtilities
 {
     public class PowerPostKeyframeAnimGen
     {
-        public const string 
+        public const string
             POWER_POST_SAVE_PATH = "Assets/PowerPostAnimCodeGen/",
             URP_POST_SAVE_PATH = "Assets/URPPostAnimCodeGen/";
-        
+
 
         [MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
         public static void GenCode()
         {
             var settingTextAssets = GetPowerPostSettings();
-            GenCode(POWER_POST_SAVE_PATH,settingTextAssets);
+            GenCode(POWER_POST_SAVE_PATH, settingTextAssets);
         }
 
         /// <summary>
@@ -50,6 +50,7 @@ namespace PowerUtilities
                 settersSB.Clear();
                 gettersSB.Clear();
             }
+            AssetDatabaseTools.SaveRefresh();
         }
 
         private static void OutputVolumeParameters()
@@ -61,8 +62,13 @@ namespace PowerUtilities
             Debug.Log(sb);
         }
 
-        public static string ConvertVolumeParameter(string typeName)
+        public static string ConvertVolumeTypeName(string typeName)
         {
+            // precision
+            if (typeName == "NoInterpTexture") return "Texture";
+            if (typeName == "TextureCurve") return "TextureCurve";
+
+            // match 
             if (typeName.Contains("Float")) return "float";
             if (typeName.Contains("Int")) return "int";
             if (typeName.Contains("Bool")) return "bool";
@@ -70,11 +76,11 @@ namespace PowerUtilities
             if (typeName.Contains("Color")) return "Color";
             if (typeName.Contains("Object")) return "object";
 
-            if (typeName.Contains("Texture")) return "Texture";
             if (typeName.Contains("Texture2D")) return "Texture2D";
             if (typeName.Contains("Texture3D")) return "Texture3D";
             if (typeName.Contains("Cubemap")) return "Cubemap";
             if (typeName.Contains("RenderTexture")) return "RenderTexture";
+            if (typeName.Contains("Texture")) return "Texture";
 
             if (typeName.Contains("Vector2")) return "Vector2";
             if (typeName.Contains("Vector3")) return "Vector3";
@@ -83,28 +89,10 @@ namespace PowerUtilities
             if (typeName.Contains("AnimationCurve")) return "AnimationCurve";
 
             if (typeName.Contains("ToneMappingMode")) return "ToneMappingSettings.Mode";
-            throw new ArgumentException(typeName);
+            return typeName;
         }
 
-        public static void AnalystCodeString1(Type type, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
-        {
 
-            //var inst = Activator.CreateInstance(type);
-            var inst = ScriptableObject.CreateInstance(type);
-
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance)
-                .Where(f => f.FieldType.IsSubclassOf(typeof(VolumeParameter)))
-                .OrderBy(t => t.MetadataToken);
-            
-            fields.ForEach(f =>
-            {
-                var defaultValue = f.GetValue(inst);
-                var fieldValue = defaultValue.GetType().GetProperty("value").GetValue(defaultValue);
-                var fieldString = $"public {ConvertVolumeParameter(f.FieldType.Name)} {f.Name};";
-                fieldsSB.AppendLine(fieldString);
-            });
-        }
-        
         public static void AnalystCodeString(string codeText, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
             //public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
@@ -116,10 +104,11 @@ namespace PowerUtilities
                 if (match.Groups[0].Value.Contains("//"))
                     continue;
 
+
                 var varType = match.Groups[2].Value;
                 var varName = match.Groups[3].Value;
-                var defaultValue = match.Groups[4].Value;
-                fieldsSB.AppendLine($"public {ConvertVolumeParameter(varType)} {varName};");
+
+                fieldsSB.AppendLine($"public {ConvertVolumeTypeName(varType)} {varName};");
                 // setters
                 //settings.baseLineMapIntensity.value = baseLineMapIntensity;
                 setterSB.AppendLine($"settings.{varName}.value = {varName};");
@@ -152,6 +141,8 @@ namespace PowerUtilities
 {{
     using PowerPost;
     using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.Universal;
 #if UNITY_EDITOR
     using UnityEditor;
 

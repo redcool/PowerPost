@@ -7,18 +7,20 @@ namespace PowerUtilities
     using UnityEngine.Rendering;
 
     public abstract class BaseSettingsControl<T> : MonoBehaviour
-        where T : BasePostExSettings
+        where T : VolumeComponent
     {
         public float updateCount = 5;
+        public bool isAutoActiveSettings;
+
         float intervalTime = 1;
 
         public Volume postVolume;
         [Header("Volume Parameters")]
         public T settings;
-        //void Awake()
-        //{
-        //    RecordVars();
-        //}
+        void Awake()
+        {
+            RecordVars();
+        }
 
         // Start is called before the first frame update
         void OnEnable()
@@ -28,7 +30,7 @@ namespace PowerUtilities
             intervalTime = 1f / updateCount;
             InvokeRepeating(nameof(UpdateVars), 0, intervalTime);
 
-            if (settings)
+            if (settings && isAutoActiveSettings)
             {
                 settings.active=true;
             }
@@ -39,7 +41,7 @@ namespace PowerUtilities
             if (IsInvoking(nameof(UpdateVars)))
                 CancelInvoke(nameof(UpdateVars));
 
-            if (settings)
+            if (settings && isAutoActiveSettings)
             {
                 settings.active=false;
             }
