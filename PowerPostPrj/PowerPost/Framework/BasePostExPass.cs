@@ -53,13 +53,21 @@ namespace PowerPost
             get
             {
                 var urpAsset = UniversalRenderPipeline.asset;
+#if UNITY_2023_1_OR_NEWER
+                return Renderer.cameraColorTargetHandle;
+#else
                 return urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
+#endif
             }
         }
 
         public RenderTargetIdentifier ColorTarget
         {
+#if UNITY_2023_1_OR_NEWER
+            get { return Renderer.cameraColorTargetHandle; }
+#else
             get { return Renderer.cameraColorTarget; }
+#endif
         }
 
         public BasePostExPass InitStatesForWrtieCameraTarget(int id, int count,bool needSwapTarget)
