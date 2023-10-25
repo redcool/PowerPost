@@ -12,6 +12,7 @@ namespace PowerUtilities
     public class PostControlCodeGenSettingsEditor : PowerEditor<PostControlCodeGenSettings>
     {
         string urpFolderPath = @"Packages/com.unity.render-pipelines.universal/Runtime/Overrides";
+        Object folderObj;
 
         public override void DrawInspectorUI(PostControlCodeGenSettings inst)
         {
@@ -38,9 +39,14 @@ namespace PowerUtilities
 
             EditorGUI.indentLevel++;
 
+            //GUILayout.BeginHorizontal();
+            //EditorGUILayout.LabelField("folder:", EditorStylesEx.BoldLabel);
+            //folderObj = EditorGUILayout.ObjectField(folderObj,typeof(Object), false);
+            //GUILayout.EndHorizontal();
+
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("URP post folder path:", EditorStylesEx.BoldLabel);
-            urpFolderPath = EditorGUILayout.TextArea(urpFolderPath);
+            EditorGUILayout.LabelField("folder path:", EditorStylesEx.BoldLabel);
+            urpFolderPath = EditorGUILayout.TextArea(urpFolderPath,GUILayout.Height(36));
             GUILayout.EndHorizontal();
 
             if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
