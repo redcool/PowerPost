@@ -12,7 +12,7 @@ namespace PowerPost
 {
     public abstract class BasePostExPass : ScriptableRenderPass
     {
-        public ScriptableRenderer Renderer { set; get; }
+        public UniversalRenderer Renderer { set; get; }
 
         public const string POWER_POST_DEFAULT_SHADER = "Hidden/PowerPost/DefaultBlit";
         Material defaultMaterial;
@@ -28,15 +28,18 @@ namespace PowerPost
             }
         }
 
-        public RenderTargetIdentifier sourceTex, targetTex;
+        public RTHandle sourceTex, targetTex;
         /// <summary>
         /// pass's order inject from PowerPostFeature.cs, used for sort
         /// </summary>
         public int order;
 
+        /// <summary>
+        /// index of powerPost's rendering list
+        /// </summary>
+        public int renderingId;
 
         public bool isNeedReleaseGlobal, isNeedInitGlobal;
-        protected bool isCameraSwapTarget;
 
         public BasePostExPass()
         {
@@ -53,7 +56,7 @@ namespace PowerPost
             get
             {
                 var urpAsset = UniversalRenderPipeline.asset;
-#if UNITY_2023_1_OR_NEWER
+#if UNITY_2022_1_OR_NEWER
                 return Renderer.cameraColorTargetHandle;
 #else
                 return urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
@@ -61,26 +64,18 @@ namespace PowerPost
             }
         }
 
-        public RenderTargetIdentifier ColorTarget
-        {
-#if UNITY_2023_1_OR_NEWER
-            get { return Renderer.cameraColorTargetHandle; }
-#else
-            get { return Renderer.cameraColorTarget; }
-#endif
-        }
+        public RTHandle ColorTarget => Renderer.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
 
-        public BasePostExPass InitStatesForWrtieCameraTarget(int id, int count,bool needSwapTarget)
+
+        public BasePostExPass InitStatesForWrtieCameraTarget(int id, int count)
         {
-            isCameraSwapTarget = needSwapTarget;
-            // target is A , post target is B, otherwist swap
+            renderingId = id;
+
+            isNeedInitGlobal = id == 0;
+
             var isOdd = (id % 2 != 0);
-            var isSwap = needSwapTarget? !isOdd : isOdd;
+            isNeedReleaseGlobal = (id == count - 1) && !isOdd;
 
-            isNeedInitGlobal = id ==0;
-            isNeedReleaseGlobal = (id ==count-1) && !isOdd;
-            sourceTex = isSwap ? ShaderPropertyIds._CameraColorAttachmentB : ShaderPropertyIds._CameraColorAttachmentA;
-            targetTex = isSwap ? ShaderPropertyIds._CameraColorAttachmentA : ShaderPropertyIds._CameraColorAttachmentB;
             return this;
         }
     }
@@ -100,18 +95,19 @@ namespace PowerPost
             var settings = GetSettings<T>();
             if (settings == null || !settings.IsActive())
                 return;
-            
-            Renderer = renderingData.cameraData.renderer;
+
+            Renderer = (UniversalRenderer)renderingData.cameraData.renderer;
+            SetupTargets(Renderer);
 
             var cmd = CommandBufferUtils.Get(ref context, PassName);
             ref var cameraData = ref renderingData.cameraData;
 
             if (isNeedInitGlobal && settings.NeedWriteToTarget())
             {
-                InitGlobal(cmd,ref cameraData);
+                InitGlobal(cmd, ref cameraData);
             }
 
-            OnExecute(context, ref renderingData, settings,cmd);
+            OnExecute(context, ref renderingData, settings, cmd);
 
             if (isNeedReleaseGlobal && settings.NeedWriteToTarget())
             {
@@ -122,7 +118,26 @@ namespace PowerPost
             CommandBufferUtils.ClearRelease(cmd);
         }
 
-        public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData,T settings,CommandBuffer cmd);
+        private void SetupTargets(ScriptableRenderer renderer)
+        {
+            if (renderer is UniversalRenderer r)
+            {
+                var ca = r.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
+                var cb = r.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
+                var curTarget = r.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
+
+                sourceTex = ca;
+                targetTex = cb;
+
+                if (curTarget == cb)
+                {
+                    sourceTex = cb;
+                    targetTex = ca;
+                }
+            }
+        }
+
+        public abstract void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, T settings, CommandBuffer cmd);
         public abstract string PassName { get; }
 
 
@@ -142,26 +157,16 @@ namespace PowerPost
 
         void BlitTargetTextures(CommandBuffer cmd)
         {
-            if (isCameraSwapTarget)
-            {
-                cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentB, DefaultBlitMaterial);
-            }
-            else
-            {
-                cmd.BlitColorDepth(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentA, DefaultBlitMaterial);
-            }
+            var ca = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
+            var cb = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
+            cmd.BlitColorDepth(cb, ca, ca, DefaultBlitMaterial);
         }
 
         void CopyTargetTextures(CommandBuffer cmd)
         {
-            if (isCameraSwapTarget)
-            {
-                cmd.CopyTexture(ShaderPropertyIds._CameraColorAttachmentA, ShaderPropertyIds._CameraColorAttachmentB);
-            }
-            else
-            {
-                cmd.CopyTexture(ShaderPropertyIds._CameraColorAttachmentB, ShaderPropertyIds._CameraColorAttachmentA);
-            }
+            var ca = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
+            var cb = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
+            cmd.CopyTexture(cb, ca);
         }
     }
 
