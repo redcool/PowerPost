@@ -102,7 +102,6 @@ namespace PowerPost
             SetupPasses(listNeedWriteTarget, listDontNeedWriteTarget);
 
             //add sorted list
-            var needSwapTarget = renderer.cameraColorTarget.IsNameIdEquals(ShaderPropertyIds._CameraColorAttachmentB);
             listNeedWriteTarget.ForEach((item,id) => renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count())));
 
             // add unsorted
