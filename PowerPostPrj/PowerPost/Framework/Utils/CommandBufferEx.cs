@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using PowerUtilities;
+using UnityEngine.Rendering.Universal;
 namespace PowerPost
 {
     public static class CommandBufferEx
@@ -62,6 +63,12 @@ namespace PowerPost
 
         public static void BlitColorDepth(this CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass = 0)
         {
+#if UNITY_2022_1_OR_NEWER
+            var render = (UniversalRenderer)UniversalRenderPipeline.asset.scriptableRenderer;
+            render.TryReplaceURPRTTarget(ref source);
+            render.TryReplaceURPRTTarget(ref colorBuffer);
+#endif
+
             cmd.SetGlobalTexture(ShaderPropertyIds._MainTex, source);
             cmd.SetRenderTarget(colorBuffer,
                 //RenderBufferLoadAction.Load, RenderBufferStoreAction.Store,
