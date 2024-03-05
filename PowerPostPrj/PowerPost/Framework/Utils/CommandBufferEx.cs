@@ -67,6 +67,7 @@ namespace PowerPost
             var render = (UniversalRenderer)UniversalRenderPipeline.asset.scriptableRenderer;
             render.TryReplaceURPRTTarget(ref source);
             render.TryReplaceURPRTTarget(ref colorBuffer);
+            render.TryReplaceURPRTTarget(ref depthBuffer);
 #endif
 
             cmd.SetGlobalTexture(ShaderPropertyIds._MainTex, source);
