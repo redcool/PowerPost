@@ -13,7 +13,7 @@ namespace PowerPost
         [Header("BaseSettings")]
         public BoolParameter sketchToggle = new BoolParameter(false);
         public ColorParameter sketchColor = new ColorParameter(Color.black);
-        public Texture2DParameter sketchTexture = new Texture2DParameter(null);
+        public TextureParameter sketchTexture = new TextureParameter(null);
         public ClampedFloatParameter sketchBlend = new ClampedFloatParameter(0.5f, 0, 1);
         public ClampedFloatParameter lightInfluence = new ClampedFloatParameter(0,0,5);
         //public LayerMaskParameter cullingLayer = new LayerMaskParameter(0);
