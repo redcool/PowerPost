@@ -23,7 +23,7 @@ namespace PowerPost
 
             var inst = target as PowerPostFeature;
             isShowSettingName = EditorGUILayout.Foldout(isShowSettingName, "Current Working Effects:", true);
-            if (isShowSettingName && inst.postSettingTypeList!=null)
+            if (isShowSettingName && inst.postSettingTypeList != null)
             {
                 var list = inst.postSettingTypeList
                     .Select(type => inst.GetPassSettings(type, true))
@@ -36,10 +36,10 @@ namespace PowerPost
 
         }
 
-        private static void Drawlist(IEnumerable<BasePostExSettings> list,string name)
+        private static void Drawlist(IEnumerable<BasePostExSettings> list, string name)
         {
             EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.LabelField(name,list.Count().ToString());
+            EditorGUILayout.LabelField(name, list.Count().ToString());
             EditorGUI.indentLevel++;
             list.ForEach((item, id) =>
             {
@@ -63,7 +63,7 @@ namespace PowerPost
         /// (other dll) effect passes ,Type : BasePostExSettings
         /// </summary>
         public static HashSet<Type> externalSettingTypeSet = new HashSet<Type>();
-
+        static List<Type> externalSettingTypeList;
         /// <summary>
         /// for sort
         /// </summary>
@@ -82,16 +82,27 @@ namespace PowerPost
                 FindAllSettingTypes(ref set);
             }
 
-            // add external item
-            foreach (var item in externalSettingTypeSet)
-            {
-                set.Add(item);
-            }
+            AddExternalSettingTypes(ref set);
 
             if (list == default || list.Count == set.Count)
                 return;
 
             list = set.ToList();
+        }
+
+        private static void AddExternalSettingTypes(ref HashSet<Type> set)
+        {
+            // lazy to list
+            if (externalSettingTypeList == null)
+                externalSettingTypeList = externalSettingTypeSet.ToList();
+
+            // add external item
+            foreach (var item in externalSettingTypeList)
+            {
+                set.Add(item);
+            }
+            // clear once
+            externalSettingTypeList.Clear();
         }
 
         /**
@@ -110,8 +121,9 @@ namespace PowerPost
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public static void AddEffectSetting<T>() where T : BasePostExSettings
-        { 
+        {
             externalSettingTypeSet.Add(typeof(T));
+            externalSettingTypeList = null;
         }
 
         public static void FindAllSettingTypes(ref HashSet<Type> set)
@@ -130,14 +142,14 @@ namespace PowerPost
             if (!cameraData.postProcessEnabled)
                 return;
 
-            TryInitPostSettingTypeList(ref postSettingTypeList,ref postSettingTypeSet);
+            TryInitPostSettingTypeList(ref postSettingTypeList, ref postSettingTypeSet);
 
             List<BasePostExPass> listNeedWriteTarget = new List<BasePostExPass>();
             List<BasePostExPass> listDontNeedWriteTarget = new List<BasePostExPass>();
             SetupPasses(listNeedWriteTarget, listDontNeedWriteTarget);
 
             //add sorted list
-            Action<BasePostExPass,int> addPassesWithTarget = (item, id) => renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count()));
+            Action<BasePostExPass, int> addPassesWithTarget = (item, id) => renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count()));
             listNeedWriteTarget.ForEach(addPassesWithTarget);
 
             // add unsorted
@@ -172,8 +184,15 @@ namespace PowerPost
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            postSettingTypeSet.Clear();
-            externalSettingTypeSet.Clear();
+
+            if (postSettingTypeSet != null)
+                postSettingTypeSet.Clear();
+
+            if (externalSettingTypeSet != null)
+                externalSettingTypeSet.Clear();
+
+            if (externalSettingTypeList != null)
+                externalSettingTypeList.Clear();
         }
 
         public override void Create()
@@ -182,7 +201,7 @@ namespace PowerPost
             //postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
-        public BasePostExSettings GetPassSettings(Type type,bool includeInactive=false)
+        public BasePostExSettings GetPassSettings(Type type, bool includeInactive = false)
         {
             if (type == default)
                 return default;
@@ -194,7 +213,7 @@ namespace PowerPost
             return settings;
         }
 
-        public BasePostExPass GetPassInstance(Type settingType,BasePostExSettings settings)
+        public BasePostExPass GetPassInstance(Type settingType, BasePostExSettings settings)
         {
             if (!postPassDict.TryGetValue(settingType, out var pass))
             {
