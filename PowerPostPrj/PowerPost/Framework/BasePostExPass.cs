@@ -25,7 +25,10 @@ namespace PowerPost
             {
                 if (!defaultMaterial)
                 {
-                    defaultMaterial = new Material(Shader.Find(POWER_POST_DEFAULT_SHADER));
+                    var shader = Shader.Find(POWER_POST_DEFAULT_SHADER);
+                    Debug.Assert(shader != null, $"shader ' {POWER_POST_DEFAULT_SHADER} ' not found");
+
+                    defaultMaterial = new Material(shader);
                 }
                 return defaultMaterial;
             }
@@ -89,7 +92,12 @@ namespace PowerPost
         public Material GetTargetMaterial(string shaderName)
         {
             if (!material)
-                material = new Material(Shader.Find(shaderName));
+            {
+                var shader = Shader.Find(shaderName);
+                Debug.Assert(shader != null, $"shader ' {shaderName} ' not found");
+
+                material = new Material(shader);
+            }
             return material;
         }
 
