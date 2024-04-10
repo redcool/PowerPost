@@ -15,6 +15,8 @@ namespace PowerPost {
 
         public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, OutlineSettings settings,CommandBuffer cmd)
         {
+            var renderer = renderingData.cameraData.renderer as UniversalRenderer;
+
             var mat = GetTargetMaterial("Hidden/PowerPost/Outline");
             mat.SetFloat("_OutlineWidth", settings.outlineWidth.value);
             mat.SetColor("_OutlineColor", settings.outlineColor.value);
@@ -35,7 +37,11 @@ namespace PowerPost {
             }
             else
             {
+#if UNITY_2022_1_OR_NEWER
+                cmd.SetGlobalTexture(_DepthTex, renderer.GetCameraDepthTexture());
+#else
                 cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIds._CameraDepthTexture);
+#endif
             }
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
