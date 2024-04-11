@@ -133,9 +133,15 @@ namespace PowerPost
         {
             if (renderer is UniversalRenderer r)
             {
+#if UNITY_2020
+                var ca = RTHandles.Alloc(ShaderPropertyIds._CameraColorTexture);
+                var cb = RTHandles.Alloc(ShaderPropertyIds._CameraColorAttachmentB);
+                var curTarget = r.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
+#else
                 var ca = r.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
                 var cb = r.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
                 var curTarget = r.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
+#endif
 
                 sourceTex = ca;
                 targetTex = cb;
@@ -168,15 +174,25 @@ namespace PowerPost
 
         void BlitTargetTextures(CommandBuffer cmd)
         {
+#if UNITY_2020
+            var ca = RTHandles.Alloc(ShaderPropertyIds._CameraColorTexture);
+            var cb = RTHandles.Alloc(ShaderPropertyIds._CameraColorAttachmentB);
+#else
             var ca = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
             var cb = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
+#endif
             cmd.BlitColorDepth(cb, ca, ca, DefaultBlitMaterial);
         }
 
         void CopyTargetTextures(CommandBuffer cmd)
         {
+#if UNITY_2020
+            var ca = RTHandles.Alloc(ShaderPropertyIds._CameraColorTexture);
+            var cb = RTHandles.Alloc(ShaderPropertyIds._CameraColorAttachmentB);
+#else
             var ca = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
             var cb = Renderer.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
+#endif
             cmd.CopyTexture(cb, ca);
         }
     }
