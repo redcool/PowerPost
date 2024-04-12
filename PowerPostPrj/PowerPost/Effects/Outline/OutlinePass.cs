@@ -37,17 +37,11 @@ namespace PowerPost {
             }
             else
             {
-                cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIds._CameraDepthTexture);
+                cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIds.GetURPRTID(nameof(ShaderPropertyIds._CameraDepthTexture)));
             }
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
-            if(layer > 0)
-                ReleaseTextures(cmd);
-        }
 
-        private void ReleaseTextures(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_DepthTex);
         }
 
         private void SetupTextures(CommandBuffer cmd,Camera cam,OutlineSettings settings)
