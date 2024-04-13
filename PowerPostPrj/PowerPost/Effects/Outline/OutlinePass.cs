@@ -37,7 +37,7 @@ namespace PowerPost {
             }
             else
             {
-                cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIds.GetURPRTID(nameof(ShaderPropertyIds._CameraDepthTexture)));
+                cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIdentifier._CameraDepthTexture);
             }
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
