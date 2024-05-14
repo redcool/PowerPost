@@ -105,17 +105,6 @@ namespace PowerPost
             externalSettingTypeList.Clear();
         }
 
-        /**
-         #if UNITY_EDITOR
-        [InitializeOnLoadMethod]
-#else
-        [RuntimeInitializeOnLoadMethod]
-#endif
-        public static void Init()
-        {
-            PowerPostFeature.AddEffectSetting<DCPostProcessingSettings>();
-        }
-         */
         /// <summary>
         /// add T to postSettingTypeSet
         /// </summary>
@@ -136,16 +125,21 @@ namespace PowerPost
             }
         }
 
+        // keep 20, avoid list resize
+        List<BasePostExPass> listNeedWriteTarget = new List<BasePostExPass>(20);
+        List<BasePostExPass> listDontNeedWriteTarget = new List<BasePostExPass>(20);
+
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
             ref CameraData cameraData = ref renderingData.cameraData;
             if (!cameraData.postProcessEnabled)
                 return;
 
+            listNeedWriteTarget.Clear();
+            listDontNeedWriteTarget.Clear();
+
             TryInitPostSettingTypeList(ref postSettingTypeList, ref postSettingTypeSet);
 
-            List<BasePostExPass> listNeedWriteTarget = new List<BasePostExPass>();
-            List<BasePostExPass> listDontNeedWriteTarget = new List<BasePostExPass>();
             SetupPasses(listNeedWriteTarget, listDontNeedWriteTarget);
 
             //add sorted list
@@ -155,11 +149,26 @@ namespace PowerPost
             // add unsorted
             Action<BasePostExPass> addPasses = item => renderer.EnqueuePass(item);
             listDontNeedWriteTarget.ForEach(addPasses);
+
         }
 
         private void SetupPasses(List<BasePostExPass> listNeedWriteTarget, List<BasePostExPass> listDontNeedWriteTarget)
         {
-            Action<Type> addPassTypes = type =>
+            //postSettingTypeList.ForEach(AddPassTypes);
+            for (int i = 0; i < postSettingTypeList.Count; i++)
+            {
+                AddPassTypes(postSettingTypeList[i], i);
+
+                //if (i > 10)
+                //    break;
+            }
+
+            // sort
+            Comparison<BasePostExPass> sortPasses = (a, b) => a.order - b.order;
+            listNeedWriteTarget.Sort(sortPasses);
+
+            //----------- inner method
+            void AddPassTypes(Type type,int id)
             {
                 var settings = GetPassSettings(type);
                 if (settings != default)
@@ -170,15 +179,7 @@ namespace PowerPost
                     else
                         listDontNeedWriteTarget.Add(pass);
                 }
-            };
-
-            postSettingTypeList.ForEach(addPassTypes);
-
-            // sort
-            Comparison<BasePostExPass> sortPasses = (a, b) => a.order - b.order;
-
-            listNeedWriteTarget.Sort(sortPasses);
-
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -215,12 +216,23 @@ namespace PowerPost
 
         public BasePostExPass GetPassInstance(Type settingType, BasePostExSettings settings)
         {
-            if (!postPassDict.TryGetValue(settingType, out var pass))
+
+            return DictionaryTools.Get(postPassDict, settingType, CreateInstance);
+
+            //if (!postPassDict.TryGetValue(settingType, out var pass))
+            //{
+            //    postPassDict[settingType] = pass = settings.CreateNewInstance();
+            //    pass.order = settings.Order;
+            //}
+            //return postPassDict[settingType];
+
+            //---------------
+            BasePostExPass CreateInstance(Type settingType)
             {
-                postPassDict[settingType] = pass = settings.CreateNewInstance();
+                var pass = settings.CreateNewInstance();
                 pass.order = settings.Order;
+                return pass;
             }
-            return postPassDict[settingType];
         }
     }
 
