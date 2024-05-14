@@ -6,10 +6,10 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using PowerUtilities;
 using System.Reflection;
+using System.Linq;
 
 namespace PowerPost
 {
-    using System.Linq;
 #if UNITY_EDITOR
     using UnityEditor;
 
@@ -23,7 +23,7 @@ namespace PowerPost
 
             var inst = target as PowerPostFeature;
             isShowSettingName = EditorGUILayout.Foldout(isShowSettingName, "Current Working Effects:", true);
-            if (isShowSettingName && inst.postSettingTypeList!=null)
+            if (isShowSettingName && inst.postSettingTypeList != null)
             {
                 var list = inst.postSettingTypeList
                     .Select(type => inst.GetPassSettings(type, true))
@@ -36,10 +36,10 @@ namespace PowerPost
 
         }
 
-        private static void Drawlist(IEnumerable<BasePostExSettings> list,string name)
+        private static void Drawlist(IEnumerable<BasePostExSettings> list, string name)
         {
             EditorGUILayout.BeginVertical("Box");
-            EditorGUILayout.LabelField(name,list.Count().ToString());
+            EditorGUILayout.LabelField(name, list.Count().ToString());
             EditorGUI.indentLevel++;
             list.ForEach((item, id) =>
             {
@@ -50,13 +50,23 @@ namespace PowerPost
         }
     }
 #endif
+
+
     public class PowerPostFeature : ScriptableRendererFeature
     {
         /// <summary>
-        /// passes need write to targetTex
+        /// (powerPost dll) effect passes,Type : BasePostExSettings
         /// </summary>
-        static HashSet<Type> postSettingTypeSet = new HashSet<Type>();
-        //save and sort
+        public static HashSet<Type> postSettingTypeSet = new HashSet<Type>();
+
+        /// <summary>
+        /// (other dll) effect passes ,Type : BasePostExSettings
+        /// </summary>
+        public static HashSet<Type> externalSettingTypeSet = new HashSet<Type>();
+        static List<Type> externalSettingTypeList;
+        /// <summary>
+        /// for sort
+        /// </summary>
         public List<Type> postSettingTypeList = new List<Type>();
 
         // cache settingType and pass corresponded
@@ -64,13 +74,15 @@ namespace PowerPost
 
         PowerPostFeaturePass postPass;
 
-        void TryInitPostSettingTypeList(ref List<Type> list,ref HashSet<Type> set)
+        void TryInitPostSettingTypeList(ref List<Type> list, ref HashSet<Type> set)
         {
             // find all again,when change RenderScale,will trigger this
-            if (set.Count == 0) 
+            if (set.Count == 0)
             {
-                FindAllSettingTypes(set);
+                FindAllSettingTypes(ref set);
             }
+
+            AddExternalSettingTypes(ref set);
 
             if (list == default || list.Count == set.Count)
                 return;
@@ -78,8 +90,32 @@ namespace PowerPost
             list = set.ToList();
         }
 
+        private static void AddExternalSettingTypes(ref HashSet<Type> set)
+        {
+            // lazy to list
+            if (externalSettingTypeList == null)
+                externalSettingTypeList = externalSettingTypeSet.ToList();
 
-        public static void FindAllSettingTypes(HashSet<Type> set)
+            // add external item
+            foreach (var item in externalSettingTypeList)
+            {
+                set.Add(item);
+            }
+            // clear once
+            externalSettingTypeList.Clear();
+        }
+
+        /// <summary>
+        /// add T to postSettingTypeSet
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public static void AddEffectSetting<T>() where T : BasePostExSettings
+        {
+            externalSettingTypeSet.Add(typeof(T));
+            externalSettingTypeList = null;
+        }
+
+        public static void FindAllSettingTypes(ref HashSet<Type> set)
         {
             var settingTypes = ReflectionTools.GetTypesDerivedFrom<BasePostExSettings>();
 
@@ -89,28 +125,51 @@ namespace PowerPost
             }
         }
 
+        // keep 20, avoid list resize
+        List<BasePostExPass> listNeedWriteTarget = new List<BasePostExPass>(20);
+        List<BasePostExPass> listDontNeedWriteTarget = new List<BasePostExPass>(20);
+
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
             ref CameraData cameraData = ref renderingData.cameraData;
             if (!cameraData.postProcessEnabled)
                 return;
 
-            TryInitPostSettingTypeList(ref postSettingTypeList,ref postSettingTypeSet);
+            listNeedWriteTarget.Clear();
+            listDontNeedWriteTarget.Clear();
 
-            List<BasePostExPass> listNeedWriteTarget = new List<BasePostExPass>();
-            List<BasePostExPass> listDontNeedWriteTarget = new List<BasePostExPass>();
+            TryInitPostSettingTypeList(ref postSettingTypeList, ref postSettingTypeSet);
+
             SetupPasses(listNeedWriteTarget, listDontNeedWriteTarget);
 
             //add sorted list
-            listNeedWriteTarget.ForEach((item,id) => renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count())));
+            Action<BasePostExPass, int> addPassesWithTarget = (item, id) => renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count()));
+            listNeedWriteTarget.ForEach(addPassesWithTarget);
 
             // add unsorted
-            listDontNeedWriteTarget.ForEach(item=>renderer.EnqueuePass(item));
+            Action<BasePostExPass> addPasses = item => renderer.EnqueuePass(item);
+            listDontNeedWriteTarget.ForEach(addPasses);
+
         }
 
         private void SetupPasses(List<BasePostExPass> listNeedWriteTarget, List<BasePostExPass> listDontNeedWriteTarget)
         {
-            postSettingTypeList.ForEach(type => {
+            //postSettingTypeList.ForEach(AddPassTypes);
+            for (int i = 0; i < postSettingTypeList.Count; i++)
+            {
+                AddPassTypes(postSettingTypeList[i], i);
+
+                //if (i > 10)
+                //    break;
+            }
+
+            // sort
+            Comparison<BasePostExPass> sortPasses = (a, b) => a.order - b.order;
+            listNeedWriteTarget.Sort(sortPasses);
+
+            //----------- inner method
+            void AddPassTypes(Type type,int id)
+            {
                 var settings = GetPassSettings(type);
                 if (settings != default)
                 {
@@ -120,25 +179,30 @@ namespace PowerPost
                     else
                         listDontNeedWriteTarget.Add(pass);
                 }
-            });
-
-            listNeedWriteTarget.Sort((a, b) => a.order - b.order);
-
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            postSettingTypeSet.Clear();
+
+            if (postSettingTypeSet != null)
+                postSettingTypeSet.Clear();
+
+            if (externalSettingTypeSet != null)
+                externalSettingTypeSet.Clear();
+
+            if (externalSettingTypeList != null)
+                externalSettingTypeList.Clear();
         }
 
         public override void Create()
         {
-            postPass = new PowerPostFeaturePass();
-            postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
+            //postPass = new PowerPostFeaturePass();
+            //postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
-        public BasePostExSettings GetPassSettings(Type type,bool includeInactive=false)
+        public BasePostExSettings GetPassSettings(Type type, bool includeInactive = false)
         {
             if (type == default)
                 return default;
@@ -150,14 +214,25 @@ namespace PowerPost
             return settings;
         }
 
-        public BasePostExPass GetPassInstance(Type settingType,BasePostExSettings settings)
+        public BasePostExPass GetPassInstance(Type settingType, BasePostExSettings settings)
         {
-            if (!postPassDict.TryGetValue(settingType, out var pass))
+
+            return DictionaryTools.Get(postPassDict, settingType, CreateInstance);
+
+            //if (!postPassDict.TryGetValue(settingType, out var pass))
+            //{
+            //    postPassDict[settingType] = pass = settings.CreateNewInstance();
+            //    pass.order = settings.Order;
+            //}
+            //return postPassDict[settingType];
+
+            //---------------
+            BasePostExPass CreateInstance(Type settingType)
             {
-                postPassDict[settingType] = pass = settings.CreateNewInstance();
+                var pass = settings.CreateNewInstance();
                 pass.order = settings.Order;
+                return pass;
             }
-            return postPassDict[settingType];
         }
     }
 

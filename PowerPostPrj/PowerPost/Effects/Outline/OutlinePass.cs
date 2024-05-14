@@ -27,26 +27,21 @@ namespace PowerPost {
                 SetupTextures(cmd, cam, settings);
 
                 cmd.SetRenderTarget(_DepthTex);
-                context.ExecuteCommandBuffer(cmd);
+                cmd.ClearRenderTarget(true, false, Color.clear);
+                cmd.Execute(ref context);
+
                 GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, null);
 
                 cmd.SetRenderTarget(ColorTarget);
-                context.ExecuteCommandBuffer(cmd);
+                cmd.Execute(ref context);
             }
             else
             {
-                cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIds._CameraDepthTexture);
+                cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIdentifier._CameraDepthTexture);
             }
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
-            if(layer > 0)
-                ReleaseTextures(cmd);
-        }
-
-        private void ReleaseTextures(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_DepthTex);
         }
 
         private void SetupTextures(CommandBuffer cmd,Camera cam,OutlineSettings settings)
