@@ -143,31 +143,43 @@ namespace PowerPost
             SetupPasses(listNeedWriteTarget, listDontNeedWriteTarget);
 
             //add sorted list
-            Action<BasePostExPass, int> addPassesWithTarget = (item, id) => renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count()));
-            listNeedWriteTarget.ForEach(addPassesWithTarget);
+            for (int i = 0; i < listNeedWriteTarget.Count; i++)
+            {
+                var item = listNeedWriteTarget[i];
+                AddPassesWithTarget(item, i);
+            }
 
             // add unsorted
-            Action<BasePostExPass> addPasses = item => renderer.EnqueuePass(item);
-            listDontNeedWriteTarget.ForEach(addPasses);
+            for (int i = 0; i < listDontNeedWriteTarget.Count; i++)
+            {
+                var item = listDontNeedWriteTarget[i];
+                AddPasses(item);
+            }
 
+            //============ inner methods
+            void AddPassesWithTarget(BasePostExPass item,int id)
+            {
+                renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count()));
+            }
+
+            void AddPasses(BasePostExPass item)
+            {
+                renderer.EnqueuePass(item);
+            }
         }
 
         private void SetupPasses(List<BasePostExPass> listNeedWriteTarget, List<BasePostExPass> listDontNeedWriteTarget)
         {
-            //postSettingTypeList.ForEach(AddPassTypes);
             for (int i = 0; i < postSettingTypeList.Count; i++)
             {
                 AddPassTypes(postSettingTypeList[i], i);
-
-                //if (i > 10)
-                //    break;
             }
 
             // sort
             Comparison<BasePostExPass> sortPasses = (a, b) => a.order - b.order;
             listNeedWriteTarget.Sort(sortPasses);
 
-            //----------- inner method
+            //----------- inner methods
             void AddPassTypes(Type type,int id)
             {
                 var settings = GetPassSettings(type);
