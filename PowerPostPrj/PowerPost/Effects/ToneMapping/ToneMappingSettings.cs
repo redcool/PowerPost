@@ -45,10 +45,10 @@ namespace PowerPost
             pass.renderPassEvent = UnityEngine.Rendering.Universal.RenderPassEvent.BeforeRenderingPostProcessing;
             return pass;
         }
-
+        
         public override bool IsActive()
         {
-            return mode != Mode.None;
+            return mode.value != Mode.None;
         }
 
         public override int Order => int.MaxValue;
@@ -57,7 +57,7 @@ namespace PowerPost
     [Serializable]
     public class ToneMappingModeParameter : VolumeParameter<ToneMappingSettings.Mode>
     {
-        public ToneMappingModeParameter(ToneMappingSettings.Mode mode):base(mode,false)
+        public ToneMappingModeParameter(ToneMappingSettings.Mode mode, bool overrideState=false) :base(mode,overrideState)
         {
         }
     }
