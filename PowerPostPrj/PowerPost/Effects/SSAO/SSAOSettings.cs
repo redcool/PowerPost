@@ -15,7 +15,7 @@ namespace PowerPost {
         public BoolParameter downSample = new BoolParameter(true);
         [Header("Samples")]
         public ClampedIntParameter sampleCount = new ClampedIntParameter(1, 1, 5);
-        public ColorParameter aoColor = new ColorParameter(Color.black);
+        public ColorParameter aoColor = new ColorParameter(Color.black,true,false,false);
 
         public override BasePostExPass CreateNewInstance()
         {

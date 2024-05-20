@@ -56,7 +56,7 @@ float4 frag_composition(v2f i) : SV_Target
     
     float4 color = tex2D(_MainTex, i.uv);
     // color.rgb *= 1 - EncodeAO(ao);
-    color.rgb = lerp(color.rgb,_AOColor,ao);
+    color.rgb = lerp(color.rgb,color.rgb*_AOColor,ao);
     return color;
 }
 
