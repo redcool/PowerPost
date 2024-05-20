@@ -61,16 +61,17 @@ namespace PowerPost
         {
             get
             {
-                var urpAsset = UniversalRenderPipeline.asset;
-#if UNITY_2022_1_OR_NEWER
-                return Renderer.cameraColorTargetHandle;
-#else
-                return urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
-#endif
+                return Renderer.cameraDepthTargetHandle;
+//#if UNITY_2022_1_OR_NEWER
+//                return Renderer.cameraColorTargetHandle;
+//#else
+//                var urpAsset = UniversalRenderPipeline.asset;
+//                return urpAsset.supportsCameraDepthTexture ? Renderer.cameraDepthTarget : Renderer.cameraColorTarget;
+//#endif
             }
         }
 
-        public RTHandle ColorTarget => Renderer.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
+        public RTHandle ColorTarget => Renderer.cameraColorTargetHandle;
 
 
         public BasePostExPass InitStatesForWrtieCameraTarget(int id, int count)

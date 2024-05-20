@@ -44,7 +44,10 @@ Shader "Hidden/PowerPost/SimpleDOF"
             {
                 float4 col = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.texcoord);
      
-                float4 blurCol = SampleGaussian(_BlurRT,sampler_BlurRT,_BlurRT_TexelSize.xy * _BlurSize,i.texcoord);
+                // float4 blurCol = SampleGaussian(_BlurRT,sampler_BlurRT,_BlurRT_TexelSize.xy * _BlurSize,i.texcoord);
+                half4 blurCol = BoxBlur(_BlurRT,sampler_BlurRT,i.texcoord,_BlurRT_TexelSize.xy*_BlurSize * half2(1,0),4);
+                blurCol += BoxBlur(_BlurRT,sampler_BlurRT,i.texcoord,_BlurRT_TexelSize.xy *_BlurSize* half2(0,1),4);
+                blurCol *= 0.5;
 
                 float depth = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,i.texcoord).r;
                 depth = Linear01Depth(depth,_ZBufferParams);
