@@ -13,6 +13,7 @@ namespace PowerPost {
 
         public ColorParameter outlineColor = new ColorParameter(Color.white);
         public ClampedFloatParameter outlineWidth = new ClampedFloatParameter(1, 0.1f, 3f);
+        public ClampedFloatParameter smoothness = new ClampedFloatParameter(1, 0.1f, 5);
 
         public override BasePostExPass CreateNewInstance()
         {

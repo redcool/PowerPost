@@ -18,6 +18,7 @@ namespace PowerPost {
             var mat = GetTargetMaterial("Hidden/PowerPost/Outline");
             mat.SetFloat("_OutlineWidth", settings.outlineWidth.value);
             mat.SetColor("_OutlineColor", settings.outlineColor.value);
+            mat.SetFloat("_Smoothness",settings.smoothness.value);
 
             var cam = renderingData.cameraData.camera;
 

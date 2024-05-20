@@ -24,6 +24,7 @@ Shader "Hidden/PowerPost/Outline"
             CBUFFER_START(UnityPerMaterial)
             half _OutlineWidth;
             half4 _OutlineColor;
+            half _Smoothness;
             CBUFFER_END
 
             half4 frag (VaryingsDefault i) : SV_Target
@@ -35,7 +36,9 @@ Shader "Hidden/PowerPost/Outline"
 
                 float depth = Linear01Depth(SAMPLE_TEXTURE2D(_DepthTex,sampler_DepthTex, depthUV).x,_ZBufferParams);
                 float depthDelta = CalcDepthDeltaAround(_DepthTex,sampler_DepthTex,depth,depthUV,_OutlineWidth * _DepthTex_TexelSize.xy);
-                mainTex.xyz = lerp(mainTex,_OutlineColor,smoothstep(0.1,0.2,depthDelta)).xyz;
+                // float depthDelta = fwidth(depth);
+                
+                mainTex.xyz = lerp(mainTex,_OutlineColor,smoothstep(0,_Smoothness,depthDelta)).xyz;
                 return mainTex;
             }
             ENDHLSL

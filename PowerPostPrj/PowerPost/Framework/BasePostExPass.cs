@@ -138,9 +138,9 @@ namespace PowerPost
                 var cb = RTHandles.Alloc(ShaderPropertyIds._CameraColorAttachmentB);
                 var curTarget = r.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
 #else
-                var ca = r.GetRTHandle(URPRTHandleNames._CameraColorAttachmentA);
-                var cb = r.GetRTHandle(URPRTHandleNames._CameraColorAttachmentB);
-                var curTarget = r.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
+                var ca = r.GetCameraColorAttachmentA();
+                var cb = r.GetCameraColorAttachmentB();
+                var curTarget = r.GetActiveCameraColorAttachment();
 #endif
 
                 sourceTex = ca;
