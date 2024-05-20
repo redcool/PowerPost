@@ -61,11 +61,10 @@ float3 PickSamplePoint(float2 uv, float index)
 //
 // Distance-based AO estimator based on Morgan 2011 http://goo.gl/2iz3P
 //
-half4 frag_ao(v2f i) : SV_Target
+float4 frag_ao(v2f i) : SV_Target
 {
     float2 uv = i.uvAlt;
     float2 uv01 = i.uv01;
-
     // Parameters used in coordinate conversion
     float3x3 proj = (float3x3)unity_CameraProjection;
     float2 p11_22 = float2(unity_CameraProjection._11, unity_CameraProjection._22);
@@ -74,6 +73,7 @@ half4 frag_ao(v2f i) : SV_Target
     float3 norm_o;
     // float depth_o = SampleDepthNormal(uv, norm_o);
     float depth_o = SampleDepth(uv);
+
 
 #if defined(SOURCE_DEPTHNORMALS)
     // Offset the depth value to avoid precision error.
@@ -122,11 +122,9 @@ half4 frag_ao(v2f i) : SV_Target
         float a2 = dot(v_s2, v_s2) + kEpsilon;
         ao += a1 / a2;
     }
-
     ao *= _Radius; // intensity normalization
 
     // Apply other parameters.
     ao = pow(ao * _Intensity / _SampleCount, kContrast);
-
     return PackAONormal(ao, norm_o);
 }

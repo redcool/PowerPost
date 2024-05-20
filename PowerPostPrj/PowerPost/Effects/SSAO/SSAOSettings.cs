@@ -11,9 +11,12 @@ namespace PowerPost {
     {
         public ClampedFloatParameter intensity = new ClampedFloatParameter(0, 0f, 50f);
         public ClampedFloatParameter radius = new ClampedFloatParameter(0.1f, 0.00001f, 0.2f);
+        
         public BoolParameter downSample = new BoolParameter(true);
         [Header("Samples")]
-        public ClampedIntParameter sampleCount = new ClampedIntParameter(1, 1, 40);
+        public ClampedIntParameter sampleCount = new ClampedIntParameter(1, 1, 5);
+        public ColorParameter aoColor = new ColorParameter(Color.black);
+
         public override BasePostExPass CreateNewInstance()
         {
             return new SSAOPass();

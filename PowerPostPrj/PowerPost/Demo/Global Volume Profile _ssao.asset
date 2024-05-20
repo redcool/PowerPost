@@ -26,7 +26,10 @@ MonoBehaviour:
     m_Value: {r: 0.8584906, g: 0.0040494935, b: 0.0040494935, a: 1}
   outlineWidth:
     m_OverrideState: 1
-    m_Value: 2.1
+    m_Value: 2.42
+  smoothness:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-8966379184359789282
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -42,16 +45,16 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 1.17
+    m_Value: 12.8
   radius:
     m_OverrideState: 1
-    m_Value: 0.092
+    m_Value: 0.074
   downSample:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   sampleCount:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 5
 --- !u!114 &-5740629127227192254
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -66,13 +69,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   glitchHorizontalIntensity:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0.067
   scanlineJitter:
     m_OverrideState: 1
     m_Value: 0
   jitterBlockSize:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   snowFlakeAmplitude:
     m_OverrideState: 1
@@ -125,6 +128,92 @@ MonoBehaviour:
   roundness:
     m_OverrideState: 1
     m_Value: 1
+  radialTexOn:
+    m_OverrideState: 0
+    m_Value: 0
+  radialTex:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  radialScale:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1}
+  minRadialIntensity:
+    m_OverrideState: 0
+    m_Value: 0
+  maxRadialIntensity:
+    m_OverrideState: 0
+    m_Value: 0.2
+  radialColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  noiseMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  noiseMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  noiseMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  noiseMapScale:
+    m_OverrideState: 0
+    m_Value: 1
+  attenMapOn:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  attenMapST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  attenMap2On:
+    m_OverrideState: 0
+    m_Value: 0
+  attenMap2:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  attenMap2ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  dissolveRate:
+    m_OverrideState: 0
+    m_Value: 0
+  isGrayScale:
+    m_OverrideState: 0
+    m_Value: 0
+  minGray:
+    m_OverrideState: 0
+    m_Value: 0.1
+  maxGray:
+    m_OverrideState: 0
+    m_Value: 0.2
+  minColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  maxColor:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  isBaseLineOn:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMap:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  baseLineMap_ST:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 0, w: 0}
+  rotateRate:
+    m_OverrideState: 0
+    m_Value: 0
+  baseLineMapIntensity:
+    m_OverrideState: 0
+    m_Value: 0.5
 --- !u!114 &-3475831526640286278
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -146,10 +235,10 @@ MonoBehaviour:
     m_Value: 4
   threshold:
     m_OverrideState: 1
-    m_Value: 1.04
+    m_Value: 1.18
   softThreshold:
     m_OverrideState: 1
-    m_Value: 0.417
+    m_Value: 0.209
   bloomColor:
     m_OverrideState: 1
     m_Value: {r: 1, g: 0, b: 0, a: 1}
@@ -227,17 +316,20 @@ MonoBehaviour:
   m_Name: SimpleDOFSettings
   m_EditorClassIdentifier: 
   active: 0
+  targetTag:
+    m_OverrideState: 1
+    m_Value: 
   distance:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0.464
   depthRange:
-    m_OverrideState: 0
-    m_Value: 0.05
+    m_OverrideState: 1
+    m_Value: 0.268
   blurSize:
-    m_OverrideState: 0
-    m_Value: 1.1
+    m_OverrideState: 1
+    m_Value: 3.35
   debugMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
 --- !u!114 &8595306529100297335
 MonoBehaviour:

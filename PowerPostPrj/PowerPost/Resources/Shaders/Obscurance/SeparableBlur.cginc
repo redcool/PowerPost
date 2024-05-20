@@ -19,18 +19,18 @@ half4 frag_blur(v2f i) : SV_Target
 
     // High quality 7-tap Gaussian with adaptive sampling
 
-    fixed4 p0  = tex2D(_MainTex, i.uv);
-    fixed4 p1a = tex2D(_MainTex, i.uv - delta);
-    fixed4 p1b = tex2D(_MainTex, i.uv + delta);
-    fixed4 p2a = tex2D(_MainTex, i.uv - delta * 2);
-    fixed4 p2b = tex2D(_MainTex, i.uv + delta * 2);
-    fixed4 p3a = tex2D(_MainTex, i.uv - delta * 3.2307692308);
-    fixed4 p3b = tex2D(_MainTex, i.uv + delta * 3.2307692308);
+    half4 p0  = tex2D(_MainTex, i.uv);
+    half4 p1a = tex2D(_MainTex, i.uv - delta);
+    half4 p1b = tex2D(_MainTex, i.uv + delta);
+    half4 p2a = tex2D(_MainTex, i.uv - delta * 2);
+    half4 p2b = tex2D(_MainTex, i.uv + delta * 2);
+    half4 p3a = tex2D(_MainTex, i.uv - delta * 3.2307692308);
+    half4 p3b = tex2D(_MainTex, i.uv + delta * 3.2307692308);
 
 #if defined(BLUR_SAMPLE_CENTER_NORMAL)
-    fixed3 n0 = SampleNormal(i.uv);
+    half3 n0 = SampleNormal(i.uv);
 #else
-    fixed3 n0 = GetPackedNormal(p0);
+    half3 n0 = GetPackedNormal(p0);
 #endif
 
     half w0 = 0.37004405286;
@@ -56,16 +56,16 @@ half4 frag_blur(v2f i) : SV_Target
 
     // Fater 5-tap Gaussian with linear sampling
 
-    fixed4 p0  = tex2D(_MainTex, i.uv);
-    fixed4 p1a = tex2D(_MainTex, i.uv - delta * 1.3846153846);
-    fixed4 p1b = tex2D(_MainTex, i.uv + delta * 1.3846153846);
-    fixed4 p2a = tex2D(_MainTex, i.uv - delta * 3.2307692308);
-    fixed4 p2b = tex2D(_MainTex, i.uv + delta * 3.2307692308);
+    half4 p0  = tex2D(_MainTex, i.uv);
+    half4 p1a = tex2D(_MainTex, i.uv - delta * 1.3846153846);
+    half4 p1b = tex2D(_MainTex, i.uv + delta * 1.3846153846);
+    half4 p2a = tex2D(_MainTex, i.uv - delta * 3.2307692308);
+    half4 p2b = tex2D(_MainTex, i.uv + delta * 3.2307692308);
 
 #if defined(BLUR_SAMPLE_CENTER_NORMAL)
-    fixed3 n0 = SampleNormal(i.uv);
+    half3 n0 = SampleNormal(i.uv);
 #else
-    fixed3 n0 = GetPackedNormal(p0);
+    half3 n0 = GetPackedNormal(p0);
 #endif
 
     half w0 = 0.2270270270;

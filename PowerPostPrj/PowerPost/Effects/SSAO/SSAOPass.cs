@@ -28,6 +28,7 @@ namespace PowerPost {
             mat.SetFloat(_Radius, settings.radius.value);
             mat.SetFloat(_Downsample, settings.downSample.value ? 0.5f : 1f);
             mat.SetInt(_SampleCount, settings.sampleCount.value);
+            mat.SetColor("_AOColor", settings.aoColor.value);
             
             InitTextures(cmd, cam, settings);
 
@@ -44,14 +45,6 @@ namespace PowerPost {
 
             //// 3 composite
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat, 6);
-
-            ReleaseTextures(cmd);
-        }
-
-        void ReleaseTextures(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_SSAOMask);
-            cmd.ReleaseTemporaryRT(_BlurTex);
         }
 
         void InitTextures(CommandBuffer cmd,Camera cam, SSAOSettings settings)
@@ -60,7 +53,7 @@ namespace PowerPost {
             var h = cam.pixelHeight >> (settings.downSample.value ? 1 : 0);
 
             cmd.GetTemporaryRT(_SSAOMask, w, h, 0, FilterMode.Bilinear, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
-            cmd.GetTemporaryRT(_BlurTex, cam.pixelWidth>>1, cam.pixelHeight>>1, 0,FilterMode.Bilinear);
+            cmd.GetTemporaryRT(_BlurTex, w, h, 0,FilterMode.Bilinear, RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
         }
     }
 }

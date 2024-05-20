@@ -58,13 +58,13 @@ static const int _SampleCount = 3;
 // Source texture properties
 sampler2D _MainTex;
 float4 _MainTex_TexelSize;
-half4 _MainTex_ST;
+float4 _MainTex_ST;
 
 sampler2D _SSAOMask;
-half4 _SSAOMask_TexelSize;
+float4 _SSAOMask_TexelSize;
 
 // Other parameters
-half _Intensity;
+float _Intensity;
 float _Radius;
 float _Downsample;
 
@@ -110,12 +110,12 @@ float LinearizeEyeDepth(float z){
     return LinearizeDepth(z) * _ZBufferParams.z;
 }
 
-half4x4 unity_MatrixInvVP;
-half3 CalcWorldPos(float2 uv){
-    half d = LinearizeDepth(SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
-    d = LinearizeEyeDepth(d);
+float4x4 unity_MatrixInvVP;
+float3 CalcWorldPos(float2 uv){
+    float d = (SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, uv));
+    // d = LinearizeEyeDepth(d);
 
-    half4 p = half4(uv,d,1);
+    float4 p = float4(uv*2-1,d,1);
     p = mul(unity_MatrixInvVP,p);
     return p.xyz/p.w;
 }
@@ -144,8 +144,8 @@ float3 SampleNormal(float2 uv)
     return norm;
 
 #elif defined(SOURCE_DEPTH)
-    half3 worldPos = CalcWorldPos(uv);
-    half3 n = cross(ddy(worldPos),ddx(worldPos));
+    float3 worldPos = CalcWorldPos(uv);
+    float3 n = cross(ddy(worldPos),ddx(worldPos));
     return n;
 
 #else
@@ -168,7 +168,7 @@ float SampleDepthNormal(float2 uv, out float3 normal)
 }
 
 // Normal vector comparer (for geometry-aware weighting)
-half CompareNormal(half3 d1, half3 d2)
+float CompareNormal(float3 d1, float3 d2)
 {
     return smoothstep(kGeometryCoeff, 1, dot(d1, d2));
 }
@@ -177,9 +177,9 @@ half CompareNormal(half3 d1, half3 d2)
 struct v2f
 {
     float4 pos : SV_POSITION;
-    half2 uv : TEXCOORD0;    // Screen space UV (supports stereo rendering)
-    half2 uv01 : TEXCOORD1;  // Original UV (from 0 to 1)
-    half2 uvAlt : TEXCOORD2; // Alternative UV (supports v-flip case)
+    float2 uv : TEXCOORD0;    // Screen space UV (supports stereo rendering)
+    float2 uv01 : TEXCOORD1;  // Original UV (from 0 to 1)
+    float2 uvAlt : TEXCOORD2; // Alternative UV (supports v-flip case)
 };
 
 struct appdata{
@@ -189,7 +189,7 @@ struct appdata{
 
 v2f vert(appdata v)
 {
-    half2 uvAlt = v.texcoord;
+    float2 uvAlt = v.texcoord;
 #if UNITY_UV_STARTS_AT_TOP
     if (_MainTex_TexelSize.y < 0.0) uvAlt.y = 1 - uvAlt.y;
 #endif

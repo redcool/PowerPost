@@ -8,30 +8,38 @@ namespace PowerPost
 {
     public static class CommandBufferEx
     {
-        
         static Mesh fullscreenQuad;
         static Mesh fullscreenTriangle;
+        /// <summary>
+        /// 
+        /// (-1,1)    (1,1)
+        /// 
+        /// (-1,-1)    (1,-1)
+        /// </summary>
         public static Mesh FullscreenQuad
         {
             get
             {
-                if (fullscreenQuad)
-                    return fullscreenQuad;
-
-                fullscreenQuad = new Mesh();
-                fullscreenQuad.vertices = new Vector3[] {
+                if (!fullscreenQuad)
+                {
+                    fullscreenQuad = new Mesh();
+                    
+                    fullscreenQuad.vertices = new Vector3[] {
                     new Vector3(-1,-1),
                     new Vector3(-1,1),
                     new Vector3(1,1),
                     new Vector3(1,-1),
-                };
-                fullscreenQuad.uv = new Vector2[] {
-                    new Vector2(0,1),
+                    };
+
+                    fullscreenQuad.uv = new Vector2[] {
                     new Vector2(0,0),
-                    new Vector2(1,0),
+                    new Vector2(0,1),
                     new Vector2(1,1),
-                };
-                fullscreenQuad.SetIndices(new[] { 0, 1, 2, 3 }, MeshTopology.Quads, 0);
+                    new Vector2(1,0),
+                    };
+
+                    fullscreenQuad.SetIndices(new[] { 0, 1, 2, 3 }, MeshTopology.Quads, 0);
+                }
                 return fullscreenQuad;
             }
         }

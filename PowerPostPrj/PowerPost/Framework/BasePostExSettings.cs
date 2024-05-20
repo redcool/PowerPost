@@ -17,7 +17,7 @@ namespace PowerPost
 
         public virtual bool IsTileCompatible() => true;
         /// <summary>
-        /// This pass dont need camera color target(_CameraColorAttachmentA,_CameraColorAttachmentB)
+        /// This pass dont need camera aoColor target(_CameraColorAttachmentA,_CameraColorAttachmentB)
         /// set false,when render a texture for later rendering
         /// </summary>
         /// <returns></returns>
