@@ -104,18 +104,26 @@ MonoBehaviour:
   radialTex:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   radialScale:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
-  radialLength:
+  minRadialIntensity:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
+  maxRadialIntensity:
+    m_OverrideState: 0
+    m_Value: 0.2
+  radialColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   noiseMapOn:
     m_OverrideState: 0
     m_Value: 0
   noiseMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   noiseMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -128,6 +136,7 @@ MonoBehaviour:
   attenMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -137,21 +146,22 @@ MonoBehaviour:
   attenMap2:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMap2ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
   dissolveRate:
     m_OverrideState: 0
     m_Value: 0
-  clipOn:
-    m_OverrideState: 0
-    m_Value: 0
   isGrayScale:
     m_OverrideState: 0
     m_Value: 0
-  grayScale:
+  minGray:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0.1
+  maxGray:
+    m_OverrideState: 0
+    m_Value: 0.2
   minColor:
     m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}
@@ -164,6 +174,7 @@ MonoBehaviour:
   baseLineMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   baseLineMap_ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -186,18 +197,21 @@ MonoBehaviour:
   m_Name: SimpleDOFSettings
   m_EditorClassIdentifier: 
   active: 1
+  targetTag:
+    m_OverrideState: 0
+    m_Value: Player
   distance:
     m_OverrideState: 1
-    m_Value: 0.275
+    m_Value: 0.083
   depthRange:
     m_OverrideState: 1
-    m_Value: 0.032
+    m_Value: 0
   blurSize:
     m_OverrideState: 1
-    m_Value: 5.04
+    m_Value: 2.57
   debugMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
 --- !u!114 &-2870057497563593717
 MonoBehaviour:
   m_ObjectHideFlags: 3

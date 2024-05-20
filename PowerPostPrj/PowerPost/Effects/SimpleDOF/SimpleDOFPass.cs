@@ -22,14 +22,29 @@
 
         public override string PassName => nameof(SimpleDOFPass);
 
-        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings,CommandBuffer cmd)
+        Transform tagTarget;
+
+        public override void OnExecute(ScriptableRenderContext context, ref RenderingData renderingData, SimpleDOFSettings settings, CommandBuffer cmd)
         {
             ref CameraData cameraData = ref renderingData.cameraData;
+            var camera = cameraData.camera;
+
+            var distance = settings.distance.value;
+
+            FindTagTarget(settings.targetTag.value);
+
+            if (tagTarget)
+            {
+                var dir = tagTarget.transform.position - cameraData.camera.transform.position;
+                if (Vector3.Dot(dir, camera.transform.forward) > 0)
+                    distance = dir.magnitude / camera.farClipPlane;
+            }
+
             Init(cmd, cameraData.cameraTargetDescriptor);
 
             var mat = GetTargetMaterial(SHADER_NAME);
 
-            mat.SetFloat(_Distance, settings.distance.value);
+            mat.SetFloat(_Distance, distance);
             mat.SetFloat(_BlurSize, settings.blurSize.value);
             mat.SetFloat(_DepthRange, settings.depthRange.value);
 
@@ -37,8 +52,26 @@
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
             mat.SetKeyword(ShaderPropertyIds._DEBUG, settings.debugMode.value);
+        }
 
-            Release(cmd);
+        private void FindTagTarget(string tag)
+        {
+            if (string.IsNullOrEmpty(tag))
+            {
+                tagTarget = null;
+                return;
+            }
+
+            var isNeedFindTarget = !tagTarget || (tagTarget && !tagTarget.CompareTag(tag));
+
+            if (isNeedFindTarget)
+            {
+                var go = GameObject.FindWithTag(tag);
+                if (go)
+                {
+                    tagTarget = go.transform;
+                }
+            };
         }
 
         void Init(CommandBuffer cmd, RenderTextureDescriptor rtDesc)
@@ -46,11 +79,6 @@
             var w = rtDesc.width >> 1;
             var h = rtDesc.height >> 1;
             cmd.GetTemporaryRT(_BlurRT, w, h, 16, FilterMode.Bilinear);
-        }
-
-        void Release(CommandBuffer cmd)
-        {
-            cmd.ReleaseTemporaryRT(_BlurRT);
         }
     }
 }

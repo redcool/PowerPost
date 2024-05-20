@@ -9,6 +9,9 @@ namespace PowerPost
     [Serializable, VolumeComponentMenu("PowerPostEx/SimpleDOF")]
     public class SimpleDOFSettings : BasePostExSettings
     {
+        [Tooltip("follow Tag target ,use distance when empty")]
+        public VolumeParameter<string> targetTag = new VolumeParameter<string>();
+
         [Tooltip("clear distance")]
         public ClampedFloatParameter distance = new ClampedFloatParameter(1, 0, 1);
         //public ClampedIntParameter downsample = new ClampedIntParameter(2, 1, 8);

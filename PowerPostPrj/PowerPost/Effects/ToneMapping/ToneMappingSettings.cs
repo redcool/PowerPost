@@ -21,7 +21,7 @@ namespace PowerPost
             ACESFitted = 7,
             GTTone = 8,
         }
-        public ToneMappingModeParameter mode = new ToneMappingModeParameter(Mode.None);
+        public VolumeParameter<Mode> mode = new VolumeParameter<Mode>();
 
         [Tooltip("Weight tone:")]
         public FloatParameter weight = new FloatParameter(1);
@@ -52,13 +52,5 @@ namespace PowerPost
         }
 
         public override int Order => int.MaxValue;
-    }
-
-    [Serializable]
-    public class ToneMappingModeParameter : VolumeParameter<ToneMappingSettings.Mode>
-    {
-        public ToneMappingModeParameter(ToneMappingSettings.Mode mode, bool overrideState=false) :base(mode,overrideState)
-        {
-        }
     }
 }

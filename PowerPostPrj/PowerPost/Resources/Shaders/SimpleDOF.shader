@@ -52,12 +52,12 @@ Shader "Hidden/PowerPost/SimpleDOF"
                 float depth = SAMPLE_TEXTURE2D(_CameraDepthTexture,sampler_CameraDepthTexture,i.texcoord).r;
                 depth = Linear01Depth(depth,_ZBufferParams);
 
-                float rate = abs(depth - _Distance)*5;
+                float rate = abs(depth - _Distance)*5;// about 2m
                 rate = saturate(max(rate-_DepthRange,0)); // flat center point to center line
                 rate = smoothstep(0.0001,0.1,rate);
 
                 #if defined(_DEBUG)
-                    blurCol *= float4(1,0,0,1);
+                    blurCol *= 0.1;
                 #endif
                 return lerp(col,blurCol,rate);
             }
