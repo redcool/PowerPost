@@ -71,11 +71,7 @@ namespace PowerPost
         }
 
         public RTHandle ColorTarget
-#if UNITY_2022_1_OR_NEWER
-            => Renderer.cameraColorTargetHandle;
-#else
-            => Renderer.cameraColorTarget.Convert();
-#endif
+            => Renderer.CameraColorTargetHandle();
 
         public BasePostExPass InitStatesForWrtieCameraTarget(int id, int count)
         {
