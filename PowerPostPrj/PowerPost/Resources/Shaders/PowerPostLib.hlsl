@@ -51,7 +51,7 @@ VaryingsDefault VertDefault(AttributesDefault input){
 const static float2 TRIANGLE_VERTEIES[3] = {-1,-1,-1,3,3,-1};
 const static float2 TRIANGLE_UV[3] = {0,0,0,2,2,0};
 
-VaryingsDefault VertDefault1(uint vid:SV_VertexID){
+VaryingsDefault VertFullscreenTriangle(uint vid:SV_VertexID){
     VaryingsDefault output;
     output.vertex = float4(TRIANGLE_VERTEIES[vid],0,1);
     output.texcoord = TRIANGLE_UV[vid];
