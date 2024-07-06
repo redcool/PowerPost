@@ -26,7 +26,7 @@ namespace PowerPost {
 
         public  static int tempTex = Shader.PropertyToID(nameof(tempTex));
 
-        private RenderTargetHandle tempRT;
+        private RTHandle tempRT;
 
         private Material outlineMat;
         private OutlineExtendSettings settings;
