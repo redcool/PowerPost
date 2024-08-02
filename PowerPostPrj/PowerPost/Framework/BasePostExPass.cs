@@ -54,7 +54,13 @@ namespace PowerPost
 
         public T GetSettings<T>() where T :BasePostExSettings
         {
-            return VolumeManager.instance.stack.GetComponent<T>();
+            var settings = VolumeManager.instance.stack.GetComponent<T>();
+
+            if (PowerPostFeature.FirstGlobalVolume && PowerPostFeature.FirstGlobalVolume.profile.TryGet(typeof(T), out T settingsOverride))
+            {
+                settings = settingsOverride;
+            }
+            return settings;
         }
 
         public RenderTargetIdentifier DepthTarget

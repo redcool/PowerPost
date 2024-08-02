@@ -69,10 +69,13 @@ namespace PowerPost
         /// </summary>
         public List<Type> postSettingTypeList = new List<Type>();
 
+        public string[] volumeLayerMasks = new[] { "Default" };
         // cache settingType and pass corresponded
         Dictionary<Type, BasePostExPass> postPassDict = new Dictionary<Type, BasePostExPass>();
 
         PowerPostFeaturePass postPass;
+
+        public static Volume FirstGlobalVolume { get; private set; }
 
         void TryInitPostSettingTypeList(ref List<Type> list, ref HashSet<Type> set)
         {
@@ -220,6 +223,14 @@ namespace PowerPost
                 return default;
 
             var settings = VolumeManager.instance.stack.GetComponent(type) as BasePostExSettings;
+
+            // check first volume profile's setting
+            var volume = PostProcessVolumeTools.GetFirstGlobalVolume(LayerMask.GetMask(volumeLayerMasks));
+            if (volume && volume.profile.TryGet(type, out BasePostExSettings settingsOverride))
+            {
+                settings = settingsOverride;
+            }
+
             if (settings == null || settings.IsActive() == includeInactive)
                 return default;
 
