@@ -47,20 +47,14 @@ namespace PowerPost
 
         public bool isNeedReleaseGlobal, isNeedInitGlobal;
 
+        /// <summary>
+        /// inject by PowerPostFFeature
+        /// </summary>
+        public BasePostExSettings settings;
+
         public BasePostExPass()
         {
             renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
-        }
-
-        public T GetSettings<T>() where T :BasePostExSettings
-        {
-            var settings = VolumeManager.instance.stack.GetComponent<T>();
-
-            if (PowerPostFeature.FirstGlobalVolume && PowerPostFeature.FirstGlobalVolume.profile.TryGet(typeof(T), out T settingsOverride))
-            {
-                settings = settingsOverride;
-            }
-            return settings;
         }
 
         public RenderTargetIdentifier DepthTarget
@@ -95,6 +89,8 @@ namespace PowerPost
     public abstract class BasePostExPass<T> : BasePostExPass where T : BasePostExSettings
     {
         Material material;
+
+
         public Material GetTargetMaterial(string shaderName)
         {
             if (!material)
@@ -109,7 +105,6 @@ namespace PowerPost
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            var settings = GetSettings<T>();
             if (settings == null || !settings.IsActive())
                 return;
 
@@ -124,7 +119,7 @@ namespace PowerPost
                 InitGlobal(cmd, ref cameraData);
             }
 
-            OnExecute(context, ref renderingData, settings, cmd);
+            OnExecute(context, ref renderingData, (T)settings, cmd);
 
             if (isNeedReleaseGlobal && settings.NeedWriteToTarget())
             {

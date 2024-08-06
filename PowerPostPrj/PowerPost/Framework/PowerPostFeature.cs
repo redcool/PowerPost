@@ -26,7 +26,7 @@ namespace PowerPost
             if (isShowSettingName && inst.postSettingTypeList != null)
             {
                 var list = inst.postSettingTypeList
-                    .Select(type => inst.GetPassSettings(type, true))
+                    .Select(type => PowerPostFeature.GetPassSettings(type, true,inst.volumeLayerMasks))
                     .Where(type => type != default)
                     .OrderBy(settings => settings.Order)
                     ;
@@ -189,6 +189,8 @@ namespace PowerPost
                 if (settings != default)
                 {
                     var pass = GetPassInstance(type, settings);
+                    pass.settings = settings;
+
                     if (settings.NeedWriteToTarget())
                         listNeedWriteTarget.Add(pass);
                     else
@@ -217,10 +219,13 @@ namespace PowerPost
             //postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
-        public BasePostExSettings GetPassSettings(Type type, bool includeInactive = false)
+        public static BasePostExSettings GetPassSettings(Type type, bool includeInactive = false, string[] volumeLayerMasks=default)
         {
             if (type == default)
                 return default;
+
+            if(volumeLayerMasks==null || volumeLayerMasks.Length==0)
+                volumeLayerMasks = new string[] { "Default"};
 
             var settings = VolumeManager.instance.stack.GetComponent(type) as BasePostExSettings;
 
@@ -239,15 +244,7 @@ namespace PowerPost
 
         public BasePostExPass GetPassInstance(Type settingType, BasePostExSettings settings)
         {
-
             return DictionaryTools.Get(postPassDict, settingType, CreateInstance);
-
-            //if (!postPassDict.TryGetValue(settingType, out var pass))
-            //{
-            //    postPassDict[settingType] = pass = settings.CreateNewInstance();
-            //    pass.order = settings.Order;
-            //}
-            //return postPassDict[settingType];
 
             //---------------
             BasePostExPass CreateInstance(Type settingType)
