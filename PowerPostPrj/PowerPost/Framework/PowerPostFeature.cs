@@ -26,7 +26,7 @@ namespace PowerPost
             if (isShowSettingName && inst.postSettingTypeList != null)
             {
                 var list = inst.postSettingTypeList
-                    .Select(type => PowerPostFeature.GetPassSettings(type, true,inst.volumeLayerMasks))
+                    .Select(type => PowerPostFeature.GetPassSettings(type, true, inst.volumeLayerMasks))
                     .Where(type => type != default)
                     .OrderBy(settings => settings.Order)
                     ;
@@ -160,7 +160,7 @@ namespace PowerPost
             }
 
             //============ inner methods
-            void AddPassesWithTarget(BasePostExPass item,int id)
+            void AddPassesWithTarget(BasePostExPass item, int id)
             {
                 renderer.EnqueuePass(item.InitStatesForWrtieCameraTarget(id, listNeedWriteTarget.Count()));
             }
@@ -181,9 +181,14 @@ namespace PowerPost
             // sort
             Comparison<BasePostExPass> sortPasses = (a, b) => a.order - b.order;
             listNeedWriteTarget.Sort(sortPasses);
+            // update pass's order,
+            for (int i = 0; i < listNeedWriteTarget.Count; i++)
+            {
+                listNeedWriteTarget[i].order = i;
+            }
 
             //----------- inner methods
-            void AddPassTypes(Type type,int id)
+            void AddPassTypes(Type type, int id)
             {
                 var settings = GetPassSettings(type);
                 if (settings != default)
@@ -219,13 +224,13 @@ namespace PowerPost
             //postPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         }
 
-        public static BasePostExSettings GetPassSettings(Type type, bool includeInactive = false, string[] volumeLayerMasks=default)
+        public static BasePostExSettings GetPassSettings(Type type, bool includeInactive = false, string[] volumeLayerMasks = default)
         {
             if (type == default)
                 return default;
 
-            if(volumeLayerMasks==null || volumeLayerMasks.Length==0)
-                volumeLayerMasks = new string[] { "Default"};
+            if (volumeLayerMasks == null || volumeLayerMasks.Length == 0)
+                volumeLayerMasks = new string[] { "Default" };
 
             var settings = VolumeManager.instance.stack.GetComponent(type) as BasePostExSettings;
 
@@ -235,8 +240,11 @@ namespace PowerPost
             {
                 settings = settingsOverride;
             }
-
-            if (settings == null || settings.IsActive() == includeInactive)
+            // check valid
+            var canSkip = settings == null || !settings.active;
+            if (!includeInactive)
+                canSkip = canSkip || !settings.IsActive();
+            if (canSkip)
                 return default;
 
             return settings;

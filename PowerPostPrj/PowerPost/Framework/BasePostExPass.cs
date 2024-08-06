@@ -34,9 +34,15 @@ namespace PowerPost
             }
         }
 
-        public RTHandle sourceTex, targetTex;
         /// <summary>
-        /// pass's order inject from PowerPostFeature.cs, used for sort
+        /// current soruceId,targetId,next post will change
+        /// </summary>
+        public RTHandle sourceTex, targetTex;
+
+        /// <summary>
+        /// pass's order inject from PowerPostFeature.cs
+        /// 1 used for sort
+        /// 2 used for change(AttachmentA,B)
         /// </summary>
         public int order;
 
@@ -137,21 +143,20 @@ namespace PowerPost
 #if UNITY_2020
                 var ca = RTHandles.Alloc(ShaderPropertyIds._CameraColorTexture);
                 var cb = RTHandles.Alloc(ShaderPropertyIds._CameraColorAttachmentB);
-                var curTarget = r.GetRTHandle(URPRTHandleNames.m_ActiveCameraColorAttachment);
 #else
                 var ca = r.GetCameraColorAttachmentA();
                 var cb = r.GetCameraColorAttachmentB();
-                var curTarget = r.GetActiveCameraColorAttachment();
 #endif
 
                 sourceTex = ca;
                 targetTex = cb;
 
-                if (curTarget == cb)
+                if (order % 2 == 1)
                 {
                     sourceTex = cb;
                     targetTex = ca;
                 }
+
             }
         }
 

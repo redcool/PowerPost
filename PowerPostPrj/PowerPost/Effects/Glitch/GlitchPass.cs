@@ -64,7 +64,7 @@ namespace PowerPost
 
             mat.SetInt(_StencilRef, layer > 0 ? stencilRef : 0);
 
-            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
+            //cmd.BlitColorDepth(sourceTex, targetTex, targetTex, DefaultBlitMaterial);
 
             cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
 
