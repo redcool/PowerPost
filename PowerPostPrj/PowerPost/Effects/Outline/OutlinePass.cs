@@ -23,26 +23,47 @@ namespace PowerPost {
             var cam = renderingData.cameraData.camera;
 
             var layer = settings.layer.value;
-            if (layer > 0)
-            {
+
+            var isCreateTex = layer > 0 || settings.downSamples.value > 0;
+            if (isCreateTex)
                 SetupTextures(cmd, cam, settings);
 
-                cmd.SetRenderTarget(_DepthTex);
-                cmd.ClearRenderTarget(true, false, Color.clear);
-                cmd.Execute(ref context);
 
-                GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, null);
+            if (layer > 0)
+            {
+                DrawLayeredRenderers(ref context, ref renderingData, cmd, layer);
+            }
+            else
+            {
+                BlitTargetDepthTex(settings, cmd);
+            }
 
-                cmd.SetRenderTarget(ColorTarget);
-                cmd.Execute(ref context);
+            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
+
+        }
+
+        private void BlitTargetDepthTex(OutlineSettings settings, CommandBuffer cmd)
+        {
+            if (settings.downSamples.value > 0)
+            {
+                cmd.BlitColorDepth(ShaderPropertyIdentifier._CameraDepthAttachment, _DepthTex, _DepthTex, DefaultBlitMaterial, 1);
             }
             else
             {
                 cmd.SetGlobalTexture(_DepthTex, ShaderPropertyIdentifier._CameraDepthTexture);
             }
+        }
 
-            cmd.BlitColorDepth(sourceTex, targetTex, targetTex, mat);
+        private void DrawLayeredRenderers(ref ScriptableRenderContext context, ref RenderingData renderingData, CommandBuffer cmd, LayerMask layer)
+        {
+            cmd.SetRenderTarget(_DepthTex);
+            cmd.ClearRenderTarget(true, false, Color.clear);
+            cmd.Execute(ref context);
 
+            GraphicsUtils.DrawRenderers(context, ref renderingData, cmd, layer, null);
+
+            cmd.SetRenderTarget(ColorTarget);
+            cmd.Execute(ref context);
         }
 
         private void SetupTextures(CommandBuffer cmd,Camera cam,OutlineSettings settings)
