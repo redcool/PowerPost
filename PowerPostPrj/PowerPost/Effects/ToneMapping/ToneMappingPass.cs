@@ -47,11 +47,11 @@
             var gradingLut = settings.colorGradingLut.value;
             if (gradingLut)
             {
-                cmd.SetGlobalVector(_ColorGradingLUTParams, new Vector4(1f/gradingLut.width, 1f/gradingLut.height, gradingLut.height-1));
+                mat.SetVector(_ColorGradingLUTParams, new Vector4(1f/gradingLut.width, 1f/gradingLut.height, gradingLut.height-1));
             }
-            cmd.SetGlobalTexture(_ColorGradingLUT,settings.colorGradingLut.value);
-            cmd.SetGlobalFloat(_UseColorGradingLUT, gradingLut ? 1 : 0);
-            cmd.SetGlobalFloat(_ColorGradingUseLogC, settings.colorGradingUseLogC.value ? 1 : 0);
+            mat.SetTexture(_ColorGradingLUT,settings.colorGradingLut.value);
+            mat.SetFloat(_UseColorGradingLUT, (settings.colorGradingLut.overrideState && gradingLut) ? 1 : 0);
+            mat.SetFloat(_ColorGradingUseLogC, settings.colorGradingUseLogC.value ? 1 : 0);
 
 
             cmd.BlitColorDepth(sourceTex,targetTex,targetTex, mat, 0);
