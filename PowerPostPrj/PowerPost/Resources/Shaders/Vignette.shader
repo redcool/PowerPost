@@ -32,7 +32,7 @@ Shader "Hidden/PowerPost/Vignette"
             {
                 half2 uv = (i.texcoord - _Center)*2 * half2(_Aspect,1) ;
                 // apply oval
-                uv /= _Oval*_Oval;
+                uv /= _Oval;
                 
                 half dist = length(uv) * _Intensity;
                 // border smoother
@@ -41,7 +41,9 @@ Shader "Hidden/PowerPost/Vignette"
                 half dist2 = dist * dist + 1;
                 half dist4 = dist2 * dist2;
                 half atten = 1.0/dist4;
+
                 // smoother oval during
+                atten *= smoothstep(0,1,abs(_Oval.x));
                 atten *= smoothstep(0,1,abs(_Oval.y));
                 
                 half3 attenColor = lerp(_VignetteColor,1,atten);
