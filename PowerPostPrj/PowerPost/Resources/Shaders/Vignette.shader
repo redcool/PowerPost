@@ -43,8 +43,8 @@ Shader "Hidden/PowerPost/Vignette"
                 half atten = 1.0/dist4;
 
                 // smoother oval during
-                atten *= smoothstep(0,1,abs(_Oval.x));
-                atten *= smoothstep(0,1,abs(_Oval.y));
+                float2 atten2 = smoothstep(0,1,abs(_Oval));
+                atten *= atten2.x * atten2.y;
                 
                 half3 attenColor = lerp(_VignetteColor,1,atten);
 
