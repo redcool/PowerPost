@@ -236,11 +236,13 @@ namespace PowerPost
 
             // check first volume profile's setting
             var volume = PostProcessVolumeTools.GetFirstGlobalVolume(LayerMask.GetMask(volumeLayerMasks));
-            var profile = volume.GetProfile();
-            if (volume && profile && profile.TryGet(type, out BasePostExSettings settingsOverride))
+
+            if (volume && volume.GetProfile() is VolumeProfile profile)
             {
-                settings = settingsOverride;
+                if(profile.TryGet(type, out BasePostExSettings settingsOverride))
+                    settings = settingsOverride;
             }
+
             // check valid
             var canSkip = settings == null || !settings.active;
             if (!includeInactive)
