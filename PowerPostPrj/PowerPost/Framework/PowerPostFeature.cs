@@ -237,7 +237,7 @@ namespace PowerPost
             // check first volume profile's setting
             var volume = PostProcessVolumeTools.GetFirstGlobalVolume(LayerMask.GetMask(volumeLayerMasks));
 
-            if (volume && volume.GetProfile() is VolumeProfile profile)
+            if (volume && volume.GetProfile() is VolumeProfile profile && profile)
             {
                 if(profile.TryGet(type, out BasePostExSettings settingsOverride))
                     settings = settingsOverride;
