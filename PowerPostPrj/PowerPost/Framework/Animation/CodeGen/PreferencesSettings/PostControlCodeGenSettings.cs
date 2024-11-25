@@ -14,8 +14,15 @@ namespace PowerUtilities
         string urpFolderPath = @"Packages/com.unity.render-pipelines.universal/Runtime/Overrides";
         Object folderObj;
 
+        const string helpBox =
+            @"Get post key frame codes,
+    when urp add new xxxParameter, need change [PowerPostKeyframeAnimGen/ConvertVolumeTypeName] conressponding type string
+";
+
         public override void DrawInspectorUI(PostControlCodeGenSettings inst)
         {
+            EditorGUITools.DrawScriptScope(serializedObject);
+            EditorGUILayout.HelpBox(helpBox,MessageType.Info);
 
             GUILayout.BeginVertical();
             EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("PowerPost"));
@@ -49,15 +56,27 @@ namespace PowerUtilities
             urpFolderPath = EditorGUILayout.TextArea(urpFolderPath,GUILayout.Height(36));
             GUILayout.EndHorizontal();
 
-            if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
+            EditorGUITools.BeginHorizontalBox(() =>
             {
-                if (!AssetDatabase.IsValidFolder(urpFolderPath))
-                    return;
+                if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
+                {
+                    if (!AssetDatabase.IsValidFolder(urpFolderPath))
+                        return;
 
-                var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                    var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                    PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
+                }
 
-                PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
-            }
+                if (GUILayout.Button(GUIContentEx.TempContent("Gen URP struct data", "generate urp post data structs ")))
+                {
+                    if (!AssetDatabase.IsValidFolder(urpFolderPath))
+                        return;
+
+                    var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                    PowerPostKeyframeAnimGen.GenCode_URPDataStructs(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
+                }
+            });
+
             EditorGUI.indentLevel--;
         }
 

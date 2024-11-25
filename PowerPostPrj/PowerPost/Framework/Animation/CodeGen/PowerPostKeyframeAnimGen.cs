@@ -53,6 +53,29 @@ namespace PowerUtilities
             AssetDatabaseTools.SaveRefresh();
         }
 
+        public static void GenCode_URPDataStructs(string outputFolderPath, TextAsset[] settingTextAssets)
+        {
+            var fieldsSB = new StringBuilder();
+
+            PathTools.CreateAbsFolderPath(outputFolderPath);
+
+            var allCode = new StringBuilder();
+            foreach (var textAsset in settingTextAssets)
+            {
+                AnalystCodeString(textAsset.text, fieldsSB, null, null);
+
+                var className = textAsset.name;
+                allCode.Append(string.Format(CODE_STRUCT, className, fieldsSB));
+                //break;
+                fieldsSB.Clear();
+
+            }
+            var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/URPPostDataStructs.cs";
+            File.WriteAllText(path, allCode.ToString());
+
+            AssetDatabaseTools.SaveRefresh();
+        }
+
         private static void OutputVolumeParameters()
         {
             var paramList = TypeCache.GetTypesDerivedFrom<VolumeParameter>();
@@ -87,8 +110,9 @@ namespace PowerUtilities
             if (typeName.Contains("Vector4")) return "Vector4";
 
             if (typeName.Contains("AnimationCurve")) return "AnimationCurve";
-
             if (typeName.Contains("ToneMappingMode")) return "ToneMappingSettings.Mode";
+
+            if (typeName.Contains("Downscale")) return "BloomDownscaleMode";
             return typeName;
         }
 
@@ -96,6 +120,7 @@ namespace PowerUtilities
         public static void AnalystCodeString(string codeText, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
             //public ClampedFloatParameter glitchHorizontalIntensity = new ClampedFloatParameter(0,0,1);
+            // public DownscaleParameter downscale = new DownscaleParameter(BloomDownscaleMode.Half);
             const string linePattern = @"(//\s*\w+\s*)*(\w+)Parameter (\w+) *= ";
             var items = Regex.Matches(codeText, linePattern);
             foreach (Match match in items)
@@ -104,17 +129,19 @@ namespace PowerUtilities
                 if (match.Groups[0].Value.Contains("//"))
                     continue;
 
-
                 var varType = match.Groups[2].Value;
                 var varName = match.Groups[3].Value;
 
-                fieldsSB.AppendLine($"public {ConvertVolumeTypeName(varType)} {varName};");
+                if(fieldsSB != null)
+                    fieldsSB.AppendLine($"public {ConvertVolumeTypeName(varType)} {varName};");
                 // setters
                 //settings.baseLineMapIntensity.value = baseLineMapIntensity;
-                setterSB.AppendLine($"settings.{varName}.value = {varName};");
+                if (setterSB != null)
+                    setterSB.AppendLine($"settings.{varName}.value = {varName};");
                 // getters
                 //rotateRate = settings.rotateRate.value;
-                getterSB.AppendLine($"{varName} = settings.{varName}.value;");
+                if (getterSB != null)
+                    getterSB.AppendLine($"{varName} = settings.{varName}.value;");
             }
         }
 
@@ -131,6 +158,25 @@ namespace PowerUtilities
             items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("*Settings", $"{asmdefDir}/PowerPost/Effects");
             return items;
         }
+
+        const string CODE_STRUCT = @"
+namespace PowerUtilities
+{{
+    using System;
+    using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.Universal;
+
+    [Serializable]
+    public struct {0}_Data
+    {{
+        // variables
+        {1}
+
+    }}
+}}
+";
+
         /**
         0 : className
         1 : fields
