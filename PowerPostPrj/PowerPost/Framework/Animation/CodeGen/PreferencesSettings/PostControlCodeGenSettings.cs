@@ -4,9 +4,7 @@ namespace PowerUtilities
     using System.Collections;
     using System.Collections.Generic;
     using UnityEditor;
-    using UnityEditor.Graphs;
     using UnityEngine;
-    using static UnityEditor.PlayerSettings;
 
     [CustomEditor(typeof(PostControlCodeGenSettings))]
     public class PostControlCodeGenSettingsEditor : PowerEditor<PostControlCodeGenSettings>
@@ -29,11 +27,12 @@ namespace PowerUtilities
             GUILayout.BeginVertical();
             EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("Code Template :"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.codeTemplateAsset)));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.volumeCompParamTypeAsset)));
 
             EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("PowerPost"));
             if (GUILayout.Button(GUIContentEx.TempContent("Gen PowerPost Control code", "generate power post control codes")))
             {
-                PowerPostKeyframeAnimGen.GenCode(inst.codeTemplateAsset.text);
+                PowerPostKeyframeAnimGen.GenCode(inst.codeTemplateAsset.text,inst.volumeCompParamTypeAsset.text);
             }
 
             // line
@@ -68,7 +67,7 @@ namespace PowerUtilities
                             return;
 
                         var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
-                        PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos, inst.codeTemplateAsset.text);
+                        PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos, inst.codeTemplateAsset.text,inst.volumeCompParamTypeAsset.text);
                     }
 
                     //if (GUILayout.Button(GUIContentEx.TempContent("Gen URP struct data", "generate urp post data structs ")))
@@ -99,8 +98,13 @@ namespace PowerUtilities
         3 : getters
         */
         [LoadAsset("PowerPostCodeTemplate.txt")]
+        [Tooltip("generate code from template file")]
         public TextAsset codeTemplateAsset;
 
+        [LoadAsset("VolumeComponentParamaterTypes.txt")]
+        [Tooltip("volument component parameter type mappping file")]
+        public TextAsset volumeCompParamTypeAsset;
+        
     }
 }
 #endif

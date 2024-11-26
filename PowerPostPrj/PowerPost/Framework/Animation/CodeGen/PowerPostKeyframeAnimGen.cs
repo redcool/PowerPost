@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,13 +18,18 @@ namespace PowerUtilities
             POWER_POST_SAVE_PATH = "Assets/PowerPostAnimCodeGen/",
             URP_POST_SAVE_PATH = "Assets/URPPostAnimCodeGen/";
 
+        // save precision types
+        static Dictionary<string, string> precisionTypeDict = new();
+        // save string match types
+        static Dictionary<string, string> matchTypeTypeDict = new();
+
 
         //[MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
         // look ProjectSettings/PostControlCodeGen
-        public static void GenCode(string codeTemplate)
+        public static void GenCode(string codeTemplate, string componentTypeInfo)
         {
             var settingTextAssets = GetPowerPostSettings();
-            GenCode(POWER_POST_SAVE_PATH, settingTextAssets, codeTemplate);
+            GenCode(POWER_POST_SAVE_PATH, settingTextAssets, codeTemplate, componentTypeInfo);
         }
 
 
@@ -31,8 +37,10 @@ namespace PowerUtilities
         /// generate post control save to outputFolderPath
         /// </summary>
         /// <param name="outputFolderPath"></param>
-        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets,string codeTemplate)
+        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets,string codeTemplate,string componentTypeInfo)
         {
+            SetupComponentTypeInfoDict(componentTypeInfo);
+
             var fieldsSB = new StringBuilder();
             var settersSB = new StringBuilder();
             var gettersSB = new StringBuilder();
@@ -53,6 +61,31 @@ namespace PowerUtilities
                 gettersSB.Clear();
             }
             AssetDatabaseTools.SaveRefresh();
+        }
+
+        private static void SetupComponentTypeInfoDict(string componentTypeInfo)
+        {
+            precisionTypeDict.Clear();
+            matchTypeTypeDict.Clear();
+
+            componentTypeInfo.ReadKeyValue(onHandleStrings: (kv) =>
+            {
+                if (kv.Length <= 1)
+                    return;
+
+                var k = kv[0];
+                var v = kv[1];
+                var isPrecisionType = (v.Contains(",p"));
+                if (isPrecisionType)
+                {
+                    v = v.SplitBy()[0];
+                    precisionTypeDict[k] = v;
+                }
+                else
+                {
+                    matchTypeTypeDict[k] = v;
+                }
+            });
         }
 
         public static void GenCode_URPDataStructs(string outputFolderPath, TextAsset[] settingTextAssets)
@@ -91,6 +124,14 @@ namespace PowerUtilities
 
         public static string ConvertVolumeTypeName(string typeName)
         {
+            // check precision dict
+            if (precisionTypeDict.TryGetValue(typeName, out var typeStr))
+                return typeStr;
+            //check match mapping dict
+            if(matchTypeTypeDict.TryFindByKey(k => typeName.Contains(k),out typeStr))
+                return typeStr;
+            return typeName;
+            /*
             // precision
             if (typeName == "NoInterpTexture") return "Texture";
             if (typeName == "TextureCurve") return "TextureCurve";
@@ -118,6 +159,7 @@ namespace PowerUtilities
 
             if (typeName.Contains("Downscale")) return "BloomDownscaleMode";
             return typeName;
+            */
         }
 
 

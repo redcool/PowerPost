@@ -1,0 +1,26 @@
+//precisionList,{key=type,precision}}
+    NoInterpTexture = Texture,p
+    TextureCurve = TextureCurve,p
+
+//mappingList
+    Float = float
+    Int = int
+    Bool = bool
+    LayerMask = LayerMask
+    Color = Color
+    Object = Object
+
+    Texture2D = Texture2D
+    Texture3D = Texture3D
+    Cubemap = Cubemap
+    RenderTexture = RenderTexture
+    Texture = Texture
+
+    Vector2 = Vector2
+    Vector3 = Vector3
+    Vector4 = Vector4
+
+    AnimationCurve = AnimationCurve
+    ToneMappingMode = ToneMappingSettings.Mode
+
+    Downscale = BloomDownscaleMode

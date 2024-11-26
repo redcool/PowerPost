@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 
 namespace PowerPost
 {
-    [ VolumeComponentMenu("PowerPostEx/RadialBlur")]
+    [Serializable, VolumeComponentMenu("PowerPostEx/RadialBlur")]
     public class RadialBlurSettings : BasePostExSettings
     {
         [Tooltip("径向模糊")]
