@@ -18,18 +18,20 @@ namespace PowerUtilities
             URP_POST_SAVE_PATH = "Assets/URPPostAnimCodeGen/";
 
 
-        [MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
-        public static void GenCode()
+        //[MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
+        // look ProjectSettings/PostControlCodeGen
+        public static void GenCode(string codeTemplate)
         {
             var settingTextAssets = GetPowerPostSettings();
-            GenCode(POWER_POST_SAVE_PATH, settingTextAssets);
+            GenCode(POWER_POST_SAVE_PATH, settingTextAssets, codeTemplate);
         }
+
 
         /// <summary>
         /// generate post control save to outputFolderPath
         /// </summary>
         /// <param name="outputFolderPath"></param>
-        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets)
+        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets,string codeTemplate)
         {
             var fieldsSB = new StringBuilder();
             var settersSB = new StringBuilder();
@@ -43,7 +45,7 @@ namespace PowerUtilities
 
                 var className = textAsset.name;
                 var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{className}Control.cs";
-                File.WriteAllText(path, string.Format(CODE_TEMPLATE, className, fieldsSB, settersSB, gettersSB));
+                File.WriteAllText(path, string.Format(codeTemplate, className, fieldsSB, settersSB, gettersSB));
 
                 //break;
                 fieldsSB.Clear();
@@ -55,6 +57,8 @@ namespace PowerUtilities
 
         public static void GenCode_URPDataStructs(string outputFolderPath, TextAsset[] settingTextAssets)
         {
+            var codeTemplate = AssetDatabaseTools.FindAssetPathAndLoad<TextAsset>(out _, "PowerPostCodeTemplate", ".txt").text;
+
             var fieldsSB = new StringBuilder();
 
             PathTools.CreateAbsFolderPath(outputFolderPath);
@@ -65,7 +69,7 @@ namespace PowerUtilities
                 AnalystCodeString(textAsset.text, fieldsSB, null, null);
 
                 var className = textAsset.name;
-                allCode.Append(string.Format(CODE_STRUCT, className, fieldsSB));
+                allCode.Append(string.Format(codeTemplate, className, fieldsSB));
                 //break;
                 fieldsSB.Clear();
 
@@ -97,7 +101,7 @@ namespace PowerUtilities
             if (typeName.Contains("Bool")) return "bool";
             if (typeName.Contains("LayerMask")) return "LayerMask";
             if (typeName.Contains("Color")) return "Color";
-            if (typeName.Contains("Object")) return "object";
+            if (typeName.Contains("Object")) return "Object";
 
             if (typeName.Contains("Texture2D")) return "Texture2D";
             if (typeName.Contains("Texture3D")) return "Texture3D";
@@ -137,7 +141,11 @@ namespace PowerUtilities
                 // setters
                 //settings.baseLineMapIntensity.value = baseLineMapIntensity;
                 if (setterSB != null)
+                {
+                    //settings.threshold.overrideState = threshold > 0;
+                    setterSB.AppendLine($"settings.{varName}.overrideState = settings.{varName}.value != default;");
                     setterSB.AppendLine($"settings.{varName}.value = {varName};");
+                }
                 // getters
                 //rotateRate = settings.rotateRate.value;
                 if (getterSB != null)
@@ -159,80 +167,6 @@ namespace PowerUtilities
             return items;
         }
 
-        const string CODE_STRUCT = @"
-namespace PowerUtilities
-{{
-    using System;
-    using UnityEngine;
-    using UnityEngine.Rendering;
-    using UnityEngine.Rendering.Universal;
-
-    [Serializable]
-    public struct {0}_Data
-    {{
-        // variables
-        {1}
-
-    }}
-}}
-";
-
-        /**
-        0 : className
-        1 : fields
-        2 : setters
-        3 : getters
-         */
-        const string CODE_TEMPLATE = @"namespace PowerUtilities
-{{
-    using PowerPost;
-    using UnityEngine;
-    using UnityEngine.Rendering;
-    using UnityEngine.Rendering.Universal;
-#if UNITY_EDITOR
-    using UnityEditor;
-
-    [CustomEditor(typeof({0}Control))]
-    public class {0}ControlEditor : Editor
-    {{
-        public override void OnInspectorGUI()
-        {{
-            base.OnInspectorGUI();
-            if (GUILayout.Button(""Record Vars""))
-            {{
-                var inst = target as {0}Control;
-                inst.RecordVars();
-            }}
-        }}
-    }}
-#endif
-    
-    [ExecuteInEditMode]
-    public class {0}Control : BaseSettingsControl<{0}>
-    {{
-        // variables
-        {1}
-
-        public override void UpdateVars()
-        {{
-            if (!settings)
-                return;
-            //settings.baseLineMapIntensity.value = baseLineMapIntensity;
-            {2}
-        }}
-
-        public override void RecordVars()
-        {{
-            base.RecordVars();
-            if (!settings)
-                return;
-            
-            //rotateRate = settings.rotateRate.value;
-            {3}
-        }}
-    }}
-}}
-";
     }
 }
 #endif

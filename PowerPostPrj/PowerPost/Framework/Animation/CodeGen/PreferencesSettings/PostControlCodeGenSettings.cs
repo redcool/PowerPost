@@ -21,14 +21,19 @@ namespace PowerUtilities
 
         public override void DrawInspectorUI(PostControlCodeGenSettings inst)
         {
+            serializedObject.Update();
+
             EditorGUITools.DrawScriptScope(serializedObject);
-            EditorGUILayout.HelpBox(helpBox,MessageType.Info);
+            EditorGUILayout.HelpBox(helpBox, MessageType.Info);
 
             GUILayout.BeginVertical();
+            EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("Code Template :"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.codeTemplateAsset)));
+
             EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("PowerPost"));
             if (GUILayout.Button(GUIContentEx.TempContent("Gen PowerPost Control code", "generate power post control codes")))
             {
-                PowerPostKeyframeAnimGen.GenCode();
+                PowerPostKeyframeAnimGen.GenCode(inst.codeTemplateAsset.text);
             }
 
             // line
@@ -36,47 +41,46 @@ namespace PowerUtilities
             var pos = EditorGUILayout.GetControlRect(GUILayout.Height(2));
             EditorGUITools.DrawColorLine(pos);
 
-            DrawURPPostGen();
+            DrawURPPostGen(inst);
             GUILayout.EndVertical();
+
+            serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawURPPostGen()
+        private void DrawURPPostGen(PostControlCodeGenSettings inst)
         {
             EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("URP post"));
 
             EditorGUI.indentLevel++;
-
-            //GUILayout.BeginHorizontal();
-            //EditorGUILayout.LabelField("folder:", EditorStylesEx.BoldLabel);
-            //folderObj = EditorGUILayout.ObjectField(folderObj,typeof(Object), false);
-            //GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("folder path:", EditorStylesEx.BoldLabel);
-            urpFolderPath = EditorGUILayout.TextArea(urpFolderPath,GUILayout.Height(36));
-            GUILayout.EndHorizontal();
-
-            EditorGUITools.BeginHorizontalBox(() =>
             {
-                if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
+                EditorGUITools.BeginHorizontalBox(() =>
                 {
-                    if (!AssetDatabase.IsValidFolder(urpFolderPath))
-                        return;
+                    EditorGUILayout.LabelField("folder path:", EditorStylesEx.BoldLabel);
+                    urpFolderPath = EditorGUILayout.TextArea(urpFolderPath, GUILayout.Height(36));
 
-                    var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
-                    PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
-                }
+                });
 
-                if (GUILayout.Button(GUIContentEx.TempContent("Gen URP struct data", "generate urp post data structs ")))
+                EditorGUITools.BeginHorizontalBox(() =>
                 {
-                    if (!AssetDatabase.IsValidFolder(urpFolderPath))
-                        return;
+                    if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
+                    {
+                        if (!AssetDatabase.IsValidFolder(urpFolderPath))
+                            return;
 
-                    var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
-                    PowerPostKeyframeAnimGen.GenCode_URPDataStructs(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
-                }
-            });
+                        var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                        PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos, inst.codeTemplateAsset.text);
+                    }
 
+                    //if (GUILayout.Button(GUIContentEx.TempContent("Gen URP struct data", "generate urp post data structs ")))
+                    //{
+                    //    if (!AssetDatabase.IsValidFolder(urpFolderPath))
+                    //        return;
+
+                    //    var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                    //    PowerPostKeyframeAnimGen.GenCode_URPDataStructs(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos);
+                    //}
+                });
+            }
             EditorGUI.indentLevel--;
         }
 
@@ -87,6 +91,15 @@ namespace PowerUtilities
     [SOAssetPath(nameof(PostControlCodeGenSettings))]
     public class PostControlCodeGenSettings : ScriptableObject
     {
+
+        /**
+        0 : className
+        1 : fields
+        2 : setters
+        3 : getters
+        */
+        [LoadAsset("PowerPostCodeTemplate.txt")]
+        public TextAsset codeTemplateAsset;
 
     }
 }

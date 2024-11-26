@@ -1,0 +1,49 @@
+namespace PowerUtilities
+{{
+    using PowerPost;
+    using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.Universal;
+#if UNITY_EDITOR
+    using UnityEditor;
+
+    [CustomEditor(typeof({0}Control))]
+    public class {0}ControlEditor : Editor
+    {{
+        public override void OnInspectorGUI()
+        {{
+            base.OnInspectorGUI();
+            if (GUILayout.Button("Record Vars"))
+            {{
+                var inst = target as {0}Control;
+                inst.RecordVars();
+            }}
+        }}
+    }}
+#endif
+    
+    [ExecuteInEditMode]
+    public class {0}Control : BaseSettingsControl<{0}>
+    {{
+        // variables
+        {1}
+
+        public override void UpdateVars()
+        {{
+            if (!settings)
+                return;
+            //settings.baseLineMapIntensity.value = baseLineMapIntensity;
+            {2}
+        }}
+
+        public override void RecordVars()
+        {{
+            base.RecordVars();
+            if (!settings)
+                return;
+            
+            //rotateRate = settings.rotateRate.value;
+            {3}
+        }}
+    }}
+}}

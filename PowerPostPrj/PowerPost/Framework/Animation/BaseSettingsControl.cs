@@ -15,6 +15,11 @@ namespace PowerUtilities
         float intervalTime = 1;
 
         public Volume postVolume;
+        
+        [Header("Temporary Mode")]
+        [Tooltip("Create a profile only save in memory, dont need save to disk.")]
+        public bool isTemporaryProfile;
+
         [Header("Volume Parameters")]
         public T settings;
         void Awake()
@@ -26,6 +31,9 @@ namespace PowerUtilities
         void OnEnable()
         {
             SetupSettings();
+
+            if(isTemporaryProfile)
+            SetupTemporarySettings();
 
             intervalTime = 1f / updateCount;
             InvokeRepeating(nameof(UpdateVars), 0, intervalTime);
@@ -55,6 +63,19 @@ namespace PowerUtilities
             if (postVolume && postVolume.profile)
             {
                 postVolume.profile.TryGet(out settings);
+            }
+        }
+
+        public void SetupTemporarySettings()
+        {
+            postVolume = gameObject.GetOrAddComponent<Volume>();
+            if (! postVolume.profile)
+            {
+                postVolume.profile = ScriptableObject.CreateInstance<VolumeProfile>();
+            }
+            if(! postVolume.profile.TryGet(out settings))
+            {
+                settings = postVolume.profile.Add<T>();
             }
         }
 
