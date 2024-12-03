@@ -1,0 +1,40 @@
+///
+/// Generated Code
+/// UI : ProjectSettings/PowerUtils/PostControlCodeGen
+/// paste this file to PowerUtilities\PowerUtilities\Timeline\Volume\Data\GenCode
+///
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+namespace PowerUtilities.Timeline
+{{
+    public partial class VolumeControlBehaviour
+    {{
+        // setting variables ,like public Test_Bloom_Data bloomData;
+
+        {0}
+
+        public void UpdateVolumeSettings()
+        {{
+            if (!clipVolume)
+                return;
+
+            // if(bloomData.isEnable)
+            //     VolumeDataTools.Update(clipVolume, bloomData);
+            {1}
+        }}
+
+        public void ReadSettingsFrom(VolumeProfile vp)
+        {{
+
+        }}
+
+    }}
+
+}}

@@ -52,7 +52,7 @@ namespace PowerUtilities
                 AnalystCodeString(textAsset.text, fieldsSB, settersSB, gettersSB);
 
                 var className = textAsset.name;
-                var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{className}Control.cs";
+                var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{className}_Control.cs";
                 File.WriteAllText(path, string.Format(codeTemplate, className, fieldsSB, settersSB, gettersSB));
 
                 //break;
@@ -68,7 +68,7 @@ namespace PowerUtilities
             precisionTypeDict.Clear();
             matchTypeTypeDict.Clear();
 
-            componentTypeInfo.ReadKeyValue(onHandleStrings: (kv) =>
+            componentTypeInfo.ReadKeyValue(onReadLineKeyValue: (kv) =>
             {
                 if (kv.Length <= 1)
                     return;
@@ -87,30 +87,68 @@ namespace PowerUtilities
                 }
             });
         }
-
-        public static void GenCode_URPDataStructs(string outputFolderPath, TextAsset[] settingTextAssets)
+        /// <summary>
+        /// gen struct data for VolumeControl(Timeline)
+        /// </summary>
+        /// <param name="outputFolderPath"></param>
+        /// <param name="settingTextAssets"></param>
+        /// <param name="codeTemplate"></param>
+        /// <param name="componentTypeInfo"></param>
+        public static void GenCode_VolumeKeyFrame(string outputFolderPath, TextAsset[] settingTextAssets, string codeTemplate, string componentTypeInfo,string volumeBehaviour_DataTemplate)
         {
-            var codeTemplate = AssetDatabaseTools.FindAssetPathAndLoad<TextAsset>(out _, "PowerPostCodeTemplate", ".txt").text;
+            SetupComponentTypeInfoDict(componentTypeInfo);
 
             var fieldsSB = new StringBuilder();
+            var settersSB = new StringBuilder();
+            var gettersSB = new StringBuilder();
 
             PathTools.CreateAbsFolderPath(outputFolderPath);
 
-            var allCode = new StringBuilder();
+            var classNameList = new List<string>();
+
+            var structDataCodeSB = new StringBuilder();
             foreach (var textAsset in settingTextAssets)
             {
-                AnalystCodeString(textAsset.text, fieldsSB, null, null);
+                AnalystCodeString(textAsset.text, fieldsSB, settersSB, gettersSB);
 
                 var className = textAsset.name;
-                allCode.Append(string.Format(codeTemplate, className, fieldsSB));
+                structDataCodeSB.Append(string.Format(codeTemplate, className, fieldsSB, settersSB,gettersSB));
                 //break;
                 fieldsSB.Clear();
+                settersSB.Clear();
+                gettersSB.Clear();
 
+                classNameList.Add(className);
             }
-            var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/URPPostDataStructs.cs";
-            File.WriteAllText(path, allCode.ToString());
+            //--- output URPPostDataStructs
+            //
+            var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/VolumeControl.cs";
+            File.WriteAllText(path, structDataCodeSB.ToString());
+
+            //--- output VolumeControLBehaviour_Data(partial)
+            //
+            GenVolumeDataUpdateCode(classNameList, fieldsSB, settersSB,gettersSB);
+
+            var volumeDataUpdateCodeStr = string.Format(volumeBehaviour_DataTemplate, fieldsSB, settersSB);
+            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/VolumeControlBehaviour_VolumeData.cs";
+            File.WriteAllText(path, volumeDataUpdateCodeStr);
 
             AssetDatabaseTools.SaveRefresh();
+        }
+
+        public static void GenVolumeDataUpdateCode(List<string> classNameList,StringBuilder fieldSB, StringBuilder settersSB, StringBuilder gettersSB)
+        {
+            foreach (var className in classNameList)
+            {
+                var dataClassName = $"{className}_Data";
+                if (fieldSB != null)
+                    fieldSB.AppendLine($"public {dataClassName} _{dataClassName};");
+                if (settersSB != null)
+                {
+                    settersSB.AppendLine($"if(_{dataClassName}.isEnable) \n" +
+                    $"  VolumeDataTools.Update(clipVolume, _{dataClassName});");
+                }
+            }
         }
 
         private static void OutputVolumeParameters()

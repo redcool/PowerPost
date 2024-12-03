@@ -1,0 +1,31 @@
+///
+/// Generated Code
+/// UI : ProjectSettings/PowerUtils/PostControlCodeGen
+///
+namespace PowerUtilities
+{{
+    using System;
+    using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.Universal;
+
+    [Serializable]
+    public struct {0}_Data : IvolumeData
+    {{
+        // variables
+        public bool isEnable;
+        {1}
+        public Type ComponentType => typeof({0});
+        public void UpdateSetting(VolumeComponent vc)
+        {{
+            var settings = ({0})vc;
+{2}
+        }}
+
+        public void RecordSetting(VolumeComponent vc)
+        {{
+            var settings = ({0})vc;
+{3}
+        }}
+    }}
+}}

@@ -1,8 +1,10 @@
-//precisionList,{key=type,precision}}
+//VolumeComponent's xxxParameter mapping unity type
+
+//precisionList,{key=type,precision}} need flags ",p"
     NoInterpTexture = Texture,p
     TextureCurve = TextureCurve,p
 
-//mappingList
+//mappingList,like XXXFloatParameter
     Float = float
     Int = int
     Bool = bool
