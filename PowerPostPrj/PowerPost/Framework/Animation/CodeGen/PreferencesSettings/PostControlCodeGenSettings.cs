@@ -27,22 +27,12 @@ namespace PowerUtilities
             GUILayout.BeginVertical();
             EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("Code Template :"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.codeTemplateAsset)));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.volumeCodeTemplateAsset)));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.volumeStructData_Template)));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.volumeBehaviour_DataTemplate)));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.volumeCompParamTypeAsset)));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PostControlCodeGenSettings.volumeControlMono_Template)));
 
-            EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("PowerPost"));
-            EditorGUITools.BeginHorizontalBox(() =>
-            {
-                if (GUILayout.Button(GUIContentEx.TempContent("Gen PowerPost Control code", "generate power post control codes")))
-                {
-                    PowerPostKeyframeAnimGen.GenCode(inst.codeTemplateAsset.text, inst.volumeCompParamTypeAsset.text);
-                }
-                if(GUILayout.Button(GUIContentEx.TempContent("Gen Struct Code","struct code for Timeline(VolueControl)")))
-                {
-
-                }
-            });
+            DrawPowerPostCodeGen(inst);
 
             // line
             EditorGUILayout.Space(20);
@@ -53,6 +43,33 @@ namespace PowerUtilities
             GUILayout.EndVertical();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private static void DrawPowerPostCodeGen(PostControlCodeGenSettings inst)
+        {
+            EditorGUITools.DrawTitleLabel(GUIContentEx.TempContent("PowerPost"));
+            EditorGUITools.BeginHorizontalBox(() =>
+            {
+                /** use struct data more convenient*/
+                //if (GUILayout.Button(GUIContentEx.TempContent("Gen PowerPost Control code", "generate power post control codes")))
+                //{
+                //    var settingTextAssets = PowerPostKeyframeAnimGen.GetPowerPostSettings();
+                //    PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.POWER_POST_SAVE_PATH, settingTextAssets, inst.codeTemplateAsset.text, inst.volumeCompParamTypeAsset.text);
+                //}
+                if (GUILayout.Button(GUIContentEx.TempContent("Gen PowerPost Volume Control(Mono & Timeline)", "generate code for PowerPost volumeControl(MonoBehavriour and Timeline)")))
+                {
+                    var monoTextAssets = PowerPostKeyframeAnimGen.GetPowerPostSettings();
+                    PowerPostKeyframeAnimGen.GenCode_VolumeKeyFrame(PowerPostKeyframeAnimGen.POWER_POST_SAVE_PATH, monoTextAssets,
+                    inst.volumeStructData_Template.text,
+                    inst.volumeCompParamTypeAsset.text,
+                    inst.volumeBehaviour_DataTemplate.text,
+                    inst.volumeControlMono_Template.text,
+                    "VolumeControl_PowerPost",
+                    "VolumeControlBehaviour_VolumeData_PowerPost",
+                    "VolumeControlMono_PowerPost"
+                    );
+                }
+            });
         }
 
         private void DrawURPPostGen(PostControlCodeGenSettings inst)
@@ -70,25 +87,27 @@ namespace PowerUtilities
 
                 EditorGUITools.BeginHorizontalBox(() =>
                 {
-                    if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Post Control code", "generate urp post control codes")))
+                    /** use struct data more convenient*/
+                    //if (GUILayout.Button(GUIContentEx.TempContent("Gen URP VolumeControl(MonoBehaviour)", "generate urp post control codes")))
+                    //{
+                    //    if (!AssetDatabase.IsValidFolder(urpFolderPath))
+                    //        return;
+
+                    //    var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                    //    PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos, inst.codeTemplateAsset.text, inst.volumeCompParamTypeAsset.text);
+                    //}
+
+                    if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Volume Control(Mono & Timeline)", "generate code for urp volumeControl(MonoBehavriour and Timeline)")))
                     {
                         if (!AssetDatabase.IsValidFolder(urpFolderPath))
                             return;
 
-                        var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
-                        PowerPostKeyframeAnimGen.GenCode(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos, inst.codeTemplateAsset.text,inst.volumeCompParamTypeAsset.text);
-                    }
-
-                    if (GUILayout.Button(GUIContentEx.TempContent("Gen URP Volume Control", "generate code for urp volumeControl(Timeline)")))
-                    {
-                        if (!AssetDatabase.IsValidFolder(urpFolderPath))
-                            return;
-
-                        var monos = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
-                        PowerPostKeyframeAnimGen.GenCode_VolumeKeyFrame(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monos,
-                            inst.volumeCodeTemplateAsset.text,
+                        var monoTextAssets = AssetDatabaseTools.FindAssetsPathAndLoad<TextAsset>(out _, "", ".cs", searchInFolders: new[] { urpFolderPath });
+                        PowerPostKeyframeAnimGen.GenCode_VolumeKeyFrame(PowerPostKeyframeAnimGen.URP_POST_SAVE_PATH, monoTextAssets,
+                            inst.volumeStructData_Template.text,
                             inst.volumeCompParamTypeAsset.text,
-                            inst.volumeBehaviour_DataTemplate.text
+                            inst.volumeBehaviour_DataTemplate.text,
+                            inst.volumeControlMono_Template.text
                             );
                     }
                 });
@@ -114,18 +133,22 @@ namespace PowerUtilities
         [Tooltip("generate code from template file")]
         public TextAsset codeTemplateAsset;
 
-        [LoadAsset("PowerPostVolumeCodeTemplate.txt")]
+        [LoadAsset("VolumeStructDataTemplate.txt")]
         [Tooltip("generate volume data code from template file")]
-        public TextAsset volumeCodeTemplateAsset;
+        public TextAsset volumeStructData_Template;
 
         [LoadAsset("PowerPostVolumeBehavriour_DataTemplate")]
-        [Tooltip("generate VolumeBehavriour update code from template file")]
+        [Tooltip("generate VolumeBehavriour update code from template file,timeline use")]
         public TextAsset volumeBehaviour_DataTemplate;
 
         [LoadAsset("VolumeComponentParamaterTypes.txt")]
         [Tooltip("volument component parameter type mappping file")]
         public TextAsset volumeCompParamTypeAsset;
         
+        [LoadAsset("VolumeControlMono_Template")]
+        [Tooltip("generate update code from template file,mono use")]
+        public TextAsset volumeControlMono_Template;
+
     }
 }
 #endif

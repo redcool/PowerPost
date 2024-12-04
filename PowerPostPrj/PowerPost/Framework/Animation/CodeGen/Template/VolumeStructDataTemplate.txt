@@ -4,6 +4,7 @@
 ///
 namespace PowerUtilities
 {{
+    using PowerPost;
     using System;
     using UnityEngine;
     using UnityEngine.Rendering;
@@ -19,6 +20,8 @@ namespace PowerUtilities
         public void UpdateSetting(VolumeComponent vc)
         {{
             var settings = ({0})vc;
+            settings.active = isEnable;
+            if(!isEnable) return;
 {2}
         }}
 

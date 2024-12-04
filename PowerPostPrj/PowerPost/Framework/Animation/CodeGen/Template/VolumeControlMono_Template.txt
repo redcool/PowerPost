@@ -1,0 +1,32 @@
+///
+/// Generated Code
+/// UI : ProjectSettings/PowerUtils/PostControlCodeGen
+///
+using PowerUtilities.Timeline;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.Rendering;
+
+namespace PowerUtilities
+{{
+    [ExecuteAlways]
+    public class {2} : MonoBehaviour
+    {{
+        // data fields
+        //public Bloom_Data _Bloom_Data;
+        {0}
+
+        private void Update()
+        {{
+            var clipVolume = gameObject.GetOrAddComponent<Volume>();
+
+            //data update
+            //VolumeDataTools.Update(clipVolume, _Bloom_Data);
+            {1}
+        }}
+    }}
+}}

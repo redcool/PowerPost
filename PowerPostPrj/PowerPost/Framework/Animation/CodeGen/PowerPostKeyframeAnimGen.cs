@@ -18,19 +18,13 @@ namespace PowerUtilities
             POWER_POST_SAVE_PATH = "Assets/PowerPostAnimCodeGen/",
             URP_POST_SAVE_PATH = "Assets/URPPostAnimCodeGen/";
 
-        // save precision types
-        static Dictionary<string, string> precisionTypeDict = new();
-        // save string match types
-        static Dictionary<string, string> matchTypeTypeDict = new();
-
-
         //[MenuItem(nameof(PowerUtilities) + "/PowerPost/Gen KeyFrame Mono")]
         // look ProjectSettings/PostControlCodeGen
-        public static void GenCode(string codeTemplate, string componentTypeInfo)
-        {
-            var settingTextAssets = GetPowerPostSettings();
-            GenCode(POWER_POST_SAVE_PATH, settingTextAssets, codeTemplate, componentTypeInfo);
-        }
+        //public static void GenCode(string codeTemplate, string componentTypeInfo)
+        //{
+        //    var settingTextAssets = GetPowerPostSettings();
+        //    GenCode(POWER_POST_SAVE_PATH, settingTextAssets, codeTemplate, componentTypeInfo);
+        //}
 
 
         /// <summary>
@@ -39,7 +33,7 @@ namespace PowerUtilities
         /// <param name="outputFolderPath"></param>
         public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets,string codeTemplate,string componentTypeInfo)
         {
-            SetupComponentTypeInfoDict(componentTypeInfo);
+            VolumeComponentTypeTools.SetupComponentTypeInfoDict(componentTypeInfo);
 
             var fieldsSB = new StringBuilder();
             var settersSB = new StringBuilder();
@@ -63,40 +57,24 @@ namespace PowerUtilities
             AssetDatabaseTools.SaveRefresh();
         }
 
-        private static void SetupComponentTypeInfoDict(string componentTypeInfo)
-        {
-            precisionTypeDict.Clear();
-            matchTypeTypeDict.Clear();
-
-            componentTypeInfo.ReadKeyValue(onReadLineKeyValue: (kv) =>
-            {
-                if (kv.Length <= 1)
-                    return;
-
-                var k = kv[0];
-                var v = kv[1];
-                var isPrecisionType = (v.Contains(",p"));
-                if (isPrecisionType)
-                {
-                    v = v.SplitBy()[0];
-                    precisionTypeDict[k] = v;
-                }
-                else
-                {
-                    matchTypeTypeDict[k] = v;
-                }
-            });
-        }
         /// <summary>
         /// gen struct data for VolumeControl(Timeline)
         /// </summary>
         /// <param name="outputFolderPath"></param>
         /// <param name="settingTextAssets"></param>
-        /// <param name="codeTemplate"></param>
+        /// <param name="structDataTemplate"></param>
         /// <param name="componentTypeInfo"></param>
-        public static void GenCode_VolumeKeyFrame(string outputFolderPath, TextAsset[] settingTextAssets, string codeTemplate, string componentTypeInfo,string volumeBehaviour_DataTemplate)
+        public static void GenCode_VolumeKeyFrame(string outputFolderPath, TextAsset[] settingTextAssets,
+            string structDataTemplate,
+            string componentTypeInfo,
+            string volumeBehaviour_DataTemplate,
+            string volumeControlMono_Template,
+            string structDataFileName= "VolumeControl",
+            string VolumeControlBehaviour_VolumeDataFileName= "VolumeControlBehaviour_VolumeData",
+            string VolumeControlMonoFileName= "VolumeControlMono"
+            )
         {
-            SetupComponentTypeInfoDict(componentTypeInfo);
+            VolumeComponentTypeTools.SetupComponentTypeInfoDict(componentTypeInfo);
 
             var fieldsSB = new StringBuilder();
             var settersSB = new StringBuilder();
@@ -112,7 +90,7 @@ namespace PowerUtilities
                 AnalystCodeString(textAsset.text, fieldsSB, settersSB, gettersSB);
 
                 var className = textAsset.name;
-                structDataCodeSB.Append(string.Format(codeTemplate, className, fieldsSB, settersSB,gettersSB));
+                structDataCodeSB.Append(string.Format(structDataTemplate, className, fieldsSB, settersSB,gettersSB));
                 //break;
                 fieldsSB.Clear();
                 settersSB.Clear();
@@ -122,7 +100,7 @@ namespace PowerUtilities
             }
             //--- output URPPostDataStructs
             //
-            var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/VolumeControl.cs";
+            var path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{structDataFileName}.cs";
             File.WriteAllText(path, structDataCodeSB.ToString());
 
             //--- output VolumeControLBehaviour_Data(partial)
@@ -130,8 +108,14 @@ namespace PowerUtilities
             GenVolumeDataUpdateCode(classNameList, fieldsSB, settersSB,gettersSB);
 
             var volumeDataUpdateCodeStr = string.Format(volumeBehaviour_DataTemplate, fieldsSB, settersSB);
-            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/VolumeControlBehaviour_VolumeData.cs";
+            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{VolumeControlBehaviour_VolumeDataFileName}.cs";
             File.WriteAllText(path, volumeDataUpdateCodeStr);
+
+            //--- output VolumeControlMono.cs
+            // 0: fields, 1: Update, 2 : className
+            var volumeControlMonoCodeStr = string.Format(volumeControlMono_Template,fieldsSB, settersSB, VolumeControlMonoFileName);
+            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{VolumeControlMonoFileName}.cs";
+            File.WriteAllText(path, volumeControlMonoCodeStr);
 
             AssetDatabaseTools.SaveRefresh();
         }
@@ -145,8 +129,9 @@ namespace PowerUtilities
                     fieldSB.AppendLine($"public {dataClassName} _{dataClassName};");
                 if (settersSB != null)
                 {
-                    settersSB.AppendLine($"if(_{dataClassName}.isEnable) \n" +
-                    $"  VolumeDataTools.Update(clipVolume, _{dataClassName});");
+                    //settersSB.AppendLine($"if(_{dataClassName}.isEnable) {{");
+                    settersSB.AppendLine($"  VolumeDataTools.Update(clipVolume, _{dataClassName});");
+                    //settersSB.AppendLine("}}");
                 }
             }
         }
@@ -160,45 +145,7 @@ namespace PowerUtilities
             Debug.Log(sb);
         }
 
-        public static string ConvertVolumeTypeName(string typeName)
-        {
-            // check precision dict
-            if (precisionTypeDict.TryGetValue(typeName, out var typeStr))
-                return typeStr;
-            //check match mapping dict
-            if(matchTypeTypeDict.TryFindByKey(k => typeName.Contains(k),out typeStr))
-                return typeStr;
-            return typeName;
-            /*
-            // precision
-            if (typeName == "NoInterpTexture") return "Texture";
-            if (typeName == "TextureCurve") return "TextureCurve";
 
-            // match 
-            if (typeName.Contains("Float")) return "float";
-            if (typeName.Contains("Int")) return "int";
-            if (typeName.Contains("Bool")) return "bool";
-            if (typeName.Contains("LayerMask")) return "LayerMask";
-            if (typeName.Contains("Color")) return "Color";
-            if (typeName.Contains("Object")) return "Object";
-
-            if (typeName.Contains("Texture2D")) return "Texture2D";
-            if (typeName.Contains("Texture3D")) return "Texture3D";
-            if (typeName.Contains("Cubemap")) return "Cubemap";
-            if (typeName.Contains("RenderTexture")) return "RenderTexture";
-            if (typeName.Contains("Texture")) return "Texture";
-
-            if (typeName.Contains("Vector2")) return "Vector2";
-            if (typeName.Contains("Vector3")) return "Vector3";
-            if (typeName.Contains("Vector4")) return "Vector4";
-
-            if (typeName.Contains("AnimationCurve")) return "AnimationCurve";
-            if (typeName.Contains("ToneMappingMode")) return "ToneMappingSettings.Mode";
-
-            if (typeName.Contains("Downscale")) return "BloomDownscaleMode";
-            return typeName;
-            */
-        }
 
 
         public static void AnalystCodeString(string codeText, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
@@ -217,7 +164,7 @@ namespace PowerUtilities
                 var varName = match.Groups[3].Value;
 
                 if(fieldsSB != null)
-                    fieldsSB.AppendLine($"public {ConvertVolumeTypeName(varType)} {varName};");
+                    fieldsSB.AppendLine($"public {VolumeComponentTypeTools.ConvertVolumeTypeName(varType)} {varName};");
                 // setters
                 //settings.baseLineMapIntensity.value = baseLineMapIntensity;
                 if (setterSB != null)
@@ -233,7 +180,7 @@ namespace PowerUtilities
             }
         }
 
-        private static TextAsset[] GetPowerPostSettings()
+        public static TextAsset[] GetPowerPostSettings()
         {
             var items = AssetDatabaseTools.FindAssetsInProject<TextAsset>("PowerPost");
             items = items.Where(item => item.name == "PowerPost").ToArray();
