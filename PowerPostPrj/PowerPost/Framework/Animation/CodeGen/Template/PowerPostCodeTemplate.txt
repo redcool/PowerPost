@@ -1,4 +1,4 @@
-///
+/// obsolete
 /// Generated Code
 /// UI : ProjectSettings/PowerUtils/PostControlCodeGen
 ///

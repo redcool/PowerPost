@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PowerUtilities.Timeline
 {
     [Serializable]
-    public partial class PowerPostVolumeControlBehaviour : VolumeControlBehaviour
+    public class PowerPostVolumeControlMixerBehaviour : VolumeControlMixerBehaviour
     {
     }
 }

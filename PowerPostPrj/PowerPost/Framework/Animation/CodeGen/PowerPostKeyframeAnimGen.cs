@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Object = UnityEngine.Object;
 
 namespace PowerUtilities
 {
@@ -31,7 +32,7 @@ namespace PowerUtilities
         /// generate post control save to outputFolderPath
         /// </summary>
         /// <param name="outputFolderPath"></param>
-        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets,string codeTemplate,string componentTypeInfo)
+        public static void GenCode(string outputFolderPath, TextAsset[] settingTextAssets, string codeTemplate, string componentTypeInfo)
         {
             VolumeComponentTypeTools.SetupComponentTypeInfoDict(componentTypeInfo);
 
@@ -69,9 +70,12 @@ namespace PowerUtilities
             string componentTypeInfo,
             string volumeBehaviour_DataTemplate,
             string volumeControlMono_Template,
-            string structDataFileName= "VolumeControl",
-            string VolumeControlBehaviour_VolumeDataFileName= "VolumeControlBehaviour_VolumeData",
-            string VolumeControlMonoFileName= "VolumeControlMono"
+            string structDataFileName = "VolumeControl",
+            string structDataFileNameSpaceAdd = "",
+            string volumeControlBehaviour_VolumeDataFileName = "VolumeControlBehaviour_VolumeData",
+            string volumeControlBehaviourClassName = "VolumeControlBehaviour",
+            string volumeControlMonoFileName = "VolumeControlMono"
+
             )
         {
             VolumeComponentTypeTools.SetupComponentTypeInfoDict(componentTypeInfo);
@@ -90,7 +94,7 @@ namespace PowerUtilities
                 AnalystCodeString(textAsset.text, fieldsSB, settersSB, gettersSB);
 
                 var className = textAsset.name;
-                structDataCodeSB.Append(string.Format(structDataTemplate, className, fieldsSB, settersSB,gettersSB));
+                structDataCodeSB.Append(string.Format(structDataTemplate, className, fieldsSB, settersSB, gettersSB, structDataFileNameSpaceAdd));
                 //break;
                 fieldsSB.Clear();
                 settersSB.Clear();
@@ -105,22 +109,25 @@ namespace PowerUtilities
 
             //--- output VolumeControLBehaviour_Data(partial)
             //
-            GenVolumeDataUpdateCode(classNameList, fieldsSB, settersSB,gettersSB);
+            GenVolumeDataUpdateCode(classNameList, fieldsSB, settersSB, gettersSB);
 
-            var volumeDataUpdateCodeStr = string.Format(volumeBehaviour_DataTemplate, fieldsSB, settersSB);
-            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{VolumeControlBehaviour_VolumeDataFileName}.cs";
+            var volumeDataUpdateCodeStr = string.Format(volumeBehaviour_DataTemplate, fieldsSB, settersSB, volumeControlBehaviourClassName);
+            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{volumeControlBehaviour_VolumeDataFileName}.cs";
             File.WriteAllText(path, volumeDataUpdateCodeStr);
 
             //--- output VolumeControlMono.cs
             // 0: fields, 1: Update, 2 : className
-            var volumeControlMonoCodeStr = string.Format(volumeControlMono_Template,fieldsSB, settersSB, VolumeControlMonoFileName);
-            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{VolumeControlMonoFileName}.cs";
+            var volumeControlMonoCodeStr = string.Format(volumeControlMono_Template, fieldsSB, settersSB, volumeControlMonoFileName);
+            path = $"{PathTools.GetAssetAbsPath(outputFolderPath)}/{volumeControlMonoFileName}.cs";
             File.WriteAllText(path, volumeControlMonoCodeStr);
 
             AssetDatabaseTools.SaveRefresh();
+
+            //  ping output path
+            EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(outputFolderPath));
         }
 
-        public static void GenVolumeDataUpdateCode(List<string> classNameList,StringBuilder fieldSB, StringBuilder settersSB, StringBuilder gettersSB)
+        public static void GenVolumeDataUpdateCode(List<string> classNameList, StringBuilder fieldSB, StringBuilder settersSB, StringBuilder gettersSB)
         {
             foreach (var className in classNameList)
             {
@@ -135,18 +142,6 @@ namespace PowerUtilities
                 }
             }
         }
-
-        private static void OutputVolumeParameters()
-        {
-            var paramList = TypeCache.GetTypesDerivedFrom<VolumeParameter>();
-            var sb = new StringBuilder();
-            paramList.ForEach(p => sb.AppendLine(p.Name));
-
-            Debug.Log(sb);
-        }
-
-
-
 
         public static void AnalystCodeString(string codeText, StringBuilder fieldsSB, StringBuilder setterSB, StringBuilder getterSB)
         {
@@ -163,7 +158,7 @@ namespace PowerUtilities
                 var varType = match.Groups[2].Value;
                 var varName = match.Groups[3].Value;
 
-                if(fieldsSB != null)
+                if (fieldsSB != null)
                     fieldsSB.AppendLine($"public {VolumeComponentTypeTools.ConvertVolumeTypeName(varType)} {varName};");
                 // setters
                 //settings.baseLineMapIntensity.value = baseLineMapIntensity;

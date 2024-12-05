@@ -4,6 +4,8 @@
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -77,6 +79,8 @@ stencilRef = settings.stencilRef.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -130,6 +134,8 @@ smoothness = settings.smoothness.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -215,6 +221,8 @@ applyInSceneView = settings.applyInSceneView.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -376,6 +384,8 @@ baseLineMapIntensity = settings.baseLineMapIntensity.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -429,6 +439,8 @@ bloomColor = settings.bloomColor.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -478,6 +490,8 @@ debugMode = settings.debugMode.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -583,6 +597,8 @@ sketchUpper = settings.sketchUpper.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -636,6 +652,8 @@ aoColor = settings.aoColor.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -689,6 +707,8 @@ stencilRef = settings.stencilRef.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -758,6 +778,8 @@ maxRadius = settings.maxRadius.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -819,6 +841,8 @@ colorGradingUseLogC = settings.colorGradingUseLogC.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -884,6 +908,8 @@ ovalY = settings.ovalY.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;
@@ -941,6 +967,8 @@ downSampers = settings.downSampers.value;
 ///
 namespace PowerUtilities
 {
+    //using PowerPost;
+    //other ns string
     using PowerPost;
     using System;
     using UnityEngine;

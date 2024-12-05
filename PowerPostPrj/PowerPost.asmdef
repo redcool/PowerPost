@@ -6,7 +6,8 @@
         "GUID:15fc0a57446b3144c949da3e2b9737a9",
         "GUID:5a5cc6c9cee917248a0beb2ae4b4170f",
         "GUID:4ccd971c6cf07f04ea3f16f8ae112570",
-        "GUID:4d7978c8e91b36c4898b68b93a664cc7"
+        "GUID:4d7978c8e91b36c4898b68b93a664cc7",
+        "GUID:f06555f75b070af458a003d92f9efb00"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -15,6 +16,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.timeline",
+            "expression": "",
+            "define": "UNITY_TIMELINE"
+        }
+    ],
     "noEngineReferences": false
 }

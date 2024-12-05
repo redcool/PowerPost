@@ -11,28 +11,30 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine;
 
 namespace PowerUtilities.Timeline
 {{
-    public partial class VolumeControlBehaviour
+    public partial class {2}//VolumeControlBehaviour
     {{
         // setting variables ,like public Test_Bloom_Data bloomData;
-
+        [Header("{2}")]
         {0}
 
-        public void UpdateVolumeSettings()
+        public override void UpdateVolumeSettings(Volume clipVolume)
         {{
             if (!clipVolume)
                 return;
 
             // if(bloomData.isEnable)
             //     VolumeDataTools.Update(clipVolume, bloomData);
+            base.UpdateVolumeSettings(clipVolume);
             {1}
         }}
 
-        public void ReadSettingsFrom(VolumeProfile vp)
+        public override void ReadSettingsFrom(VolumeProfile vp)
         {{
-
+            base.ReadSettingsFrom(vp);
         }}
 
     }}

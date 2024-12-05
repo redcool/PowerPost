@@ -1,23 +1,24 @@
 ///
 /// Generated Code
 /// UI : ProjectSettings/PowerUtils/PostControlCodeGen
+/// paste this file to PowerUtilities\PowerUtilities\Timeline\Volume\Data\GenCode
 ///
-using PowerUtilities.Timeline;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine;
 
-namespace PowerUtilities
+namespace PowerUtilities.Timeline
 {
-    [ExecuteAlways]
-    public class VolumeControlMono_PowerPost : MonoBehaviour
+    public partial class PowerPostVolumeControlBehaviour//VolumeControlBehaviour
     {
-        // data fields
-        //public Bloom_Data _Bloom_Data;
+        // setting variables ,like public Test_Bloom_Data bloomData;
+        [Header("PowerPostVolumeControlBehaviour")]
         public GlitchSettings_Data _GlitchSettings_Data;
 public OutlineSettings_Data _OutlineSettings_Data;
 public OutlineExtendSettings_Data _OutlineExtendSettings_Data;
@@ -34,12 +35,14 @@ public VolumeLightingSettings_Data _VolumeLightingSettings_Data;
 public WhiteBalanceSettings_Data _WhiteBalanceSettings_Data;
 
 
-        private void Update()
+        public override void UpdateVolumeSettings(Volume clipVolume)
         {
-            var clipVolume = gameObject.GetOrAddComponent<Volume>();
+            if (!clipVolume)
+                return;
 
-            //data update
-            //VolumeDataTools.Update(clipVolume, _Bloom_Data);
+            // if(bloomData.isEnable)
+            //     VolumeDataTools.Update(clipVolume, bloomData);
+            base.UpdateVolumeSettings(clipVolume);
               VolumeDataTools.Update(clipVolume, _GlitchSettings_Data);
   VolumeDataTools.Update(clipVolume, _OutlineSettings_Data);
   VolumeDataTools.Update(clipVolume, _OutlineExtendSettings_Data);
@@ -56,5 +59,12 @@ public WhiteBalanceSettings_Data _WhiteBalanceSettings_Data;
   VolumeDataTools.Update(clipVolume, _WhiteBalanceSettings_Data);
 
         }
+
+        public override void ReadSettingsFrom(VolumeProfile vp)
+        {
+            base.ReadSettingsFrom(vp);
+        }
+
     }
+
 }

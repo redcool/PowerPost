@@ -64,9 +64,9 @@ namespace PowerUtilities
                     inst.volumeCompParamTypeAsset.text,
                     inst.volumeBehaviour_DataTemplate.text,
                     inst.volumeControlMono_Template.text,
-                    "VolumeControl_PowerPost",
-                    "VolumeControlBehaviour_VolumeData_PowerPost",
-                    "VolumeControlMono_PowerPost"
+                    "PowerPostVolumeControl", "using PowerPost;",
+                    "PowerPostVolumeControlBehaviour_VolumeData", "PowerPostVolumeControlBehaviour",
+                    "PowerPostVolumeControlMono"
                     );
                 }
             });
@@ -137,8 +137,8 @@ namespace PowerUtilities
         [Tooltip("generate volume data code from template file")]
         public TextAsset volumeStructData_Template;
 
-        [LoadAsset("PowerPostVolumeBehavriour_DataTemplate")]
-        [Tooltip("generate VolumeBehavriour update code from template file,timeline use")]
+        [LoadAsset("PowerPostVolumeBehaviour_DataTemplate.txt")]
+        [Tooltip("generate VolumeBehaviour update code from template file,timeline use")]
         public TextAsset volumeBehaviour_DataTemplate;
 
         [LoadAsset("VolumeComponentParamaterTypes.txt")]

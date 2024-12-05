@@ -1,23 +1,23 @@
 ///
 /// Generated Code
 /// UI : ProjectSettings/PowerUtils/PostControlCodeGen
-/// paste this file to PowerUtilities\PowerUtilities\Timeline\Volume\Data\GenCode
 ///
-
+using PowerUtilities.Timeline;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
-namespace PowerUtilities.Timeline
+namespace PowerUtilities
 {
-    public partial class PowerPostVolumeControlBehaviour
+    [ExecuteAlways]
+    public class PowerPostVolumeControlMono : MonoBehaviour
     {
-        // setting variables ,like public Test_Bloom_Data bloomData;
-
+        // data fields
+        //public Bloom_Data _Bloom_Data;
         public GlitchSettings_Data _GlitchSettings_Data;
 public OutlineSettings_Data _OutlineSettings_Data;
 public OutlineExtendSettings_Data _OutlineExtendSettings_Data;
@@ -34,13 +34,12 @@ public VolumeLightingSettings_Data _VolumeLightingSettings_Data;
 public WhiteBalanceSettings_Data _WhiteBalanceSettings_Data;
 
 
-        public void UpdateVolumeSettings()
+        private void Update()
         {
-            if (!clipVolume)
-                return;
+            var clipVolume = gameObject.GetOrAddComponent<Volume>();
 
-            // if(bloomData.isEnable)
-            //     VolumeDataTools.Update(clipVolume, bloomData);
+            //data update
+            //VolumeDataTools.Update(clipVolume, _Bloom_Data);
               VolumeDataTools.Update(clipVolume, _GlitchSettings_Data);
   VolumeDataTools.Update(clipVolume, _OutlineSettings_Data);
   VolumeDataTools.Update(clipVolume, _OutlineExtendSettings_Data);
@@ -57,12 +56,5 @@ public WhiteBalanceSettings_Data _WhiteBalanceSettings_Data;
   VolumeDataTools.Update(clipVolume, _WhiteBalanceSettings_Data);
 
         }
-
-        public void ReadSettingsFrom(VolumeProfile vp)
-        {
-
-        }
-
     }
-
 }
