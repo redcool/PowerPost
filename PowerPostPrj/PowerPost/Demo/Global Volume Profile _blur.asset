@@ -53,6 +53,9 @@ MonoBehaviour:
   sampleCount:
     m_OverrideState: 0
     m_Value: 1
+  aoColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &-4019462824194003324
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -80,6 +83,9 @@ MonoBehaviour:
   outlineWidth:
     m_OverrideState: 1
     m_Value: 0.5
+  smoothness:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-3249327431788198251
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -93,6 +99,9 @@ MonoBehaviour:
   m_Name: SimpleDOFSettings
   m_EditorClassIdentifier: 
   active: 0
+  targetTag:
+    m_OverrideState: 0
+    m_Value: 
   distance:
     m_OverrideState: 0
     m_Value: 1
@@ -139,6 +148,7 @@ MonoBehaviour:
   radialTex:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   radialScale:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
@@ -157,6 +167,7 @@ MonoBehaviour:
   noiseMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   noiseMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -169,6 +180,7 @@ MonoBehaviour:
   attenMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -178,6 +190,7 @@ MonoBehaviour:
   attenMap2:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMap2ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -205,6 +218,7 @@ MonoBehaviour:
   baseLineMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   baseLineMap_ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -282,7 +296,7 @@ MonoBehaviour:
   - {fileID: 4274973694375071326}
   - {fileID: -5719176067366717621}
   - {fileID: 9127479613970444783}
-  - {fileID: 7839007031172842046}
+  - {fileID: 3337639578091862672}
 --- !u!114 &2360694625920938564
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -323,6 +337,28 @@ MonoBehaviour:
   maxRadius:
     m_OverrideState: 1
     m_Value: 0.132
+--- !u!114 &3337639578091862672
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e1bee4e5019b6b40b2bea57cfa019c5, type: 3}
+  m_Name: BlurSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  blurSize:
+    m_OverrideState: 0
+    m_Value: 0
+  stepCount:
+    m_OverrideState: 0
+    m_Value: 1
+  downSamples:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &4274973694375071326
 MonoBehaviour:
   m_ObjectHideFlags: 3

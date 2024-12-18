@@ -1,5 +1,6 @@
 namespace PowerPost
 {
+    using PowerUtilities;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -49,10 +50,14 @@ namespace PowerPost
             mat.SetInt(_StepCount, settings.stepCount.value);
             mat.SetFloat(_BlurSize, settings.blurSize.value);
 
+            // 1 time,
             cmd.BlitColorDepth(sourceTex, _BlurTexB, _BlurTexB, mat, 0);
-            cmd.BlitColorDepth(_BlurTexB, _BlurTexA, _BlurTexA, mat, 1);
 
-            cmd.BlitColorDepth(_BlurTexA, targetTex, targetTex, DefaultBlitMaterial);
+            // 2 times
+            cmd.BlitColorDepth(_BlurTexB, _BlurTexA, _BlurTexA, mat, 1);
+            
+            // 3 do pass 0,one more time
+            cmd.BlitColorDepth(_BlurTexA, targetTex, targetTex, mat,0);
 
             cmd.ReleaseTemporaryRT(_BlurTexA);
             cmd.ReleaseTemporaryRT(_BlurTexB);

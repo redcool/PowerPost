@@ -37,7 +37,7 @@ Shader "Hidden/PowerPost/Blur"
                 }
                 return c*rcp(_StepCount);
 
-                return BoxBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize.xy * _BlurSize* float2(1,0),_StepCount);
+                // return BoxBlur(_MainTex,sampler_MainTex,i.texcoord,_MainTex_TexelSize.xy * _BlurSize* float2(1,0),_StepCount);
             }
 
             ENDHLSL
