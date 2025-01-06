@@ -61,14 +61,6 @@ Shader "Hidden/PowerPost/Sketch"
                 return 0.299*color.r + 0.587*color.g + 0.114*color.b;
             }
 
-            float Linear01Depth(float z)
-            {
-                const float isOrtho = unity_OrthoParams.w;
-                const float isPers = 1.0 - unity_OrthoParams.w;
-                z *= _ZBufferParams.x;
-                return (1.0 - isOrtho * z) / (isPers * z + _ZBufferParams.y);
-            }
-
             half SketchCalculate(float lightness,float texCol)
             {
                 

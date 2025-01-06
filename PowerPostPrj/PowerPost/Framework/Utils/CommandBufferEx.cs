@@ -44,30 +44,7 @@ namespace PowerPost
             }
         }
 
-        public static Mesh FullscreenTriangle
-        {
-            get{ 
-                if(fullscreenTriangle)
-                    return fullscreenTriangle;
 
-                fullscreenTriangle = new Mesh();
-                fullscreenTriangle.vertices = new Vector3[] {
-                    //new Vector3(-1,-1),
-                    //new Vector3(3,-1),
-                    //new Vector3(-1,3)
-                    Vector3.zero,Vector3.zero,Vector3.zero
-                };
-                fullscreenTriangle.uv = new Vector2[3]
-                {
-                    //new Vector2(0,0),
-                    //new Vector2(2,0),
-                    //new Vector2(0,2)
-                    Vector2.zero,Vector2.zero,Vector2.zero
-                };
-                fullscreenTriangle.SetIndices(new[] { 0,1,2}, MeshTopology.Triangles, 0);
-                return fullscreenTriangle;
-            }
-        }
 
         public static void BlitColorDepth(this CommandBuffer cmd, RenderTargetIdentifier source, RenderTargetIdentifier colorBuffer, RenderTargetIdentifier depthBuffer, Material mat, int pass = 0)
         {

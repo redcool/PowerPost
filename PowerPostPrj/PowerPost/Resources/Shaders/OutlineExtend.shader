@@ -88,16 +88,6 @@ Shader "Hidden/PowerPost/ExtendOutline"
             //float4 _SourceSize;
             float4 _MainTex_TexelSize;
 
-            // Z buffer depth to linear 0-1 depth
-            // Handles orthographic projection correctly
-            float Linear01Depth(float z)
-            {
-                const float isOrtho = unity_OrthoParams.w;
-                const float isPers = 1.0 - unity_OrthoParams.w;
-                z *= _ZBufferParams.x;
-                return (1.0 - isOrtho * z) / (isPers * z + _ZBufferParams.y);
-            }
-
             float SampleDepth(float2 uv)
             {
 
@@ -132,14 +122,14 @@ Shader "Hidden/PowerPost/ExtendOutline"
             {
                 float4 original = SampleCameraColor(uv);
 
-                const float offset_positive = +ceil(_Thickness * 0.5f);
-                const float offset_negative = -floor(_Thickness * 0.5f);
+                float offset_positive = +ceil(_Thickness * 0.5f);
+                float offset_negative = -floor(_Thickness * 0.5f);
 
                 // #if RESOLUTION_INVARIANT_THICKNESS
-                // const float screen_ratio = _MainTex_TexelSize.z / _MainTex_TexelSize.w;
-                // const float2 texel_size = 1.0 / 800.0 * float2(1.0, screen_ratio);
+                // float screen_ratio = _MainTex_TexelSize.z / _MainTex_TexelSize.w;
+                // float2 texel_size = 1.0 / 800.0 * float2(1.0, screen_ratio);
                 // #else
-                const float2 texel_size = _MainTex_TexelSize.xy;
+                float2 texel_size = _MainTex_TexelSize.xy;
                 //#endif
 
                 float left = texel_size.x * offset_negative;
@@ -147,20 +137,20 @@ Shader "Hidden/PowerPost/ExtendOutline"
                 float top = texel_size.y * offset_negative;
                 float bottom = texel_size.y * offset_positive;
 
-                const float2 uv0 = uv + float2(left, top);
-                const float2 uv1 = uv + float2(right, bottom);
-                const float2 uv2 = uv + float2(right, top);
-                const float2 uv3 = uv + float2(left, bottom);
+                float2 uv0 = uv + float2(left, top);
+                float2 uv1 = uv + float2(right, bottom);
+                float2 uv2 = uv + float2(right, top);
+                float2 uv3 = uv + float2(left, bottom);
 
-                const float d0 = SampleDepth(uv0);
+                float d0 = SampleDepth(uv0);
                 float distWeight = smoothstep(-(_DistInfluenceSmooth),_DistInfluence,d0);
                 //return distWeight;
 
                 #ifdef OUTLINE_USE_DEPTH
-                const float d1 = SampleDepth(uv1);
-                const float d2 = SampleDepth(uv2);
-                const float d3 = SampleDepth(uv3);
-                const float depth_threshold_scale = 300.0f;
+                float d1 = SampleDepth(uv1);
+                float d2 = SampleDepth(uv2);
+                float d3 = SampleDepth(uv3);
+                float depth_threshold_scale = 300.0f;
                 //float d = min(length(float2(d1 - d0, d3 - d2)) * depth_threshold_scale + _DepthEdgeWidth * distWeight,0);
                 float d = clamp(0,1 - distWeight,saturate(length(float2(d1 - d0, d3 - d2)) *  _DepthEdgeWidth)) ;
                 //return clamp(0,1 - distWeight,saturate(length(float2(d1 - d0, d3 - d2)) *  _DepthEdgeWidth)) ;
@@ -171,13 +161,13 @@ Shader "Hidden/PowerPost/ExtendOutline"
                 #endif  // OUTLINE_USE_DEPTH
                
                 #ifdef OUTLINE_USE_NORMALS
-                const float3 n0 = SampleNormals(uv0);
-                const float3 n1 = SampleNormals(uv1);
-                const float3 n2 = SampleNormals(uv2);
-                const float3 n3 = SampleNormals(uv3);
+                float3 n0 = SampleNormals(uv0);
+                float3 n1 = SampleNormals(uv1);
+                float3 n2 = SampleNormals(uv2);
+                float3 n3 = SampleNormals(uv3);
 
-                const float3 nd1 = n1 - n0;
-                const float3 nd2 = n3 - n2;
+                float3 nd1 = n1 - n0;
+                float3 nd2 = n3 - n2;
                 //float n = sqrt(dot(nd1, nd1) + dot(nd2, nd2)) * _NormalEdgeWidth;
                 float n = clamp(0,1 - distWeight,saturate(sqrt(dot(nd1, nd1) + dot(nd2, nd2)) * _NormalEdgeWidth));
                 n = smoothstep(_NormalThresholdMin, _NormalThresholdMax , n);
@@ -189,13 +179,13 @@ Shader "Hidden/PowerPost/ExtendOutline"
                 //return float4(SampleNormals(uv0),1);
 
                 #ifdef OUTLINE_USE_COLOR
-                const float3 c0 = SampleCameraColor(uv0).rgb;
-                const float3 c1 = SampleCameraColor(uv1).rgb;
-                const float3 c2 = SampleCameraColor(uv2).rgb;
-                const float3 c3 = SampleCameraColor(uv3).rgb;
+                float3 c0 = SampleCameraColor(uv0).rgb;
+                float3 c1 = SampleCameraColor(uv1).rgb;
+                float3 c2 = SampleCameraColor(uv2).rgb;
+                float3 c3 = SampleCameraColor(uv3).rgb;
 
-                const float3 cd1 = c1 - c0;
-                const float3 cd2 = c3 - c2;
+                float3 cd1 = c1 - c0;
+                float3 cd2 = c3 - c2;
                 float c = clamp(0,1 - distWeight,saturate(sqrt(dot(cd1, cd1) + dot(cd2, cd2)) * _ColorEdgeWidth));
                 //return 1;
                 c = smoothstep(_ColorThresholdMin, _ColorThresholdMax, c);
@@ -204,7 +194,7 @@ Shader "Hidden/PowerPost/ExtendOutline"
                 float c = 0;
                 #endif  // OUTLINE_USE_COLOR
 
-                const float g = max(d, max(n, c)) ;
+                float g = max(d, max(n, c)) ;
 
 
                 #ifdef OUTLINE_ONLY
