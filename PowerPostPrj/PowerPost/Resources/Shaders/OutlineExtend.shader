@@ -51,6 +51,7 @@ Shader "Hidden/PowerPost/ExtendOutline"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/NormalReconstruction.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
             #define SKIP_DEPTH
+            #define SKIP_NORMAL
             #include "PowerPostLib.hlsl"
 
             #pragma vertex VertDefault

@@ -25,6 +25,25 @@ MonoBehaviour:
   sampleCount:
     m_OverrideState: 0
     m_Value: 1
+  aoColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-7610668797482021541
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81180773991d8724ab7f2d216912b564, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 0
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.185
 --- !u!114 &-6690242533076779509
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -96,6 +115,9 @@ MonoBehaviour:
   outlineWidth:
     m_OverrideState: 1
     m_Value: 0.5
+  smoothness:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-522830349771770714
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -139,6 +161,9 @@ MonoBehaviour:
   m_Name: SimpleDOFSettings
   m_EditorClassIdentifier: 
   active: 0
+  targetTag:
+    m_OverrideState: 0
+    m_Value: 
   distance:
     m_OverrideState: 0
     m_Value: 1
@@ -173,6 +198,7 @@ MonoBehaviour:
   - {fileID: -1319704679513378675}
   - {fileID: 4641413423776988317}
   - {fileID: -7965323580491380883}
+  - {fileID: -7610668797482021541}
 --- !u!114 &3191802302427137956
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -364,6 +390,7 @@ MonoBehaviour:
   radialTex:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   radialScale:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
@@ -382,6 +409,7 @@ MonoBehaviour:
   noiseMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   noiseMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -394,6 +422,7 @@ MonoBehaviour:
   attenMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMapST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -403,6 +432,7 @@ MonoBehaviour:
   attenMap2:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   attenMap2ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
@@ -430,6 +460,7 @@ MonoBehaviour:
   baseLineMap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
+    dimension: 1
   baseLineMap_ST:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 0, w: 0}
