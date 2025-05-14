@@ -16,7 +16,6 @@ Shader "Hidden/PowerPost/WhiteBalance"
             #pragma vertex VertDefault
             #pragma fragment frag
             #include "PowerPostLib.hlsl"
-            #include "Lib/NodeLib.hlsl"
 
             TEXTURE2D(_MainTex);SAMPLER(sampler_MainTex);
 
